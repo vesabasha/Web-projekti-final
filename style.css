@@ -37,9 +37,18 @@ h1{
 p{
     font-family: 'helvetica', sans-serif;
     color:white;
+}
+
+.secondary-text{
+    font-family: 'helvetica', sans-serif;
+    color:#979595;}
+
+h2{
+    font-family: 'helvetica', sans-serif;
+    color:white;
 
 }
-h2{
+h3{
     font-family: 'helvetica', sans-serif;
     color:white;
 
@@ -52,6 +61,16 @@ a{
 }
 a:hover{
     color: #44A1A0;
+}
+
+.secondary-a{
+    text-decoration: none;
+    color: #44A1A0;
+    font-family: 'helvetica', sans-serif;
+    font-size: 16px;
+}
+.secondary-a:hover{
+    color: white;
 }
 
 /*Qekjo pjes o veq per nav bar*/
@@ -146,3 +165,41 @@ footer {
     line-height: 1.5;
 }
 
+
+#browse-games {
+  width: 57%;
+  margin: auto;
+  height: 550px;
+  padding: 20px;
+  background-color: #010B14 ;
+}
+.game-card {
+    border: 1px solid #333;
+display: flex;
+  flex-direction: row;
+  height: 200px;
+}
+
+.game-card img {
+  height: 100%;
+  width: auto;
+}
+.game-card-info {
+    margin-left: 20px;
+  flex: 1;
+  display: block;
+  flex-direction: row; 
+  padding-right:5px;
+}
+
+.genre-badge {
+  display: inline-block;
+  background-color: #44A1A0;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-right: 5px;
+  margin-top: 5px;
+  opacity: 70%;
+}
