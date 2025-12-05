@@ -12,3 +12,4 @@ class="secondary-text" esht per ato shkrimet qe jon me lighter color ma tvogla
 per linqe by default eshte white edhe bohet green on hover if u use class="secondary-a" eshte green bohet white on hover
 
 tjeter najsen sbesoj qe ju vyn
+
