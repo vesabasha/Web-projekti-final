@@ -73,6 +73,82 @@ a:hover{
     color: white;
 }
 
+/*Qekjo pjes o veq per hero section*/
+.hero {
+    width: 100%;
+    height: 75vh; /* adjust nese don */
+    background-image: url("images/hero.jpg"); /* whatever u wanna link it qetu*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    padding: 20px;
+
+    position: relative;
+}
+
+/* dark overlay per readibility */
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+/* so content stays above overlay */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 800px;
+}
+
+/* hero text */
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    font-family: 'helvetica', sans-serif;
+}
+
+.hero h3 {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 25px;
+    color: #dcdcdc;
+    font-family: 'helvetica', sans-serif;
+}
+
+/* hero buttons */
+.hero-buttons button {
+    padding: 10px 22px;
+    font-size: 16px;
+    margin: 0 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+/* uses your existing button colors */
+.hero-buttons .start-btn {
+    background-color: #44A1A0;
+    color: white;
+}
+.hero-buttons .start-btn:hover {
+    background-color: #6cbdbb;
+}
+
+.hero-buttons .create-btn {
+    background-color: #A24465;
+    color: white;
+}
+.hero-buttons .create-btn:hover {
+    background-color: #b76c82;
+}
 /*Qekjo pjes o veq per nav bar*/
 
 nav{
