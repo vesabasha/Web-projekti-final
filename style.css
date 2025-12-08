@@ -203,3 +203,127 @@ display: flex;
   margin-top: 5px;
   opacity: 70%;
 }
+
+
+/*per image edhe privacy page in general*/
+.privacy-kh {
+    width: 100%;
+    max-width: 700px; 
+    margin: 0 auto;     
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.privacy-kh img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.privacy-title {
+    text-align: center;
+}
+
+.privacy-title p{
+    font-size: 18px;
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 40px;
+}
+
+/*per login edhe signup*/
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background-color: #010B14;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px 25px;
+    min-width: 320px;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    float: right;
+}
+
+.modal h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-family: 'helvetica', sans-serif;
+    color: white;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-form label {
+    font-size: 14px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-form input {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+.google-btn {
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.google-btn img {
+    height: 20px;
+    width: 20px;
+}
+
+.google-btn:hover {
+    background: #f7f7f7;
+}
+
+.divider-text {
+    text-align: center;
+    color: #bbb;
+    font-size: 14px;
+    margin: 10px 0;
+}

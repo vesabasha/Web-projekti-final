@@ -1,7 +1,14 @@
-Hini qetu nese doni me pa qa bona pak figma 
+Figma: https://www.figma.com/design/rQlsEK9svKIczOG0Ud7siD/Untitled?node-id=0-1&t=f4BnldojixI7d2Gh-1
 
-href="https://www.figma.com/design/rQlsEK9svKIczOG0Ud7siD/Untitled?node-id=0-1&t=f4BnldojixI7d2Gh-1"
+Guide per qysh me i perdor css style thing so we dont have to rewrite code
 
-Muni me shtu najsen figma ama skena nevoj mujna direkt me bo veq pritojsha mja nis pa e pas naj ide
+Butoni kryesore i gjelberti ngjyroset vet skeni nevoj mi jep class se esht default
+Butoni i kuq eshte class="button-2"
 
-Kur doni me shtu dicka e boni ni branch t ri edhe bojeni name psh erind/added-login a njs qeshtu edhe boni commit veq qaty mos boni commit nmain tani e boni Pull request edhe e bojna merge nfund nese doket mire
+Per text h1,h2,h3,p jon me font qe jena tu e perdor edhe color white if you need any other header just go in style.css edhe kopjo fontin edhe ngjyren pi ktyne tjerave
+
+class="secondary-text" esht per ato shkrimet qe jon me lighter color ma tvogla
+
+per linqe by default eshte white edhe bohet green on hover if u use class="secondary-a" eshte green bohet white on hover
+
+tjeter najsen sbesoj qe ju vyn
