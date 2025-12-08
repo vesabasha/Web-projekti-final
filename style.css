@@ -327,3 +327,147 @@ display: flex;
     font-size: 14px;
     margin: 10px 0;
 }
+
+/*per profile page*/
+.profile-container {
+    width: 90%;
+    max-width:1000px;
+  margin: 60px auto 60px;
+}
+.profile-header {
+    padding: 10px 0 30px;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.profile-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.profile-user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-user-info h2 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+
+.profile-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.edit-profile-btn {
+    padding: 8px 28px;       
+    border: none;
+    background: #5ad4df;     
+    color: white;
+    cursor: pointer;
+    height: 40px;           
+    font-size: 15px;
+    font-weight: 500;     
+}
+.edit-profile-btn:hover {
+    background-color: #7ee4ed;
+}
+
+
+.edit-profile-btn:hover {
+    background-color: #64d6e4;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 45px;   
+}
+
+.profile-stats p {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 13px;
+    text-align: left;
+}
+.profile-stats span {
+    display: block;
+    font-size: 22px;
+    color: #b3b3b3;
+    font-weight: 700;
+    font-weight: bold;
+}
+
+.lists-header {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.create-list-btn {
+    background-color: #a24465;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+
+.create-list-btn:hover {
+    background-color: #b76c82;
+}
+
+.list-block {
+    margin-top: 30px;
+    margin-bottom: 40px; 
+    background-color: #071523;
+    padding: 20px;
+    border-radius: 8px; 
+}
+.list-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-title-row h3 {
+    color: #A24465;
+}
+
+.see-full {
+    color: #8db8ff;
+    font-size: 14px;
+}
+
+.see-full:hover {
+    color: white;
+}
+
+.list-row {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+}
+
+.list-row img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 4px;
+}
