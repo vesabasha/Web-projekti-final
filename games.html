@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    
+
+
 </head>
 <body>
 
@@ -13,7 +16,7 @@
     <nav>
         <ul>
             <li><img href="#" style="width: 50px; height: 50px; cursor: pointer;" src="images/logo.jpg" alt="Logo"></li>
-            <li><a style="font-size:30px" id="title" href="landing.html">QUEST</a></li>
+            <li><a style="font-size:30px" id="title" href="index.html">QUEST</a></li>
 
             <li style="margin-left: auto;"><a  class="navitem" href="games.html">Browse Games</a></li>
             <li><a class="navitem" href="#">About Us</a></li>
@@ -24,86 +27,6 @@
             <li><button id="signupBtn" class="button-2">Sign Up</button></li>
         </ul>
     </nav>
-
-
-    <!--Qetu e bojm hero section-->
-
-
-    <!--Qetu e bojm ksi info section-->
-    <div>
-
-    </div>
-    <!--Qetu e bojm game browsing section-->
-   <section id="browse-games">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h2 style="color: #A24465; font-size: 32px;">Start Browsing</h2>
-            <a href="games.html" class="secondary-a">See More</a>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; padding-left: 20px; padding-right: 20px;">
-            <!-- Card 1 -->
-            <div class="game-card">
-                
-                <img src="images/eldenring.jpg" alt="Elden Ring Photo qetu">
-                <div class="game-card-info">
-                <h3>Elden Ring</h3>
-                <p class="secondary-text">Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.</p>
-                <div class="genre-container">
-                        <p class="genre-badge">Action</p>
-                        <p class="genre-badge">RPG</p>
-                        <p class="genre-badge">Adventure</p>
-                        <p class="genre-badge">Souls Like</p>
-                    </div>
-            </div>
-            </div>
-
-            <!-- Cardsa per loja tjera -->
-            <div class="game-card">
-                
-                <img src="images/cyberpunk.jpg" alt="Whatever else other game">
-                <div class="game-card-info">
-                <h3>Cyberpunk 2077</h3>
-                <p class="secondary-text">Cyberpunk 2077 is an open-world, action-adventure RPG set in the dark future of Night City.</p>
-                    <div class="genre-container">
-                        <p class="genre-badge">Action</p>
-                        <p class="genre-badge">Adventure</p>
-                        <p class="genre-badge">RPG</p>
-                    </div>
-            
-                </div>
-            </div>
-
-            <div class="game-card">
-                <img src="images/hades2.jpeg" alt="Same thing as above">
-                <div class="game-card-info">
-                <h3>Hades 2</h3>
-                <p class="secondary-text">Battle beyond the Underworld using dark sorcery to take on the Titan of Time in this bewitching sequel to the award-winning rogue-like dungeon crawler.</p>
-                    <div class="genre-container">
-                        <p class="genre-badge">Action</p>
-                        <p class="genre-badge">Rouge-like</p>
-                        <p class="genre-badge">Indie</p>
-                    </div>
-            </div>
-            </div>
-
-            <div class="game-card">
-                <img src="images/silksong.jpg" alt="njejt">
-                <div class="game-card-info">
-                <h3>Silksong</h3>
-                <p class="secondary-text">Discover a vast, haunted kingdom in Hollow Knight: Silksong! Explore, fight and survive as you ascend to the peak of a land ruled by silk and song.</p>
-                    <div class="genre-container">
-                        <p class="genre-badge">Action</p>
-                        <p class="genre-badge">Adventure</p>
-                        <p class="genre-badge">Indie</p>
-                    </div>
-                </div>
-
-                
-            </div>
-            
-        </div>
-    </section>
-
     <!-- login and signup -->
 
      <!-- login -->
@@ -221,9 +144,30 @@
         </div>
     </div>
 
+<!--header -->
 
-    <!--footer, e boni copy paste qeta ncdo faqe ever-->
-    <footer>
+<div style="margin: 40px auto; width: 75%; display: flex; flex-direction: row; margin-bottom: 50px; align-items: center;">
+    <h1 class="h1-title" style="flex-grow: 0.5; margin: 0;">Find the perfect game for you</h1>
+    <input style="height:45px; width:42%; margin-left: 5%;" type="search" placeholder=" Search...">
+</div>
+
+<!-- qetu i qesim filters advanced search -->
+<div style="width: 75%; margin: 0 auto;">
+    <button id="advancedBtn" style="height: auto; width: 100%; cursor: pointer; border: none; border-radius: 8px 8px 0 0; background-color: #010B14; color: white; text-align: left;">
+        <p style="padding-left: 2%; font-size: 20px;" class="secondary-text">Advanced Search</p>
+    </button>
+
+    <div id="advancedBox" style="display: none; width: 100%; background-color: #010B14; color: white; border-top: 1px solid #000; border-radius: 0 0 8px 8px;">
+        <p class="secondary-text" style="padding-left: 2%;">Seems like you're early...</p>
+        <p class="secondary-text" style="padding-left:  2%; padding-bottom:2%;">Come back in phase two of the project to be able to filter by genre, date etc. from more games, as well as use our AI feature.</p>
+    </div>
+</div>
+
+<!-- games  -->
+ <div style="margin-top: 2%;" class="game-container" id="game-container"></div>
+
+
+   <footer>
         <div class="footer-columns">
             <div class="col">
             <h2>QUEST</h2>
@@ -234,7 +178,7 @@
             </div>
             <div class="col">
             <a href="#">Terms of Service</a><br>
-            <a href="privacy.html">Privacy Policy</a>
+            <a href="#">Privacy Policy</a>
             </div>
         </div>
         <br>
@@ -242,7 +186,49 @@
             © 2025 Quest. All rights reserved. Game data and artwork belong to their respective owners.
         </div>
     </footer>
-
     <script src="script.js"></script>
 </body>
+
+    <script>
+    fetch('games.json')
+        .then(response => response.json())
+        .then(games => {
+            const container = document.getElementById("game-container");
+
+            games.forEach(game => {
+                const card = document.createElement("div");
+                card.className = "game-card";
+                const imgSrc = game.main_image_url || "images/placeholder.png";
+                card.innerHTML = `
+                    <img src="${game.main_image_url}" alt="${game.name}" onerror="this.src='images/games/placeholder.png';">
+                    <div class="game-card-info">
+                        <h3>${game.name}</h3>
+                        <p class="secondary-text">${game.description}</p>
+                        <div class="genre-container">
+                            ${game.genres.map(genre => `<p class="genre-badge">${genre}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        })
+        .catch(error => console.error("Error loading games.json:", error));
+
+
+
+    const btn = document.getElementById('advancedBtn');
+    const box = document.getElementById('advancedBox');
+
+    btn.addEventListener('click', () => {
+        // toggle display
+        if (box.style.display === 'none') {
+            box.style.display = 'block';
+        } else {
+            box.style.display = 'none';
+        }
+    });
+    </script>
+    
+
 </html>
