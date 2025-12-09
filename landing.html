@@ -9,18 +9,18 @@
 <body>
 
 <nav>
-    <ul>
-        <li><img href="#" style="width: 50px; height: 50px; cursor: pointer;" src="images/logo.jpg" alt="Logo"></li>
-        <li><a style="font-size:30px" id="title" href="landing.html">QUEST</a></li>
+        <ul>
+            <li><img href="#" style="width: 50px; height: 50px; cursor: pointer;" src="images/logo.jpg" alt="Logo"></li>
+            <li><a style="font-size:30px" id="title" href="landing.html">QUEST</a></li>
 
-        <li style="margin-left: auto;"><a class="navitem" href="#">Browse Games</a></li>
-        <li><a class="navitem" href="#">About Us</a></li>
+            <li style="margin-left: auto;"><a  class="navitem" href="games.html">Browse Games</a></li>
+            <li><a class="navitem" href="#">About Us</a></li>
 
-        <li><input type="search" placeholder="Search..."></li>
+            <li><input type="search" placeholder=" Search..."></li>
 
-        <li><button id="loginBtn">Log in</button></li>
-        <li><button class="button-2" id="signupBtn">Sign Up</button></li>
-    </ul>
+            <li><button id="loginBtn">Log in</button></li>
+            <li><button id="signupBtn" class="button-2">Sign Up</button></li>
+        </ul>
 </nav>
 
 <section class="hero">
@@ -142,6 +142,123 @@
     </div>
 </section>
 
+    <!-- login and signup -->
+
+     <!-- login -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Log in</h2>
+
+            <button class="google-btn">
+                <img src="images/googleicon.png" alt="Google Icon">
+                Continue with Google
+            </button>
+
+            <p class="divider-text">or</p>
+
+            <form class="modal-form">
+                <label>
+                    Email
+                    <input type="email" placeholder="Enter your email or username" required>
+                </label>
+                <label>
+                    Password
+                    <input type="password" placeholder="Enter your password" required>
+                </label>
+
+                <div style="margin-bottom: 12px;"></div>
+
+                <button type="submit">Log in</button>
+            </form>
+
+                <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
+                <button id="reset" style="
+                    background:none;
+                    border:none;
+                    color:#44A1A0;
+                    cursor:pointer;
+                    font-size:14px;
+                    text-decoration:underline;
+                ">Reset password</button>
+
+                <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
+                No account?
+                <button id="swapToSignup" style="
+                    background:none;
+                    border:none;
+                    color:#44A1A0;
+                    cursor:pointer;
+                    font-size:14px;
+                    text-decoration:underline;
+                ">Create one</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- signup -->
+    <div id="signupModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Sign Up</h2>
+
+            <button class="google-btn">
+                <img src="images/googleicon.png" alt="Google Icon">
+                Continue with Google
+            </button>
+
+            <p class="divider-text">or</p>
+
+            <form class="modal-form">
+                <label>
+                    Username
+                    <input type="text" placeholder="Choose a username" required>
+                </label>
+
+                <label>
+                    Email
+                    <input type="email" placeholder="Enter your email" required>
+                </label>
+
+                <label>
+                    Age
+                    <input type="number" min="1" placeholder="Your age" required>
+                </label>
+
+                <label>
+                    Phone Number
+                    <input type="tel" placeholder="+383 44 123 456" required>
+                </label>
+
+                <label>
+                    Password
+                    <input type="password" placeholder="Create a password" required>
+                </label>
+
+                <label>
+                    Confirm Password
+                    <input type="password" placeholder="Confirm your password" required>
+                </label>
+
+                <div style="margin-bottom: 12px;"></div>
+
+                <button type="submit" class="button-2">Create Account</button>
+            </form>
+
+            <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
+                Already a member?
+                <button id="swapToLogin" style="
+                    background:none;
+                    border:none;
+                    color:#44A1A0;
+                    cursor:pointer;
+                    font-size:14px;
+                    text-decoration:underline;
+                ">Log in!</button>
+            </p>
+        </div>
+    </div>
+
 <footer>
     <div class="footer-columns">
         <div class="col"><h2>QUEST</h2></div>
@@ -160,5 +277,6 @@
     </div>
 </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>
