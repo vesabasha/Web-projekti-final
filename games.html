@@ -210,6 +210,10 @@
                     </div>
                 `;
 
+                card.addEventListener('click', () => {
+                window.location.href = `details.html?game=${encodeURIComponent(game.name)}`;
+            });
+
                 container.appendChild(card);
             });
         })

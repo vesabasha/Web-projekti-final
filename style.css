@@ -179,6 +179,7 @@ footer {
 #browse-games {
   width: 57%;
   margin: auto;
+  margin-top: 100px;
   padding: 20px;
   background-color: #010B14 ;
 }
@@ -187,8 +188,12 @@ footer {
 display: flex;
   flex-direction: row;
   height: 220px;
+  cursor: pointer;
 }
-
+.game-card:hover {
+    border-color: #6b6d6d;
+    scale: 1.02;
+}
 .game-card img {
   height: 100%;
   width: auto;
@@ -515,4 +520,10 @@ display: flex;
     height: 170px;
     object-fit: cover;
     border-radius: 4px;
+}
+
+/*game details page*/
+.game-detail-image{
+    cursor: pointer;
+    opacity: 0.5;
 }
