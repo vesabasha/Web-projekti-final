@@ -136,6 +136,7 @@ footer {
     margin-top:5%;
 }
 
+
 .footer-columns {
     display: flex;
     justify-content: center;
@@ -378,6 +379,102 @@ display: flex;
     margin: 10px 0;
 }
 
+/* landing */
+
+/* main section */
+.hero {
+    position: relative;
+    min-height: 110vh;
+    background-image: url("images/ff7.png");
+    background-size: cover !important;
+    background-position: center bottom !important;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px 140px;
+}
+
+.hero-content h1 {
+    font-size: 60px;
+    color: white;
+}
+
+.hero-content p {
+    color: #ccc;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* info section */
+.info-section {
+    padding: 80px 80px;
+    background-color: #011628;
+}
+
+.info-row {
+    max-width: 900px;
+    margin: 0 auto 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.info-row.info-row-reverse {
+    flex-direction: row-reverse;
+}
+
+.info-text {
+    flex: 0 0 48%;
+    text-align: left;
+}
+
+.info-image-wrapper {
+    flex: 0 0 40%;
+    display: flex;
+    justify-content: center;
+}
+
+.info-image {
+    max-width: 260px;
+    height: auto;
+}
+
+@media (max-width: 900px) {
+    .info-row,
+    .info-row.info-row-reverse {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 80px !important;
+    padding-bottom: 200px !important;
+
+    background-color: #011628;
+    overflow-x: hidden;
+}
+
+.hero {
+    min-height: 80vh !important;
+    padding-bottom: 40px !important;
+}
+
+#browse-games {
+    height: auto !important;
+    margin-top: 60px !important;
+}
 /*per profile page*/
 .profile-container {
     width: 90%;
