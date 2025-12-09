@@ -16,7 +16,7 @@
             <li><a style="font-size:30px" id="title" href="landing.html">QUEST</a></li>
 
             <li style="margin-left: auto;"><a  class="navitem" href="games.html">Browse Games</a></li>
-            <li><a class="navitem" href="#">About Us</a></li>
+            <li><a class="navitem" href="privacy.html">Our Policy</a></li>
 
             <li><input type="search" placeholder=" Search..."></li>
 
@@ -43,76 +43,14 @@
         <button style="width:100%;" class="button-2">Add to List</button>
     </div>
 </div>
+<section id="browse-games">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    <h2 style="color:#A24465; font-size:32px;">Browse other games</h2>
+    <a href="games.html" class="secondary-a">See More</a>
+  </div>
 
-   <section id="browse-games">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h2 style="color: #A24465; font-size: 32px;">Browse Other Games</h2>
-            <a href="games.html" class="secondary-a">See More</a>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; padding-left: 20px; padding-right: 20px;">
-            <!-- Card 1 -->
-            <div class="game-card">
-                
-                <img src="images/eldenring.jpg" alt="Elden Ring Photo qetu">
-                <div class="game-card-info">
-                <h3>Elden Ring</h3>
-                <p class="secondary-text">Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.</p>
-                <div class="genre-container">
-                        <p class="genre-badge">Action</p>
-                        <p class="genre-badge">RPG</p>
-                        <p class="genre-badge">Adventure</p>
-                        <p class="genre-badge">Souls Like</p>
-                    </div>
-            </div>
-            </div>
-
-            <!-- Cardsa per loja tjera -->
-            <div class="game-card">
-                
-                <img src="images/cyberpunk.jpg" alt="Whatever else other game">
-                <div class="game-card-info">
-                <h3>Cyberpunk 2077</h3>
-                <p class="secondary-text">Cyberpunk 2077 is an open-world, action-adventure RPG set in the dark future of Night City.</p>
-                    <div class="genre-container">
-                        <p class="genre-badge">Action</p>
-                        <p class="genre-badge">Adventure</p>
-                        <p class="genre-badge">RPG</p>
-                    </div>
-            
-                </div>
-            </div>
-
-            <div class="game-card">
-                <img src="images/hades2.jpeg" alt="Same thing as above">
-                <div class="game-card-info">
-                <h3>Hades 2</h3>
-                <p class="secondary-text">Battle beyond the Underworld using dark sorcery to take on the Titan of Time in this bewitching sequel to the award-winning rogue-like dungeon crawler.</p>
-                    <div class="genre-container">
-                        <p class="genre-badge">Action</p>
-                        <p class="genre-badge">Rouge-like</p>
-                        <p class="genre-badge">Indie</p>
-                    </div>
-            </div>
-            </div>
-
-            <div class="game-card">
-                <img src="images/silksong.jpg" alt="njejt">
-                <div class="game-card-info">
-                <h3>Silksong</h3>
-                <p class="secondary-text">Discover a vast, haunted kingdom in Hollow Knight: Silksong! Explore, fight and survive as you ascend to the peak of a land ruled by silk and song.</p>
-                    <div class="genre-container">
-                        <p class="genre-badge">Action</p>
-                        <p class="genre-badge">Adventure</p>
-                        <p class="genre-badge">Indie</p>
-                    </div>
-                </div>
-
-                
-            </div>
-            
-        </div>
-    </section>
+  <div id="browse-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:25px; padding:0 20px;"></div>
+</section>
 
     <!-- login and signup -->
 
@@ -132,16 +70,16 @@
             <form class="modal-form">
                 <label>
                     Email
-                    <input type="email" placeholder="Enter your email or username" required>
+                    <input type="email" placeholder="Enter your email or username">
                 </label>
                 <label>
                     Password
-                    <input type="password" placeholder="Enter your password" required>
+                    <input type="password" placeholder="Enter your password">
                 </label>
 
                 <div style="margin-bottom: 12px;"></div>
 
-                <button type="submit">Log in</button>
+                <button type="button" onclick="window.location.href='profile.html'">Log in</button>
             </form>
 
                 <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
@@ -184,37 +122,37 @@
             <form class="modal-form">
                 <label>
                     Username
-                    <input type="text" placeholder="Choose a username" required>
+                    <input type="text" placeholder="Choose a username" >
                 </label>
 
                 <label>
                     Email
-                    <input type="email" placeholder="Enter your email" required>
+                    <input type="email" placeholder="Enter your email" >
                 </label>
 
                 <label>
                     Age
-                    <input type="number" min="1" placeholder="Your age" required>
+                    <input type="number" min="1" placeholder="Your age" >
                 </label>
 
                 <label>
                     Phone Number
-                    <input type="tel" placeholder="+383 44 123 456" required>
+                    <input type="tel" placeholder="+383 44 123 456" >
                 </label>
 
                 <label>
                     Password
-                    <input type="password" placeholder="Create a password" required>
+                    <input type="password" placeholder="Create a password" >
                 </label>
 
                 <label>
                     Confirm Password
-                    <input type="password" placeholder="Confirm your password" required>
+                    <input type="password" placeholder="Confirm your password" >
                 </label>
 
                 <div style="margin-bottom: 12px;"></div>
 
-                <button type="submit" class="button-2">Create Account</button>
+                <button type="button" onclick="window.location.href='profile.html'" class="button-2">Create Account</button>
             </form>
 
             <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
@@ -303,4 +241,7 @@ fetch('games.json')
 .catch(err => console.error(err));
 
 </script>
+
+    <script src="browsegames.js"></script>
+
 </html>

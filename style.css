@@ -428,9 +428,6 @@ display: flex;
     gap: 40px;
 }
 
-.info-row.info-row-reverse {
-    flex-direction: row-reverse;
-}
 
 .info-text {
     flex: 0 0 48%;
@@ -493,12 +490,12 @@ body {
 .profile-top {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 25px;
 }
 .profile-user-info {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 35px;
 }
 
 .profile-user-info h2 {
@@ -582,9 +579,13 @@ body {
 .list-block {
     margin-top: 30px;
     margin-bottom: 40px; 
-    background-color: #071523;
-    padding: 20px;
+    background-color: #010B14;
+    padding: 25px;
     border-radius: 8px; 
+}
+.list-block:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    scale: 1.02;;
 }
 .list-title-row {
     display: flex;
@@ -614,13 +615,29 @@ body {
 
 .list-row img {
     width: 100%;
-    height: 170px;
+    height: 200px;
     object-fit: cover;
     border-radius: 4px;
+    cursor: pointer;
+}
+.list-row img:hover {
+    transform: scale(1.05);
 }
 
 /*game details page*/
 .game-detail-image{
     cursor: pointer;
     opacity: 0.5;
+}
+
+.copy-link-btn {
+    background-color: #44A1A0;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 20px;
+    height: 30px;
 }
