@@ -203,7 +203,10 @@
                     <img src="${game.main_image_url}" alt="${game.name}" onerror="this.src='images/games/placeholder.png';">
                     <div class="game-card-info">
                         <h3>${game.name}</h3>
-                        <p class="secondary-text">${game.description}</p>
+                        <p style="display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;" class="secondary-text">${game.description}</p>
                         <div class="genre-container">
                             ${game.genres.map(genre => `<p class="genre-badge">${genre}</p>`).join('')}
                         </div>
