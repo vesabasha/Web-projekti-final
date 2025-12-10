@@ -1,15 +1,24 @@
+Github: https://github.com/vesabasha/Web-projekti-final.git
 Figma: https://www.figma.com/design/rQlsEK9svKIczOG0Ud7siD/Untitled?node-id=0-1&t=f4BnldojixI7d2Gh-1
 
-Guide per qysh me i perdor css style thing so we dont have to rewrite code
+Quest is a website that aims to make it easier for students or other adults who are busy to spend less time trying to pick the games they want to play and more actually playing. 
 
-Butoni kryesore i gjelberti ngjyroset vet skeni nevoj mi jep class se esht default
-Butoni i kuq eshte class="button-2"
+In the future, we will aim to accomplish this by letting users create lists of games they want to play, are playing etc. by categorising them however they want into lists, making it effortless to organize their backlog and jump straight into what they feel like playing next.
 
-Per text h1,h2,h3,p jon me font qe jena tu e perdor edhe color white if you need any other header just go in style.css edhe kopjo fontin edhe ngjyren pi ktyne tjerave
+We also plan to implement a smart search feature with AI using openai api or a similar api, whereas for the catalogue of games itself we plan to use steamAPI
 
-class="h1-title" esht h1 ama edhe ma i madh
-class="secondary-text" esht per ato shkrimet qe jon me lighter color ma tvogla
+The UI part of our website is done and it is completed with mock data for games, lists and the user.
 
-per linqe by default eshte white edhe bohet green on hover if u use class="secondary-a" eshte green bohet white on hover
+Our website has these pages:
+1. Landing page - learn about the website (landing.html)
+2. Browse games page - browse different games with short descriptions, genre badges and the games cover picture (games.html)
+3. Game details page - view the games, a picture catalogue of them, a descriptions, genre etc. (details.html)
+4. Profile page - View your profile and your lists (profile.html)
+5. Lists page - similar to browse games page, but only includes the games from the users list (lists.html)
+6. Privacy Policy page - Read our privacy policy (privacy.html)
 
-tjeter najsen sbesoj qe ju vyn
+Javascript has been used to render the games and games details pages from our json. It has also been used to open up the login and sign up modals.
+
+The developers: Vesa Basha, Bled Mehmeti, Erind Balaj
+
+Keep Gaming 
