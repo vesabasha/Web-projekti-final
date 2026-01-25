@@ -11,13 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
 
     // Basic validation 
     if (empty($username) || empty($email) || empty($password)) {
         echo "All fields are required.";
         exit();
     }
-    if (empty($username) || empty($email) || $password !== $_POST['confirmPassword']) {
+    if (empty($username) || empty($email) || $password !== $confirm_password) {
         echo "invalid input or passwords arent the same";
         exit;
     }
