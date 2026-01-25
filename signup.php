@@ -1,5 +1,8 @@
 <?php
-//signups
+
+
+
+//signupabbles
 session_start();
 require_once 'UserRepository.php';
 $userRepo = new UserRepository($pdo);
@@ -38,9 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: profile.html");
         exit;
     } else {
-        echo "Singup failed";
+        echo "Signup failed. Please try again.";
     }
-
-
-
+}
 ?>
