@@ -16,7 +16,7 @@ class UserRepository {
         return $stmt->execute([$username, $email, $hashedPassword]);
     }
     
-    public function getUserByEmailorUsername($emailOrUsername){
+    public function getUserByEmailOrUsername($emailOrUsername){
 
     $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
     $stmt->execute([$emailOrUsername, $emailOrUsername]);
