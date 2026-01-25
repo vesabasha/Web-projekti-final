@@ -114,40 +114,30 @@
 
             <p class="divider-text">or</p>
 
-            <form class="modal-form">
+            <form action="signup.php" method="post" class="modal-form">
                 <label>
                     Username
-                    <input type="text" placeholder="Choose a username">
+                    <input type="text" name="username" placeholder="Choose a username">
                 </label>
 
                 <label>
                     Email
-                    <input type="email" placeholder="Enter your email">
-                </label>
-
-                <label>
-                    Age
-                    <input type="number" min="1" placeholder="Your age">
-                </label>
-
-                <label>
-                    Phone Number
-                    <input type="tel" placeholder="+383 44 123 456">
+                    <input type="email" name="email" placeholder="Enter your email">
                 </label>
 
                 <label>
                     Password
-                    <input type="password" placeholder="Create a password">
+                    <input type="password" name="password" placeholder="Create a password">
                 </label>
 
                 <label>
                     Confirm Password
-                    <input type="password" placeholder="Confirm your password">
+                    <input type="password" name="confirm_password" placeholder="Confirm your password">
                 </label>
 
                 <div style="margin-bottom: 12px;"></div>
 
-                <button type="button" onclick="window.location.href='profile.html'" class="button-2">Create Account</button>
+                <button type="submit" class="button-2">Create Account</button>
             </form>
 
             <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
