@@ -30,17 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_game_id'])) {
     $main_image_url = uploadFileEdit($_FILES['main_image_url'], $uploadDir);
     $main_image2_url = uploadFileEdit($_FILES['main_image2_url'], $uploadDir);
 
-    $stmt = $pdo->prepare("UPDATE games SET title=?, description=?, release_date=?, " .
-        ($main_image_url ? ", main_image_url=?" : "") .
-        ($main_image2_url ? ", main_image2_url=?" : "") .
-        " WHERE id=?");
+    $fields = ["title=?", "description=?", "release_date=?"];
+$params = [$title, $description, $release_date];
 
-    $params = [$title, $description, $release_date];
-    if ($main_image_url) $params[] = $main_image_url;
-    if ($main_image2_url) $params[] = $main_image2_url;
-    $params[] = $gameId;
+if ($main_image_url) {
+    $fields[] = "main_image_url=?";
+    $params[] = $main_image_url;
+}
 
-    $stmt->execute($params);
+if ($main_image2_url) {
+    $fields[] = "main_image2_url=?";
+    $params[] = $main_image2_url;
+}
+
+$params[] = $gameId;
+
+$stmt = $pdo->prepare("UPDATE games SET " . implode(", ", $fields) . " WHERE id=?");
+$stmt->execute($params);
+
 
     if (!empty($_POST['genres'])) {
         $pdo->prepare("DELETE FROM game_genres WHERE game_id=?")->execute([$gameId]);
