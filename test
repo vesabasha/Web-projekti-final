@@ -1,0 +1,59 @@
+-- 1️⃣ Insert unique genres
+INSERT IGNORE INTO genres (name) VALUES
+('Action'),
+('Souls-like'),
+('Open World'),
+('Roguelike'),
+('Indie'),
+('Metroidvania'),
+('Simulation'),
+('Farming'),
+('RPG'),
+('Narrative'),
+('Detective'),
+('Fantasy'),
+('Platformer'),
+('Adventure'),
+('Story Rich'),
+('Stealth');
+
+-- 1️⃣ Insert games
+INSERT INTO games
+(title, description, main_image_url, main_image2_url, image1, image2, image3, image4, release_date)
+VALUES
+('Elden Ring','Elden Ring is a vast open-world action RPG crafted by FromSoftware set in the mysterious Lands Between. You explore sweeping landscapes, uncover secrets in colossal dungeons, and battle powerful demigods. The game blends challenging combat with extensive player choice.','images/games/Elden Ring.png','images/games/details/Elden Ring2.png','images/games/details/Elden Ring_1.png','images/games/details/Elden Ring_2.png','images/games/details/Elden Ring_3.png','images/games/details/Elden Ring_4.png','2022-02-25'),
+('Hades','Hades is a fast-paced rogue-like dungeon crawler where you play as Zagreus, the rebellious son of Hades. Each escape attempt reveals new story moments, character interactions, and godly boons that drastically change your playstyle.','images/games/Hades.png','images/games/details/Hades2.png','images/games/details/Hades_1.png','images/games/details/Hades_2.png','images/games/details/Hades_3.png','images/games/details/Hades_4.png','2020-09-17'),
+('Hollow Knight','Hollow Knight is a hand-drawn 2D Metroidvania set in the decaying kingdom of Hallownest. As the silent Knight, you explore vast interconnected regions filled with secrets, challenging enemies, and haunting beauty. The game’s difficulty is fair yet demanding.','images/games/Hollow Knight.png','images/games/details/Hollow Knight2.png','images/games/details/Hollow Knight_1.png','images/games/details/Hollow Knight_2.png','images/games/details/Hollow Knight_3.png','images/games/details/Hollow Knight_4.png','2017-02-24'),
+('Stardew Valley','Stardew Valley is a relaxing farming and life simulation game where you rebuild your grandfather’s old farm. You can plant crops, raise animals, mine, fish, and build relationships with the townsfolk. The game offers incredible freedom to shape your own routine and long-term goals.','images/games/Stardew Valley.png','images/games/details/Stardew Valley2.png','images/games/details/Stardew Valley_1.png','images/games/details/Stardew Valley_2.png','images/games/details/Stardew Valley_3.png','images/games/details/Stardew Valley_4.png','2016-02-26'),
+('Disco Elysium','Disco Elysium is a groundbreaking narrative-driven RPG where you play as a detective with a fractured mind. Instead of traditional combat, the game focuses on dialogue checks, personality traits, and choices that dramatically shape the story.','images/games/Disco Elysium.png','images/games/details/Disco Elysium2.png','images/games/details/Disco Elysium_1.png','images/games/details/Disco Elysium_2.png','images/games/details/Disco Elysium_3.png','images/games/details/Disco Elysium_4.png','2019-10-15');
+
+-- 3️⃣ Link games to genres
+-- Elden Ring
+INSERT INTO game_genres (game_id, genre_id)
+SELECT g.id, ge.id
+FROM games g, genres ge
+WHERE g.title='Elden Ring' AND ge.name IN ('Action','Souls-like','Open World');
+
+-- Hades
+INSERT INTO game_genres (game_id, genre_id)
+SELECT g.id, ge.id
+FROM games g, genres ge
+WHERE g.title='Hades' AND ge.name IN ('Roguelike','Action','Indie');
+
+-- Hollow Knight
+INSERT INTO game_genres (game_id, genre_id)
+SELECT g.id, ge.id
+FROM games g, genres ge
+WHERE g.title='Hollow Knight' AND ge.name IN ('Metroidvania','Action','Indie');
+
+-- Stardew Valley
+INSERT INTO game_genres (game_id, genre_id)
+SELECT g.id, ge.id
+FROM games g, genres ge
+WHERE g.title='Stardew Valley' AND ge.name IN ('Simulation','Farming','RPG');
+
+-- Disco Elysium
+INSERT INTO game_genres (game_id, genre_id)
+SELECT g.id, ge.id
+FROM games g, genres ge
+WHERE g.title='Disco Elysium' AND ge.name IN ('RPG','Narrative','Detective');

@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_game_id'])) {
     $title = $_POST['title'];
     $description = $_POST['description'];
     $release_date = $_POST['release_date'];
-    $platform = $_POST['platform'] ?? null;
 
     $uploadDir = 'images/games/details/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
@@ -31,12 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_game_id'])) {
     $main_image_url = uploadFileEdit($_FILES['main_image_url'], $uploadDir);
     $main_image2_url = uploadFileEdit($_FILES['main_image2_url'], $uploadDir);
 
-    $stmt = $pdo->prepare("UPDATE games SET title=?, description=?, release_date=?, platform=? " .
+    $stmt = $pdo->prepare("UPDATE games SET title=?, description=?, release_date=?, " .
         ($main_image_url ? ", main_image_url=?" : "") .
         ($main_image2_url ? ", main_image2_url=?" : "") .
         " WHERE id=?");
 
-    $params = [$title, $description, $release_date, $platform];
+    $params = [$title, $description, $release_date];
     if ($main_image_url) $params[] = $main_image_url;
     if ($main_image2_url) $params[] = $main_image2_url;
     $params[] = $gameId;
@@ -58,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title']) && !isset($_
     $title = $_POST['title'];
     $description = $_POST['description'];
     $release_date = $_POST['release_date'];
-    $platform = $_POST['platform'] ?? null;
 
     $uploadDir = 'images/games/details/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
@@ -75,8 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title']) && !isset($_
     $main_image_url = uploadFile($_FILES['main_image_url'], $uploadDir);
     $main_image2_url = uploadFile($_FILES['main_image2_url'], $uploadDir);
 
-    $stmt = $pdo->prepare("INSERT INTO games (title, description, release_date, platform, main_image_url, main_image2_url) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$title, $description, $release_date, $platform, $main_image_url, $main_image2_url]);
+    $stmt = $pdo->prepare("INSERT INTO games (title, description, release_date, main_image_url, main_image2_url) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$title, $description, $release_date, $main_image_url, $main_image2_url]);
 
     $gameId = $pdo->lastInsertId();
 
