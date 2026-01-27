@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styledashboard.css">
+</head>
+<body>
+
+  <div class="sidebar">
+    <h1 style="padding-left: 3vh;">Admin Panel</h1>
+    <a href="dashboard">Users</a>
+    <a href="manage_games">Games</a>
+  </div>
+
+  <div class="main-content">
+
+
+    <h2>User Management</h2>
+
+<div class="table-container">
+        <div class="table-header">
+          <h2>All Users</h2>
+          <span class="badge" id="userCount">5 users</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+              <td>Vesa_B</td>
+              <td>Member</td>
+              <td>2022-01-15</td>
+              <td>
+                <button>Edit</button>
+                <button class="button-2">Delete</button>
+              </td>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+  </div>
+
+
+
+</body>
+</html>

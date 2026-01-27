@@ -3,92 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quest Landing</title>
+    <title>Document</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<nav>
+    <nav>
         <ul>
             <li><img href="#" style="width: 50px; height: 50px; cursor: pointer;" src="images/logo.jpg" alt="Logo"></li>
-            <li><a style="font-size:30px" id="title" href="landing.html">QUEST</a></li>
+            <li><a style="font-size:30px" id="title" href="landing">QUEST</a></li>
 
-            <li style="margin-left: auto;"><a  class="navitem" href="games.html">Browse Games</a></li>
-            <li><a class="navitem" href="privacy.html">Our Policy</a></li>
+            <li style="margin-left: auto;"><a  class="navitem" href="games">Browse Games</a></li>
+            <li><a class="navitem" href="privacy">Our Policy</a></li>
 
             <li><input type="search" placeholder=" Search..."></li>
 
             <li><button id="loginBtn">Log in</button></li>
             <li><button id="signupBtn" class="button-2">Sign Up</button></li>
         </ul>
-</nav>
+    </nav>
 
-<section class="hero">
-    <div class="hero-content">
-        <h1>Find the Next World<br>Worth Entering.</h1>
-        <p>Log your gaming journey and find new games perfect for you.</p>
+<section class="profile-container">
+        <div class="profile-header">
+            <div class="profile-top">
+                <img src="images/joker pfp.jpg" class="profile-avatar">
+                <div class="profile-user-info">
+                    <h2 style="color:#FF669C ;">Vesa_B</h2>
+                    <button>Edit Profile</button>
+                </div>
+            </div>
 
-        <div class="hero-buttons">
-            <a href="games.html"><button>Start Browsing</button></a>
-            <button id="heroSignupBtn" class="button-2">Create an account</button>
+            <div class="profile-stats">
+                <p><span>103</span>Liked Games</p>
+                <p><span>5</span>Lists</p>
+                <p><span>63</span>Games Saved</p>
+            </div>
         </div>
-    </div>
-</section>
 
-<!-- info-->
-<section class="info-section">
+        <div class="lists-header">
+            <h2>My Lists</h2>
+            <button class="create-list-btn"> Create a List</button>
+        </div>
 
-    <!-- 1 -->
-    <div class="info-row">
-        <div class="info-text">
-            <h3>What is quest?</h3>
-            <p class="secondary-text">
-                Quest is a website developed by gamers, for gamers. With an overwhelming amount
-                of great games to play, Quest offers a place to keep track of your gaming
-                history as well as find recommendations catered to you.
-            </p>
-        </div>
-        <div class="info-image-wrapper">
-            <img src="images/img1.png" class="info-image" alt="">
-        </div>
-    </div>
-
-    <!-- 2 -->
-    <div class="info-row info-row-reverse">
-        <div class="info-image-wrapper">
-            <img src="images/img2.png" class="info-image" alt="">
-        </div>
-        <div class="info-text">
-            <h3>Track your games</h3>
-            <p class="secondary-text">
-                Quest offers a way for you to track your gaming journey. Create lists of games
-                in your radar or maybe your favorites and share them with your friends.
-            </p>
-        </div>
-    </div>
-
-    <!-- 3 -->
-    <div class="info-row">
-        <div class="info-text">
-            <h3>Find games for you</h3>
-            <p class="secondary-text">
-                Browse games based on genre, rating, year of release or use our specialized
-                tools to help you find your next perfect game.
-            </p>
-        </div>
-        <div class="info-image-wrapper">
-            <img src="images/img3.png" class="info-image" alt="">
-        </div>
-    </div>
-
-</section>
-<section id="browse-games">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <h2 style="color:#A24465; font-size:32px;">Start Browsing</h2>
-    <a href="games.html" class="secondary-a">See More</a>
-  </div>
-
-  <div id="browse-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:25px; padding:0 20px;"></div>
+    <div id="lists"></div>
 </section>
 
     <!-- login and signup -->
@@ -113,12 +69,12 @@
                 </label>
                 <label>
                     Password
-                    <input type="password" name="password" placeholder="Enter your password">
+                    <input type="button" onclick="window.location.href='profile.html'" placeholder="Enter your password" >
                 </label>
 
                 <div style="margin-bottom: 12px;"></div>
 
-                <button type="button" onclick="window.location.href='profile.html'">Log in</button>
+                <button type="submit">Log in</button>
             </form>
 
                 <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
@@ -161,7 +117,7 @@
             <form action="signup.php" method="post" class="modal-form">
                 <label>
                     Username
-                    <input type="text" name="username" placeholder="Choose a username" required>
+                    <input type="text" name="username" placeholder="Choose a username">
                 </label>
 
                 <label>
@@ -200,24 +156,79 @@
 
 <footer>
     <div class="footer-columns">
-        <div class="col"><h2>QUEST</h2></div>
         <div class="col">
-            <a href="#">About Us</a>
-            <a href="#">Contact Us</a>
+        <h2>QUEST</h2>
         </div>
         <div class="col">
-            <a href="#">Terms of Service</a>
-            <a href="privacy.html">Privacy Policy</a>
+        <a href="#">About Us</a><br>
+        <a href="#">Contact Us</a>
+        </div>
+        <div class="col">
+        <a href="#">Terms of Service</a><br>
+        <a href="privacy.html">Privacy Policy</a>
         </div>
     </div>
-
+    <br>
     <div class="footer-bottom">
         © 2025 Quest. All rights reserved. Game data and artwork belong to their respective owners.
     </div>
 </footer>
+    </div>
+    
+<script>  
+async function loadLists() {
+  const res = await fetch('games.json')
+  const games = await res.json()
+  const container = document.getElementById('lists')
 
-    <script src="script.js"></script>
-    <script src="browsegames.js"></script>
+const titles = ["Favorites", "Haven't Finished", "Want to Play"]
+
+  for (let i = 0; i < 3; i++) {
+    const start = i * 6
+    const end = start + 6
+    const picks = games.slice(start, end)
+
+    const block = document.createElement('div')
+    block.className = 'list-block'
+
+
+    const titleRow = document.createElement('div')
+    titleRow.className = 'list-title-row'
+
+const copyBtn = document.createElement('button')
+copyBtn.textContent = 'Copy Link'
+copyBtn.className = 'copy-link-btn'
+copyBtn.onclick = () => {
+    navigator.clipboard.writeText(window.location.href)
+    alert('Link copied!')
+}
+    titleRow.appendChild(copyBtn)
+
+    titleRow.innerHTML = `<h3>${titles[i]}</h3> <a href="lists.html?list=${i}" class="secondary-a">See Full List</a>`
+
+
+    const row = document.createElement('div')
+    row.className = 'list-row'
+
+    for (const g of picks) {
+      const img = document.createElement('img')
+      img.src = g.main_image_url
+      img.onclick = () => {
+        location.href = `details.html?game=${encodeURIComponent(g.name)}`
+      }
+      row.appendChild(img)
+    }
+
+    block.appendChild(titleRow)
+    block.appendChild(row)
+    container.appendChild(block)
+  }
+}
+
+loadLists()
+</script>
+
+<script src="script.js"></script>
 
 </body>
 </html>

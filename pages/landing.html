@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest Landing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><img href="#" style="width: 50px; height: 50px; cursor: pointer;" src="images/logo.jpg" alt="Logo"></li>
+            <li><a style="font-size:30px" id="title" href="landing">QUEST</a></li>
+
+            <li style="margin-left: auto;"><a  class="navitem" href="games">Browse Games</a></li>
+            <li><a class="navitem" href="privacy">Our Policy</a></li>
+
+            <li><input type="search" placeholder=" Search..."></li>
+
+            <li><button id="loginBtn">Log in</button></li>
+            <li><button id="signupBtn" class="button-2">Sign Up</button></li>
+        </ul>
+    </nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Find the Next World<br>Worth Entering.</h1>
+        <p>Log your gaming journey and find new games perfect for you.</p>
+
+        <div class="hero-buttons">
+            <a href="games.html"><button>Start Browsing</button></a>
+            <button id="heroSignupBtn" class="button-2">Create an account</button>
+        </div>
+    </div>
+</section>
+
+<!-- info-->
+<section class="info-section">
+
+    <!-- 1 -->
+    <div class="info-row">
+        <div class="info-text">
+            <h3>What is quest?</h3>
+            <p class="secondary-text">
+                Quest is a website developed by gamers, for gamers. With an overwhelming amount
+                of great games to play, Quest offers a place to keep track of your gaming
+                history as well as find recommendations catered to you.
+            </p>
+        </div>
+        <div class="info-image-wrapper">
+            <img src="images/img1.png" class="info-image" alt="">
+        </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="info-row info-row-reverse">
+        <div class="info-image-wrapper">
+            <img src="images/img2.png" class="info-image" alt="">
+        </div>
+        <div class="info-text">
+            <h3>Track your games</h3>
+            <p class="secondary-text">
+                Quest offers a way for you to track your gaming journey. Create lists of games
+                in your radar or maybe your favorites and share them with your friends.
+            </p>
+        </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="info-row">
+        <div class="info-text">
+            <h3>Find games for you</h3>
+            <p class="secondary-text">
+                Browse games based on genre, rating, year of release or use our specialized
+                tools to help you find your next perfect game.
+            </p>
+        </div>
+        <div class="info-image-wrapper">
+            <img src="images/img3.png" class="info-image" alt="">
+        </div>
+    </div>
+
+</section>
+<section id="browse-games">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    <h2 style="color:#A24465; font-size:32px;">Start Browsing</h2>
+    <a href="games.html" class="secondary-a">See More</a>
+  </div>
+
+  <div id="browse-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:25px; padding:0 20px;"></div>
+</section>
+
+    <!-- login and signup -->
+
+     <!-- login -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Log in</h2>
+
+            <button class="google-btn">
+                <img src="images/googleicon.png" alt="Google Icon">
+                Continue with Google
+            </button>
+
+            <p class="divider-text">or</p>
+
+            <form class="modal-form">
+                <label>
+                    Email
+                    <input type="email" placeholder="Enter your email or username">
+                </label>
+                <label>
+                    Password
+                    <input type="password" name="password" placeholder="Enter your password">
+                </label>
+
+                <div style="margin-bottom: 12px;"></div>
+
+                <button type="button" onclick="window.location.href='profile.html'">Log in</button>
+            </form>
+
+                <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
+                <button id="reset" style="
+                    background:none;
+                    border:none;
+                    color:#44A1A0;
+                    cursor:pointer;
+                    font-size:14px;
+                    text-decoration:underline;
+                ">Reset password</button>
+
+                <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
+                No account?
+                <button id="swapToSignup" style="
+                    background:none;
+                    border:none;
+                    color:#44A1A0;
+                    cursor:pointer;
+                    font-size:14px;
+                    text-decoration:underline;
+                ">Create one</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- signup -->
+    <div id="signupModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Sign Up</h2>
+
+            <button class="google-btn">
+                <img src="images/googleicon.png" alt="Google Icon">
+                Continue with Google
+            </button>
+
+            <p class="divider-text">or</p>
+
+            <form action="signup.php" method="post" class="modal-form">
+                <label>
+                    Username
+                    <input type="text" name="username" placeholder="Choose a username" required>
+                </label>
+
+                <label>
+                    Email
+                    <input type="email" name="email" placeholder="Enter your email">
+                </label>
+
+                <label>
+                    Password
+                    <input type="password" name="password" placeholder="Create a password">
+                </label>
+
+                <label>
+                    Confirm Password
+                    <input type="password" name="confirm_password" placeholder="Confirm your password">
+                </label>
+
+                <div style="margin-bottom: 12px;"></div>
+
+                <button type="submit" class="button-2">Create Account</button>
+            </form>
+
+            <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
+                Already a member?
+                <button id="swapToLogin" style="
+                    background:none;
+                    border:none;
+                    color:#44A1A0;
+                    cursor:pointer;
+                    font-size:14px;
+                    text-decoration:underline;
+                ">Log in!</button>
+            </p>
+        </div>
+    </div>
+
+<footer>
+    <div class="footer-columns">
+        <div class="col"><h2>QUEST</h2></div>
+        <div class="col">
+            <a href="#">About Us</a>
+            <a href="#">Contact Us</a>
+        </div>
+        <div class="col">
+            <a href="#">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        © 2025 Quest. All rights reserved. Game data and artwork belong to their respective owners.
+    </div>
+</footer>
+
+    <script src="script.js"></script>
+    <script src="browsegames.js"></script>
+
+</body>
+</html>
