@@ -11,7 +11,7 @@ The UI part of our website is done and it is completed with mock data for games,
 
 Our website has these pages:
 1. Landing page - learn about the website (landing.html)
-2. Browse games page - browse different games with short descriptions, genre badges and the games cover picture (games.html)
+2. Browse games page - browse different games with short descriptions, genre badges and the games cover picture (games.php)
 3. Game details page - view the games, a picture catalogue of them, a descriptions, genre etc. (details.html)
 4. Profile page - View your profile and your lists (profile.html)
 5. Lists page - similar to browse games page, but only includes the games from the users list (lists.html)

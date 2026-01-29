@@ -22,7 +22,7 @@ switch ($path) {
         require 'pages/privacy.html';
         break;
     case 'games': 
-        require 'pages/games.html';
+        require 'pages/games.php';
         break;
     case 'manage_games':
         require 'pages/manage_games.php';
