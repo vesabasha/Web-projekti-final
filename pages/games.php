@@ -5,7 +5,14 @@ $games = [];
 if (file_exists($games_file)) {
     $json_content = file_get_contents($games_file);
     $games = json_decode($json_content, true);
+} else {
+    // um bertiti gptja qe si kom qit fallback so this is it i guess (nese dini a better way do lmk)
+    $games = [];
 }
+
+//check per log-ins   
+$is_logged_in = isset($_SESSION['user_id']);
+    $username = $is_logged_in ? $_SESSION['username'] : null;
 ?>
 
 
