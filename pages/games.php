@@ -1,18 +1,17 @@
 <?php
 session_start();
-$games_file = __DIR__ . '/../games.json';
-$games = [];
-if (file_exists($games_file)) {
-    $json_content = file_get_contents($games_file);
-    $games = json_decode($json_content, true);
-} else {
-    // um bertiti gptja qe si kom qit fallback so this is it i guess (nese dini a better way do lmk)
-    $games = [];
-}
+include 'config.php'; // this should define $pdo as your PDO connection
 
-//check per log-ins   
-$is_logged_in = isset($_SESSION['user_id']);
-    $username = $is_logged_in ? $_SESSION['username'] : null;
+// Fetch games with genres
+$stmt = $pdo->query("
+    SELECT g.id, g.title, g.description, g.main_image_url,
+           GROUP_CONCAT(ge.name) AS genres
+    FROM games g
+    LEFT JOIN game_genres gg ON g.id = gg.game_id
+    LEFT JOIN genres ge ON gg.genre_id = ge.id
+    GROUP BY g.id
+");
+$games = $stmt->fetchAll();
 ?>
 
 
@@ -21,8 +20,8 @@ $is_logged_in = isset($_SESSION['user_id']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Browse Games - Quest</title>
+    <link rel="stylesheet" href="../style.css">
     
 
 
@@ -33,16 +32,21 @@ $is_logged_in = isset($_SESSION['user_id']);
     <!--navigation bar, e boni copy paste qeta ncdo faqe ever -->
     <nav>
         <ul>
-            <li><img href="#" style="width: 50px; height: 50px; cursor: pointer;" src="images/logo.jpg" alt="Logo"></li>
-            <li><a style="font-size:30px" id="title" href="landing">QUEST</a></li>
+            <li><img href="#" style="width: 50px; height: 50px; cursor: pointer;" src="../images/logo.jpg" alt="Logo"></li>
+            <li><a style="font-size:30px" id="title" href="/">QUEST</a></li>
 
-            <li style="margin-left: auto;"><a  class="navitem" href="games">Browse Games</a></li>
-            <li><a class="navitem" href="privacy">Our Policy</a></li>
+            <li style="margin-left: auto;"><a  class="navitem" href="/games">Browse Games</a></li>
+            <li><a class="navitem" href="/privacy">Our Policy</a></li>
 
             <li><input type="search" placeholder=" Search..."></li>
 
-            <li><button id="loginBtn">Log in</button></li>
-            <li><button id="signupBtn" class="button-2">Sign Up</button></li>
+            <?php if (!$is_logged_in): ?>
+                <li><button id="loginBtn">Log in</button></li>
+                <li><button id="signupBtn" class="button-2">Sign Up</button></li>
+            <?php else: ?>
+                <li><a href="/profile"><?php echo htmlspecialchars($username); ?></a></li>
+                <li><a href="../logout.php" style="color: #ff6b6b;">Log out</a></li>
+            <?php endif; ?>
         </ul>
     </nav>
     <!-- login and signup -->
@@ -53,25 +57,25 @@ $is_logged_in = isset($_SESSION['user_id']);
             <h2>Log in</h2>
 
             <button class="google-btn">
-                <img src="images/googleicon.png" alt="Google Icon">
+                <img src="../images/googleicon.png" alt="Google Icon">
                 Continue with Google
             </button>
 
             <p class="divider-text">or</p>
 
-            <form class="modal-form">
+            <form class="modal-form" action="../login.php" method="POST">
                 <label>
                     Email
-                    <input type="email" placeholder="Enter your email or username">
+                    <input type="email" name="email" placeholder="Enter your email or username" required>
                 </label>
                 <label>
                     Password
-                    <input type="password" placeholder="Enter your password">
+                    <input type="password" name="password" placeholder="Enter your password" required>
                 </label>
 
                 <div style="margin-bottom: 12px;"></div>
 
-                <button type="button" onclick="window.location.href='profile.html'" >Log in</button>
+                <button type="submit">Log in</button>
             </form>
 
                 <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
@@ -105,46 +109,46 @@ $is_logged_in = isset($_SESSION['user_id']);
             <h2>Sign Up</h2>
 
             <button class="google-btn">
-                <img src="images/googleicon.png" alt="Google Icon">
+                <img src="../images/googleicon.png" alt="Google Icon">
                 Continue with Google
             </button>
 
             <p class="divider-text">or</p>
 
-            <form class="modal-form">
+            <form class="modal-form" action="../signup.php" method="POST">
                 <label>
                     Username
-                    <input type="text" placeholder="Choose a username" >
+                    <input type="text" name="username" placeholder="Choose a username" required>
                 </label>
 
                 <label>
                     Email
-                    <input type="email" placeholder="Enter your email" >
+                    <input type="email" name="email" placeholder="Enter your email" required>
                 </label>
 
                 <label>
                     Age
-                    <input type="number" min="1" placeholder="Your age" >
+                    <input type="number" name="age" min="1" placeholder="Your age" required>
                 </label>
 
                 <label>
                     Phone Number
-                    <input type="tel" placeholder="+383 44 123 456" >
+                    <input type="tel" name="phone" placeholder="+383 44 123 456">
                 </label>
 
                 <label>
                     Password
-                    <input type="password" placeholder="Create a password" >
+                    <input type="password" name="password" placeholder="Create a password" required>
                 </label>
 
                 <label>
                     Confirm Password
-                    <input type="password" placeholder="Confirm your password" >
+                    <input type="password" name="confirm_password" placeholder="Confirm your password" required>
                 </label>
 
                 <div style="margin-bottom: 12px;"></div>
 
-                <button type="button" onclick="window.location.href='profile.html'" class="button-2">Create Account</button>
+                <button type="submit" class="button-2">Create Account</button>
             </form>
 
             <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
@@ -181,7 +185,25 @@ $is_logged_in = isset($_SESSION['user_id']);
 </div>
 
 <!-- games  -->
- <div style="margin-top: 2%;" class="game-container" id="game-container"></div>
+<div style="margin-top: 2%;" class="game-container" id="game-container">
+    <?php foreach ($games as $game): ?>
+        <div class="game-card" onclick="window.location.href='/details?game=<?php echo urlencode($game['name']); ?>';" style="cursor: pointer;">
+            <img src="<?php echo htmlspecialchars($game['main_image_url']); ?>" alt="<?php echo htmlspecialchars($game['name']); ?>" onerror="this.src='../images/games/placeholder.png';">
+            <div class="game-card-info">
+                <h3><?php echo htmlspecialchars($game['name']); ?></h3>
+                <p style="display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;" class="secondary-text"><?php echo htmlspecialchars($game['description']); ?></p>
+                <div class="genre-container">
+                    <?php foreach ($game['genres'] as $genre): ?>
+                        <p class="genre-badge"><?php echo htmlspecialchars($genre); ?></p>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
 
 
    <footer>
@@ -203,44 +225,10 @@ $is_logged_in = isset($_SESSION['user_id']);
             © 2025 Quest. All rights reserved. Game data and artwork belong to their respective owners.
         </div>
     </footer>
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
 </body>
 
     <script>
-    fetch('games.json')
-        .then(response => response.json())
-        .then(games => {
-            const container = document.getElementById("game-container");
-
-            games.forEach(game => {
-                const card = document.createElement("div");
-                card.className = "game-card";
-                const imgSrc = game.main_image_url || "images/placeholder.png";
-                card.innerHTML = `
-                    <img src="${game.main_image_url}" alt="${game.name}" onerror="this.src='images/games/placeholder.png';">
-                    <div class="game-card-info">
-                        <h3>${game.name}</h3>
-                        <p style="display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;" class="secondary-text">${game.description}</p>
-                        <div class="genre-container">
-                            ${game.genres.map(genre => `<p class="genre-badge">${genre}</p>`).join('')}
-                        </div>
-                    </div>
-                `;
-
-                card.addEventListener('click', () => {
-                window.location.href = `details.html?game=${encodeURIComponent(game.name)}`;
-            });
-
-                container.appendChild(card);
-            });
-        })
-        .catch(error => console.error("Error loading games.json:", error));
-
-
-
     const btn = document.getElementById('advancedBtn');
     const box = document.getElementById('advancedBox');
 
