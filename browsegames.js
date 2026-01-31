@@ -6,7 +6,7 @@ async function loadBrowseGames() {
 
   grid.innerHTML = four.map(g => `
     <div class="game-card" data-name="${g.name}">
-      <img src="${g.main_image_url}" alt="">
+      <img src="${g.main_image_url}" alt="" onerror="this.src='images/games/placeholder.png';">
       <div class="game-card-info">
         <h3>${g.name}</h3>
         <p class="secondary-text" style="
@@ -25,7 +25,7 @@ async function loadBrowseGames() {
   document.querySelectorAll(".game-card").forEach(card => {
     const name = card.getAttribute("data-name")
     card.addEventListener("click", () => {
-      window.location.href = `details.html?game=${encodeURIComponent(name)}`
+      window.location.href = `/details?game=${encodeURIComponent(name)}`
     })
   })
 }
