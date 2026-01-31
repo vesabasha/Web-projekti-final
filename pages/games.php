@@ -206,9 +206,16 @@ $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : 
 const btn = document.getElementById('advancedBtn');
 const box = document.getElementById('advancedBox');
 
+const savedState = localStorage.getItem('advancedBoxOpen');
+if (savedState) {
+    box.style.display = savedState;
+} else {
+    box.style.display = 'none';
+}
+
 btn.addEventListener('click', () => {
-    
-    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    const isOpen = box.style.display === 'block';
+    box.style.display = isOpen ? 'none' : 'block';
     localStorage.setItem('advancedBoxOpen', box.style.display);
 });
 
