@@ -7,6 +7,11 @@ $userId = $_SESSION['user_id'] ?? null;
 $username = $_SESSION['username'] ?? '';
 $profilePic = $_SESSION['pfp_url'] ?? 'images/placeholder.jpg';
 
+if (!$userId) {
+    header("Location: landing");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $newUsername = trim($_POST['username'] ?? '');
