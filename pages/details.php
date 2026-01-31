@@ -52,18 +52,26 @@ $genres = $game['genres'] ? explode(',', $game['genres']) : [];
 </h1>
 
 <div style="width:75%;margin:auto;display:flex;gap:20px;">
-    <div style="flex:3;">
-        <img id="big-image" src="<?= $images[0] ?>" style="width:94%;height:83%;object-fit:cover;margin-bottom:10px;">
-        <div id="thumbnails" style="margin-left:3%;display:flex;gap:10px;height:80px;">
-            <?php foreach ($images as $i => $img): ?>
-                <img
-                    src="<?= $img ?>"
-                    class="game-detail-image"
-                    style="opacity:<?= $i === 0 ? '1' : '0.5' ?>"
-                >
-            <?php endforeach; ?>
+    <div style="flex:3; position:relative;">
+
+        <div style="position: relative; width:94%; height:440px; margin-bottom:10px;">
+            <img id="big-image" src="<?= $images[0] ?>" style="width:100%; height:100%; object-fit:cover;">
+
+            <button id="prev" class="arrow-button">&#10094;</button>
+            <button id="next" class="arrow-button">&#10095;</button>
         </div>
+
+
+    <div id="thumbnails" style="margin-left:3%;display:flex;gap:10px;height:80px;">
+        <?php foreach ($images as $i => $img): ?>
+            <img
+                src="<?= $img ?>"
+                class="game-detail-image"
+                style="opacity:<?= $i === 0 ? '1' : '0.5' ?>; cursor:pointer;"
+            >
+        <?php endforeach; ?>
     </div>
+</div>
 
     <div style="flex:2;">
         <img src="<?= $game['main_image2_url'] ?>" style="width:100%;margin-bottom:5%;">
@@ -82,15 +90,29 @@ $genres = $game['genres'] ? explode(',', $game['genres']) : [];
 <?php include __DIR__ . '/../components/footer.php'; ?>
 
 <script>
-const thumbs = document.querySelectorAll('.game-detail-image');
-const big = document.getElementById('big-image');
+document.addEventListener('DOMContentLoaded', () => {
+    const thumbs = document.querySelectorAll('.game-detail-image');
+    const big = document.getElementById('big-image');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
 
-thumbs.forEach(img => {
-    img.onclick = () => {
-        big.src = img.src;
-        thumbs.forEach(i => i.style.opacity = '0.5');
-        img.style.opacity = '1';
-    };
+    if (!thumbs.length) return;
+
+    let currentIndex = 0;
+    const images = Array.from(thumbs).map(t => t.src);
+
+    function showSlide(index) {
+        currentIndex = (index + images.length) % images.length;
+        big.src = images[currentIndex];
+        thumbs.forEach((t, i) => t.style.opacity = i === currentIndex ? '1' : '0.5');
+    }
+
+    thumbs.forEach((t, i) => t.addEventListener('click', () => showSlide(i)));
+
+    prevBtn.addEventListener('click', () => showSlide(currentIndex - 1));
+    nextBtn.addEventListener('click', () => showSlide(currentIndex + 1));
+
+    setInterval(() => showSlide(currentIndex + 1), 8000);
 });
 </script>
 

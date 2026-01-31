@@ -706,3 +706,31 @@ button img.icon-btn {
 .edit-mode .pfp-overlay {
     opacity: 1;
 }
+
+.arrow-button {
+    position: absolute;
+    top: 55%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: #00000066;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1vh;
+}
+
+.arrow-button:hover {
+    background: #00000088;
+}
+#prev {
+    left: 0;
+}
+#next {
+    right: 0;
+}
