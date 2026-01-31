@@ -48,7 +48,7 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 document.querySelectorAll("#browse-grid .game-card").forEach(card => {
     const name = card.getAttribute("data-name");
     card.addEventListener("click", () => {
-        window.location.href = `/details?game=${encodeURIComponent(title)}`;
+        window.location.href = `/details?game=${encodeURIComponent(name)}`;
     });
 });
 </script>

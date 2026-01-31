@@ -26,7 +26,7 @@ switch ($path) {
         require 'pages/lists.html';
         break;
     case 'details':
-        require 'pages/details.html';
+        require 'pages/details.php';
         break;
     case 'privacy':
         require 'pages/privacy.html';
