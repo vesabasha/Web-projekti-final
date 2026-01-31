@@ -101,7 +101,6 @@
                         <img src="images/delete.png" alt="Delete" class="icon-btn">
                       </button>
                     </form>
-                  <button><img src="images/view.png" alt="View" class="icon-btn"></button>
                 </td>        
             </tr>
             <?php endforeach; ?>

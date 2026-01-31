@@ -246,7 +246,9 @@ $genres = $pdo->query("SELECT * FROM genres")->fetchAll();
   <td>
     <button class="edit-btn button-3"><img src="images/edit.png" alt="Edit" class="icon-btn"></button>
       
-    <button><img src="images/view.png" alt="View" class="icon-btn"></button>
+    <button class="view-btn" data-title="<?= htmlspecialchars($game['title']) ?>">
+      <img src="images/view.png" alt="View" class="icon-btn">
+    </button>
     <form method="POST" style="display:inline;">
         <input type="hidden" name="delete_game_id" value="<?= $game['id'] ?>">
         <button type="submit" class="button-2">
@@ -278,6 +280,13 @@ window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; }
 
 const editModal = document.getElementById('edit-game-modal');
 const editClose = editModal.querySelector('.close');
+
+document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const title = encodeURIComponent(btn.dataset.title);
+        window.location.href = `/details?game=${title}`;
+    });
+});
 
 document.querySelectorAll('.edit-btn').forEach(btn => {
   btn.addEventListener('click', () => {
