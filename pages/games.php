@@ -7,7 +7,8 @@ $allGenres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
 
 
 $genre = $_GET['genre'] ?? null;
-$year  = $_GET['year'] ?? null;
+$yearFrom = $_GET['year_from'] ?? null;
+$yearTo   = $_GET['year_to'] ?? null;
 $search = $_GET['search'] ?? null;
 
 $sql = "
@@ -31,9 +32,18 @@ if (!empty($search)) {
     $params[':search'] = '%' . $search . '%';
 }
 
-if (!empty($year)) {
-    $sql .= " AND YEAR(g.release_date) = :year";
-    $params[':year'] = $year;
+if (!empty($yearFrom) && !empty($yearTo)) {
+    $sql .= " AND YEAR(g.release_date) BETWEEN :yearFrom AND :yearTo";
+    $params[':yearFrom'] = $yearFrom;
+    $params[':yearTo'] = $yearTo;
+
+} elseif (!empty($yearFrom)) {
+    $sql .= " AND YEAR(g.release_date) >= :yearFrom";
+    $params[':yearFrom'] = $yearFrom;
+
+} elseif (!empty($yearTo)) {
+    $sql .= " AND YEAR(g.release_date) <= :yearTo";
+    $params[':yearTo'] = $yearTo;
 }
 
 $selectedGenres = [];
@@ -140,7 +150,12 @@ $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : 
 
     <div class="year-filter">
         <label class="secondary-text">Release year</label>
-        <input type="number" name="year" placeholder="e.g. 2023" min="1980" max="2030">
+
+        <div class="year-range">
+            <input type="number" name="year_from" placeholder="From" min="1980" max="2030">
+            <span class="year-separator">–</span>
+            <input type="number" name="year_to" placeholder="To" min="1980" max="2030">
+        </div>
     </div>
 
     <div class="apply-filter">
