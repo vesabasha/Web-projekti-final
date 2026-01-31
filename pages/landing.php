@@ -79,7 +79,5 @@
 <?php include __DIR__ . '/../components/footer.php'; ?>
 
     <script src="script.js"></script>
-    <script src="browsegames.js"></script>
-
 </body>
 </html>
