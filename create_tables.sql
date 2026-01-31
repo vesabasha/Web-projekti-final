@@ -17,7 +17,7 @@ CREATE TABLE games(
     image2 VARCHAR(255),
     image3 VARCHAR(255),
     image4 VARCHAR(255),
-    release_date DATE,
+    release_date DATE
 );
 
 CREATE TABLE genres(
