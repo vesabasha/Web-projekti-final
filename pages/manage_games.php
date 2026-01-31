@@ -135,7 +135,10 @@ $genres = $pdo->query("SELECT * FROM genres")->fetchAll();
   <div class="main-content">
     <div class="header">
       <h2>Game Management</h2>
-      <button id="openModalBtn">Add Game</button>
+      <button style="margin-left:auto;" class="button-3" onclick="window.location.href='landing'">Back to Quest</button>
+
+      <button  id="openModalBtn">Add Game</button>
+
     </div>
 
 <div id="add-game-modal">
@@ -241,14 +244,15 @@ $genres = $pdo->query("SELECT * FROM genres")->fetchAll();
   <td><?= htmlspecialchars($game['description']) ?></td>
   <td><?= date('Y', strtotime($game['release_date'])) ?></td>
   <td>
-    <button class="edit-btn"><img src="images/edit.png" alt="Edit" class="icon-btn"></button>
-      <form method="POST" style="display:inline;">
+    <button class="edit-btn button-3"><img src="images/edit.png" alt="Edit" class="icon-btn"></button>
+      
+    <button><img src="images/view.png" alt="View" class="icon-btn"></button>
+    <form method="POST" style="display:inline;">
         <input type="hidden" name="delete_game_id" value="<?= $game['id'] ?>">
         <button type="submit" class="button-2">
           <img src="images/delete.png" alt="Delete" class="icon-btn">
         </button>
       </form>
-    <button><img src="images/view.png" alt="View" class="icon-btn"></button>
   </td>
 </tr>
 

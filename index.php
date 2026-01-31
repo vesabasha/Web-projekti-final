@@ -20,7 +20,7 @@ switch ($path) {
         require 'pages/dashboard.php';
         break;
     case 'profile':
-        require 'pages/profile.html';
+        require 'pages/profile.php';
         break;
     case 'list':
         require 'pages/lists.html';

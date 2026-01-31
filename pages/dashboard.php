@@ -55,9 +55,10 @@
 
   <div class="main-content">
 
-
-    <h2>User Management</h2>
-
+  <div class="header">
+    <h2>User Management</h2> 
+    <button class="button-3" onclick="window.location.href='landing'">Back to Quest</button>
+</div>
 <div class="table-container">
         <div class="table-header">
           <h2>All Users</h2>
@@ -76,7 +77,10 @@
             <?php foreach ($users as $user): ?>
               <tr>
                 <td>
-                  <div class="username"><?= htmlspecialchars($user['username']) ?></div>
+                  <div style="display:flex;align-items:center;gap:15px;">
+                    <img src="<?= $user['pfp_url'] ?>" alt="Profile" class="profile-avatar" style="width:40px;height:40px;border-radius:50%;">
+                    <div class="username"><?= htmlspecialchars($user['username']) ?></div>
+                  </div>
                 </td>
                 <td>
                   <div class="email"><?= htmlspecialchars($user['email']) ?></div>

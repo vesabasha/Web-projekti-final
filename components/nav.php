@@ -3,15 +3,23 @@ session_start();
 
 $userId = $_SESSION['user_id'] ?? null;
 $username = $_SESSION['username'] ?? '';
-$profilePic = $_SESSION['profile_pic'] ?? 'images/joker pfp.jpg';
-
+$profilePic = $_SESSION['pfp_url'] ?? 'images/placeholder.jpg';
+$is_admin = $_SESSION['is_admin'] ?? false;
+?>
 <nav>
     <ul>
         <li><img style="width:50px;height:50px;cursor:pointer;" src="images/logo.jpg" alt="Logo"></li>
         <li><a style="font-size:30px" id="title" href="landing">QUEST</a></li>
 
+        
+        
         <li style="margin-left:auto;"><a class="navitem" href="games">Browse Games</a></li>
         <li><a class="navitem" href="privacy">Our Policy</a></li>
+
+        <?php if ($is_admin):?> 
+        <li><a class="navitem" href="dashboard">Dashboard</a></li>
+        <?php endif;?>
+
 
         <li><input type="search" placeholder=" Search..."></li>
 
