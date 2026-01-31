@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_game_id'])) {
     $main_image_url = uploadFileEdit($_FILES['main_image_url'], $uploadDir);
     $main_image2_url = uploadFileEdit($_FILES['main_image2_url'], $uploadDir);
 
-    $stmt = $pdo->prepare("UPDATE games SET title=?, description=?, release_date=?, " .
+    $stmt = $pdo->prepare("UPDATE games SET title=?, description=?, release_date=? " .
         ($main_image_url ? ", main_image_url=?" : "") .
         ($main_image2_url ? ", main_image2_url=?" : "") .
         " WHERE id=?");
@@ -242,7 +242,12 @@ $genres = $pdo->query("SELECT * FROM genres")->fetchAll();
   <td><?= date('Y', strtotime($game['release_date'])) ?></td>
   <td>
     <button class="edit-btn"><img src="images/edit.png" alt="Edit" class="icon-btn"></button>
-    <button class="button-2"><img src="images/delete.png" alt="Delete" class="icon-btn"></button>
+      <form method="POST" style="display:inline;">
+        <input type="hidden" name="delete_game_id" value="<?= $game['id'] ?>">
+        <button type="submit" class="button-2">
+          <img src="images/delete.png" alt="Delete" class="icon-btn">
+        </button>
+      </form>
     <button><img src="images/view.png" alt="View" class="icon-btn"></button>
   </td>
 </tr>

@@ -7,7 +7,7 @@ switch ($path) {
         require 'pages/landing.html';
         break;
     case 'dashboard':
-        require 'pages/dashboard.html';
+        require 'pages/dashboard.php';
         break;
     case 'profile':
         require 'pages/profile.html';
