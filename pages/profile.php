@@ -12,8 +12,58 @@ if (!$userId) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_GET['action'])) {
+    header('Content-Type: application/json');
 
+    if ($_GET['action'] === 'search_games') {
+        $q = trim($_GET['q'] ?? '');
+        if (!$q) { echo json_encode([]); exit; }
+        $stmt = $pdo->prepare("SELECT id, title, main_image2_url, main_image_url FROM games WHERE title LIKE ? LIMIT 10");
+        $stmt->execute(["%$q%"]);
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+        exit;
+    }
+
+    if ($_GET['action'] === 'create_list') {
+        if (!$userId) {
+            echo json_encode(['success' => false, 'error' => 'Not logged in']);
+            exit;
+        }
+
+        $name = trim($_POST['name'] ?? '');
+        if (!$name) {
+            echo json_encode(['success' => false, 'error' => 'List name required']);
+            exit;
+        }
+
+        $games = isset($_POST['games']) && is_array($_POST['games']) ? $_POST['games'] : [];
+
+        try {
+            $pdo->beginTransaction();
+            
+            $stmt = $pdo->prepare("INSERT INTO lists (name, user_id) VALUES (?, ?)");
+            $stmt->execute([$name, $userId]);
+            $listId = $pdo->lastInsertId();
+
+            if (!empty($games)) {
+                $stmt = $pdo->prepare("INSERT INTO list_games (list_id, game_id) VALUES (?, ?)");
+                foreach ($games as $gameId) {
+                    $stmt->execute([$listId, intval($gameId)]);
+                }
+            }
+
+            $pdo->commit();
+            echo json_encode(['success' => true, 'message' => 'List created successfully']);
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+        }
+        exit;
+    }
+}
+
+// Handle profile update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
     $newUsername = trim($_POST['username'] ?? '');
 
     if (!empty($_FILES['pfp']['name'])) {
@@ -23,10 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (move_uploaded_file($_FILES['pfp']['tmp_name'], $uploadPath)) {
             $pfpUrl = 'images/user_profiles/' . $newFileName;
-
             $stmt = $pdo->prepare("UPDATE users SET pfp_url = ? WHERE id = ?");
             $stmt->execute([$pfpUrl, $userId]);
-
             $_SESSION['pfp_url'] = $pfpUrl;
         }
     }
@@ -40,123 +88,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: /profile");
     exit();
 }
-
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../list-modal.css">
+
 </head>
 <body>
 
 <?php include __DIR__ . '/../components/nav.php'; ?>
-
 <?php include __DIR__ . '/../components/authModal.php'; ?>
 
 <section class="profile-container">
-        <div class="profile-header">
-            <div class="profile-top">
-                <div class="profile-pic-container">
-                    <img src="<?= $profilePic ?>" class="profile-avatar" id="profilePicPreview">
-                    <div class="pfp-overlay"><p>Choose Picture</p></div>
-                </div>
-
-                <div class="profile-user-info">
-                    <h2 id="usernameDisplay" style="color:#FF669C ;"><?= htmlspecialchars($username) ?></h2>
-                    <button id="editProfileBtn">Edit Profile</button>
-                </div>
-
-                <form method="post" enctype="multipart/form-data" id="editProfileForm" style="display:none;">
+    <div class="profile-header">
+        <div class="profile-top">
+            <div class="profile-pic-container">
+                <img src="<?= $profilePic ?>" class="profile-avatar" id="profilePicPreview">
+                <div class="pfp-overlay"><p>Choose Picture</p></div>
+            </div>
+            <div class="profile-user-info">
+                <h2 id="usernameDisplay" style="color:#FF669C ;"><?= htmlspecialchars($username) ?></h2>
+                <button id="editProfileBtn">Edit Profile</button>
+            </div>
+            <form method="post" enctype="multipart/form-data" id="editProfileForm" style="display:none;">
                 <input type="text" name="username" value="<?= htmlspecialchars($username) ?>">
                 <input type="file" name="pfp" id="pfpInput" style="display:none;" accept="image/*">
                 <button class="button-3" type="submit">Apply</button>
                 <button class="button-3" type="button" id="cancelEdit">Cancel</button>
-                </form>
-
-                <button class="button-2" onclick="window.location.href='logout.php'"><img src="images/logout.png" alt="Lo2gout" class="icon-btn"></button>
-
-            </div>
-
-
-
-
-            <div class="profile-stats">
-                <p><span>103</span>Liked Games</p>
-                <p><span>5</span>Lists</p>
-                <p><span>63</span>Games Saved</p>
-            </div>
+            </form>
+            <button class="button-2" onclick="window.location.href='logout.php'">
+                <img src="images/logout.png" alt="Logout" class="icon-btn">
+            </button>
         </div>
 
-        <div class="lists-header">
-            <h2>My Lists</h2>
-            <button class="create-list-btn"> Create a List</button>
+        <div class="profile-stats">
+            <p><span>103</span>Liked Games</p>
+            <p><span>5</span>Lists</p>
+            <p><span>63</span>Games Saved</p>
         </div>
+    </div>
+
+    <div class="lists-header">
+        <h2>My Lists</h2>
+        <button class="create-list-btn">Create a List</button>
+    </div>
+
+    <div id="create-list-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create New List</h2>
+            <form id="createListForm">
+                <label>List Name:</label>
+                <input type="text" id="listNameInput" name="name" placeholder="Enter list name" required>
+                
+                <label>Search Games to Add (Optional):</label>
+                <input type="text" id="listGameSearch" placeholder="Type to search games..." autocomplete="off">
+                <div id="listGameResults"></div>
+                
+                <div id="selectedGamesContainer"></div>
+                
+                <div id="listFeedback"></div>
+                <button type="submit">Create List</button>
+            </form>
+        </div>
+    </div>
 
     <div id="lists"></div>
 </section>
 
-    <?php include __DIR__ . '/../components/footer.php'; ?>
-    </div>
-    
-<script>  
-
-
-async function loadLists() {
-  const res = await fetch('games.json')
-  const games = await res.json()
-  const container = document.getElementById('lists')
-
-const titles = ["Favorites", "Haven't Finished", "Want to Play"]
-
-  for (let i = 0; i < 3; i++) {
-    const start = i * 6
-    const end = start + 6
-    const picks = games.slice(start, end)
-
-    const block = document.createElement('div')
-    block.className = 'list-block'
-
-
-    const titleRow = document.createElement('div')
-    titleRow.className = 'list-title-row'
-
-const copyBtn = document.createElement('button')
-copyBtn.textContent = 'Copy Link'
-copyBtn.className = 'copy-link-btn'
-copyBtn.onclick = () => {
-    navigator.clipboard.writeText(window.location.href)
-    alert('Link copied!')
-}
-    titleRow.appendChild(copyBtn)
-
-    titleRow.innerHTML = `<h3>${titles[i]}</h3> <a href="lists.html?list=${i}" class="secondary-a">See Full List</a>`
-
-
-    const row = document.createElement('div')
-    row.className = 'list-row'
-
-    for (const g of picks) {
-      const img = document.createElement('img')
-      img.src = g.main_image_url
-      img.onclick = () => {
-        location.href = `details.html?game=${encodeURIComponent(g.name)}`
-      }
-      row.appendChild(img)
-    }
-
-    block.appendChild(titleRow)
-    block.appendChild(row)
-    container.appendChild(block)
-  }
-}
-
-loadLists()
-</script>
+<?php include __DIR__ . '/../components/footer.php'; ?>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -168,41 +174,180 @@ document.addEventListener('DOMContentLoaded', () => {
     const profilePic = document.getElementById('profilePicPreview');
     const pfpInput = document.getElementById('pfpInput');
 
-    if (editBtn && editForm) {
-        editBtn.onclick = () => {
-            usernameDisplay.style.display = 'none';
-            editBtn.style.display = 'none';
-            editForm.style.display = 'block';
-            profilePicContainer.classList.add('edit-mode'); 
-        };
+    editBtn.onclick = () => {
+        usernameDisplay.style.display = 'none';
+        editBtn.style.display = 'none';
+        editForm.style.display = 'block';
+        profilePicContainer.classList.add('edit-mode');
+    };
 
-        cancelBtn.onclick = () => {
-            editForm.style.display = 'none';
-            usernameDisplay.style.display = 'block';
-            editBtn.style.display = 'inline-block';
-            profilePicContainer.classList.remove('edit-mode');
-        };
+    cancelBtn.onclick = () => {
+        editForm.style.display = 'none';
+        usernameDisplay.style.display = 'block';
+        editBtn.style.display = 'inline-block';
+        profilePicContainer.classList.remove('edit-mode');
+    };
 
-        profilePicContainer.onclick = () => {
-            if (editForm.style.display === 'block') {
-                pfpInput.click();
-            }
-        };
+    profilePicContainer.onclick = () => {
+        if (editForm.style.display === 'block') pfpInput.click();
+    };
 
-        pfpInput.onchange = () => {
-            const file = pfpInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = e => profilePic.src = e.target.result;
-                reader.readAsDataURL(file);
-            }
-        };
+    pfpInput.onchange = () => {
+        const file = pfpInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => profilePic.src = e.target.result;
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const listModal = document.getElementById('create-list-modal');
+    const listClose = listModal.querySelector('.close');
+    const listGameSearch = document.getElementById('listGameSearch');
+    const listGameResults = document.getElementById('listGameResults');
+    const selectedGamesContainer = document.getElementById('selectedGamesContainer');
+    const listFeedback = document.getElementById('listFeedback');
+    const listNameInput = document.getElementById('listNameInput');
+    const createListForm = document.getElementById('createListForm');
+
+    let selectedGames = [];
+    let searchTimeout = null;
+
+    function openListModal() {
+        selectedGames = [];
+        listModal.style.display = 'flex';
+        listNameInput.value = '';
+        listGameSearch.value = '';
+        listGameResults.innerHTML = '';
+        selectedGamesContainer.innerHTML = '';
+        listFeedback.style.display = 'none';
     }
+
+    function closeListModal() {
+        listModal.style.display = 'none';
+        selectedGames = [];
+    }
+
+    function showFeedback(message, isError = false) {
+        listFeedback.textContent = message;
+        listFeedback.className = isError ? 'error' : 'success';
+        listFeedback.style.display = 'block';
+        setTimeout(() => { listFeedback.style.display = 'none'; }, 3000);
+    }
+
+    function renderSelectedGames() {
+        if (selectedGames.length === 0) {
+            selectedGamesContainer.innerHTML = '';
+            return;
+        }
+
+        const gamesHtml = selectedGames.map(game => `
+            <div class="selected-game-item">
+                <img src="${game.main_image2_url}" alt="${game.title}">
+                <span>${game.title}</span>
+                <button type="button" class="remove-btn" onclick="removeGame(${game.id})">
+                    <img src="../images/delete.png" alt="Delete">
+                </button>
+            </div>
+        `).join('');
+
+        selectedGamesContainer.innerHTML = `
+            <label>Selected Games (${selectedGames.length}):</label>
+            <div class="selected-games-list">${gamesHtml}</div>
+        `;
+    }
+
+    window.removeGame = (gameId) => {
+        selectedGames = selectedGames.filter(g => g.id !== gameId);
+        renderSelectedGames();
+    };
+
+    document.querySelector('.create-list-btn').onclick = openListModal;
+    listClose.onclick = closeListModal;
+    window.onclick = e => {
+        if (e.target === listModal) closeListModal();
+    };
+
+    listGameSearch.oninput = () => {
+        clearTimeout(searchTimeout);
+        const term = listGameSearch.value.trim();
+
+        if (!term) {
+            listGameResults.innerHTML = '';
+            return;
+        }
+
+        searchTimeout = setTimeout(async () => {
+            try {
+                const res = await fetch(`?action=search_games&q=${encodeURIComponent(term)}`);
+                const games = await res.json();
+
+                if (games.length === 0) {
+                    listGameResults.innerHTML = '<p class="no-results">No games found</p>';
+                    return;
+                }
+
+                listGameResults.innerHTML = games.slice(0, 5).map(game => `
+                    <div class="game-search-result" data-id="${game.id}" data-title="${game.title}" data-img="${game.main_image2_url}">
+                        <img src="${game.main_image2_url}" alt="${game.title}">
+                        <span>${game.title}</span>
+                    </div>
+                `).join('');
+
+                document.querySelectorAll('.game-search-result').forEach(el => {
+                    el.onclick = () => {
+                        const gameId = parseInt(el.dataset.id);
+                        const gameTitle = el.dataset.title;
+                        const gameImg = el.dataset.img;
+
+                        if (selectedGames.some(g => g.id === gameId)) {
+                            showFeedback('Game already added!', true);
+                            return;
+                        }
+
+                        selectedGames.push({ id: gameId, title: gameTitle, main_image2_url: gameImg });
+                        renderSelectedGames();
+                        listGameSearch.value = '';
+                        listGameResults.innerHTML = '';
+                        showFeedback(`Added: ${gameTitle}`);
+                    };
+                });
+            } catch (error) {
+                listGameResults.innerHTML = '<p class="search-error">Error searching games</p>';
+            }
+        }, 300);
+    };
+
+    createListForm.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const listName = listNameInput.value.trim();
+        if (!listName) {
+            showFeedback('Please enter a list name', true);
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', listName);
+        selectedGames.forEach(game => formData.append('games[]', game.id));
+
+        try {
+            const res = await fetch('?action=create_list', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            if (data.success) {
+                showFeedback(data.message || 'List created successfully!');
+                setTimeout(() => closeListModal(), 1500);
+            } else {
+                showFeedback(data.error || 'Failed to create list', true);
+            }
+        } catch (error) {
+            showFeedback('Network error. Please try again.', true);
+        }
+    };
 });
 </script>
 
-
 <script src="../script.js"></script>
-
 </body>
 </html>
