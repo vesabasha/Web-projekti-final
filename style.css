@@ -706,3 +706,139 @@ button img.icon-btn {
 .edit-mode .pfp-overlay {
     opacity: 1;
 }
+
+.genre-badge.selected {
+    background-color: #1f1e1d02;
+}
+
+.genre-badge:hover {
+    background-color: #1f1e1d02;
+}
+.genre-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.selected-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 6px;
+}
+
+.genre-badge {
+    background-color: #2fa4a9;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.genre-badge .remove {
+    font-size: 12px;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.genre-badge .remove:hover {
+    opacity: 1;
+}
+.genre-filter select {
+    width: 240px;
+    height: 36px;
+}
+.genre-filter {
+    max-width: 260px;
+}
+.advanced-form {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.right-filters {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.year-field input {
+    width: 120px;
+}
+.advanced-form {
+    padding: 24px;
+}
+
+.advanced-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr auto;
+    align-items: start;
+    gap: 40px;
+}
+
+.genre-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.selected-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 260px;
+}
+
+.year-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 22px;
+}
+
+.apply-filter {
+    display: flex;
+    align-items: center;
+    margin-top: 22px;
+}
+.genre-filter select,
+.year-filter input {
+    width: 240px;
+    height: 36px;
+    padding: 6px 10px;
+
+    background-color: #010B14;
+    color: white;
+
+    border: 1px solid #333;
+    border-radius: 6px;
+
+    font-size: 14px;
+    font-family: 'helvetica', sans-serif;
+}
+
+.year-filter input::placeholder {
+    color: #979595;
+}
+
+.year-filter input::-webkit-outer-spin-button,
+.year-filter input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.year-filter input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.genre-filter select:focus,
+.year-filter input:focus {
+    outline: none;
+    border-color: #44A1A0;
+}

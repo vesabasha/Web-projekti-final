@@ -36,17 +36,29 @@ if (!empty($year)) {
     $params[':year'] = $year;
 }
 
-if (!empty($genre)) {
+$selectedGenres = [];
+if (!empty($_GET['genres']) && is_array($_GET['genres'])) {
+    $selectedGenres = $_GET['genres'];
+}
+
+if (!empty($selectedGenres)) {
+    $placeholders = [];
+    $params = $params ?? [];
+    foreach ($selectedGenres as $i => $g) {
+        $placeholders[] = ":genre$i";
+        $params[":genre$i"] = $g;
+    }
+
     $sql .= "
     AND g.id IN (
         SELECT gg2.game_id
         FROM game_genres gg2
         JOIN genres ge2 ON gg2.genre_id = ge2.id
-        WHERE ge2.name = :genre
+        WHERE ge2.name IN (" . implode(',', $placeholders) . ")
+        GROUP BY gg2.game_id
+        HAVING COUNT(DISTINCT ge2.name) = " . count($selectedGenres) . "
     )";
-    $params[':genre'] = $genre;
 }
-
 $sql .= " GROUP BY g.id ORDER BY g.release_date DESC";
 
 $stmt = $pdo->prepare($sql);
@@ -74,8 +86,6 @@ $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Games - Quest</title>
     <link rel="stylesheet" href="../style.css">
-    
-
 
 </head>
 <body>
@@ -111,36 +121,34 @@ $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : 
     </button>
 
     <div id="advancedBox" style="display: none; width: 100%; background-color: #010B14; color: white; border-top: 1px solid #000; border-radius: 0 0 8px 8px;">
-    <form method="GET" style="padding: 2%; display: flex; gap: 20px; flex-wrap: wrap;">
+    <form method="GET" class="advanced-form">
 
-        <!-- Genre -->
-        <select name="genre">
-        <option value="">All genres</option>
+    <div class="advanced-grid">
 
-        <?php foreach ($allGenres as $g): ?>
-            <option
-                value="<?= htmlspecialchars($g) ?>"
-                <?= $genre === $g ? 'selected' : '' ?>
-        >
-                <?= htmlspecialchars($g) ?>
-            </option>
-        <?php endforeach; ?>
+    <div class="genre-filter">
+        <p class="secondary-text">Genres</p>
+
+        <select id="genreDropdown">
+            <option value="">-- Select a genre --</option>
+            <?php foreach ($allGenres as $g): ?>
+                <option value="<?= htmlspecialchars($g) ?>"><?= htmlspecialchars($g) ?></option>
+            <?php endforeach; ?>
         </select>
 
-        <!-- Year -->
-        <div>
-            <label class="secondary-text">Release year</label><br>
-            <input type="number" name="year" placeholder="e.g. 2023" min="1980" max="2030">
-        </div>
+        <div id="selectedGenres" class="selected-genres"></div>
+    </div>
 
-        <!-- Submit -->
-        <div style="align-self: flex-end;">
-            <button type="submit" style="padding: 8px 20px; cursor: pointer;">
-                Apply filters
-            </button>
-        </div>
+    <div class="year-filter">
+        <label class="secondary-text">Release year</label>
+        <input type="number" name="year" placeholder="e.g. 2023" min="1980" max="2030">
+    </div>
 
-    </form>
+    <div class="apply-filter">
+        <button type="submit" style="margin-top:33px;">Apply filters</button>
+    </div>
+
+</div>
+</form>
 </div>
 </div>
 
@@ -179,17 +187,62 @@ $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : 
 </body>
 
     <script>
-    const btn = document.getElementById('advancedBtn');
-    const box = document.getElementById('advancedBox');
+/* Advanced Search toggle */
+const btn = document.getElementById('advancedBtn');
+const box = document.getElementById('advancedBox');
 
-    btn.addEventListener('click', () => {
-        // toggle display
-        if (box.style.display === 'none') {
-            box.style.display = 'block';
-        } else {
-            box.style.display = 'none';
-        }
+btn.addEventListener('click', () => {
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+});
+
+/* Genre multi-select logic */
+const dropdown = document.getElementById('genreDropdown');
+const selectedContainer = document.getElementById('selectedGenres');
+
+let selectedGenres = [];
+
+dropdown.addEventListener('change', () => {
+    const value = dropdown.value;
+
+    if (value && !selectedGenres.includes(value)) {
+        selectedGenres.push(value);
+        updateBadges();
+    }
+
+    dropdown.value = '';
+});
+
+function updateBadges() {
+    selectedContainer.innerHTML = '';
+
+    selectedGenres.forEach((genre, index) => {
+        const badge = document.createElement('span');
+        badge.className = 'genre-badge';
+
+        const text = document.createElement('span');
+        text.textContent = genre;
+
+        const remove = document.createElement('span');
+        remove.className = 'remove';
+        remove.textContent = '✕';
+
+        remove.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedGenres.splice(index, 1);
+            updateBadges();
+        });
+
+        badge.appendChild(text);
+        badge.appendChild(remove);
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'genres[]';
+        input.value = genre;
+
+        selectedContainer.appendChild(badge);
+        selectedContainer.appendChild(input);
     });
-    </script>
-    
+}
+</script>
 </html>
