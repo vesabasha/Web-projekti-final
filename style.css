@@ -841,6 +841,7 @@ button img.icon-btn {
 .year-filter input:focus {
     outline: none;
     border-color: #44A1A0;
+} 
 .arrow-button {
     position: absolute;
     top: 55%;
