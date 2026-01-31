@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $userId = $_SESSION['user_id'] ?? null;
 $username = $_SESSION['username'] ?? '';
 $profilePic = $_SESSION['pfp_url'] ?? 'images/placeholder.jpg';
