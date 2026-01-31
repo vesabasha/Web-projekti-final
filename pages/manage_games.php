@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require_once __DIR__ . '/../config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_game_id'])) {
     $gameId = $_POST['delete_game_id'];

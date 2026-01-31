@@ -1,17 +1,31 @@
 <?php
 session_start();
-include 'config.php'; // this should define $pdo as your PDO connection
+require_once __DIR__ . '/../config.php'; // this should define $pdo as your PDO connection
 
 // Fetch games with genres
 $stmt = $pdo->query("
-    SELECT g.id, g.title, g.description, g.main_image_url,
+    SELECT g.id, g.title AS name, g.description, g.main_image_url,
            GROUP_CONCAT(ge.name) AS genres
     FROM games g
     LEFT JOIN game_genres gg ON g.id = gg.game_id
     LEFT JOIN genres ge ON gg.genre_id = ge.id
     GROUP BY g.id
 ");
-$games = $stmt->fetchAll();
+$games = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Convert genres from a comma-separated string into an array
+foreach ($games as &$game) {
+    if (isset($game['genres']) && $game['genres'] !== null && $game['genres'] !== '') {
+        $game['genres'] = explode(',', $game['genres']);
+    } else {
+        $game['genres'] = [];
+    }
+}
+unset($game);
+
+// Check if user is logged in
+$is_logged_in = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+$username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : '';
 ?>
 
 
@@ -127,16 +141,6 @@ $games = $stmt->fetchAll();
                 </label>
 
                 <label>
-                    Age
-                    <input type="number" name="age" min="1" placeholder="Your age" required>
-                </label>
-
-                <label>
-                    Phone Number
-                    <input type="tel" name="phone" placeholder="+383 44 123 456">
-                </label>
-
-                <label>
                     Password
                     <input type="password" name="password" placeholder="Create a password" required>
                 </label>
@@ -188,7 +192,15 @@ $games = $stmt->fetchAll();
 <div style="margin-top: 2%;" class="game-container" id="game-container">
     <?php foreach ($games as $game): ?>
         <div class="game-card" onclick="window.location.href='/details?game=<?php echo urlencode($game['name']); ?>';" style="cursor: pointer;">
-            <img src="<?php echo htmlspecialchars($game['main_image_url']); ?>" alt="<?php echo htmlspecialchars($game['name']); ?>" onerror="this.src='../images/games/placeholder.png';">
+            <?php
+            // Try to use main_image_url from database, otherwise construct from game name
+            $imagePath = $game['main_image_url'];
+            if (empty($imagePath) || $imagePath === null) {
+                // Construct path from game name
+                $imagePath = '../images/games/' . urlencode($game['name']) . '.png';
+            }
+            ?>
+            <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="<?php echo htmlspecialchars($game['name']); ?>" onerror="this.src='../images/games/placeholder.png';">
             <div class="game-card-info">
                 <h3><?php echo htmlspecialchars($game['name']); ?></h3>
                 <p style="display: -webkit-box;
