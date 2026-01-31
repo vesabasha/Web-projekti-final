@@ -207,14 +207,17 @@ const btn = document.getElementById('advancedBtn');
 const box = document.getElementById('advancedBox');
 
 btn.addEventListener('click', () => {
+    
     box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    localStorage.setItem('advancedBoxOpen', box.style.display);
 });
 
 /* Genre multi-select logic */
 const dropdown = document.getElementById('genreDropdown');
 const selectedContainer = document.getElementById('selectedGenres');
 
-let selectedGenres = [];
+let selectedGenres = <?= json_encode($selectedGenres ?? []) ?>;
+
 
 dropdown.addEventListener('change', () => {
     const value = dropdown.value;
@@ -259,5 +262,7 @@ function updateBadges() {
         selectedContainer.appendChild(input);
     });
 }
+updateBadges();
+
 </script>
 </html>
