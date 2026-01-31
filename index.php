@@ -1,10 +1,20 @@
 <?php
-$path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+
+$basePath = '/Web final project';
+$requestUri = $_SERVER['REQUEST_URI'];
+$requestPath = parse_url($requestUri, PHP_URL_PATH);
+
+$path = trim(str_replace($basePath, '', $requestPath), '/');
+
+$filePath = __DIR__ . $requestPath;
+if ($requestPath !== '/' && file_exists($filePath) && is_file($filePath)) {
+    return false;
+}
 
 switch ($path) {
     case '':
     case 'landing':
-        require 'pages/landing.html';
+        require 'pages/landing.php';
         break;
     case 'dashboard':
         require 'pages/dashboard.php';

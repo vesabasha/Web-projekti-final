@@ -1,62 +1,60 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     const loginBtn = document.getElementById("loginBtn");
     const signupBtn = document.getElementById("signupBtn");
-
     const heroSignupBtn = document.getElementById("heroSignupBtn");
 
-    const loginModal = document.getElementById("loginModal");
-    const signupModal = document.getElementById("signupModal");
+    const authModal = document.getElementById("authModal");
+    const loginWrapper = document.getElementById("loginFormWrapper");
+    const signupWrapper = document.getElementById("signupFormWrapper");
 
     const closeButtons = document.querySelectorAll(".modal-close");
 
-    function openModal(modal) {
-        modal.classList.remove("hidden");
+    function openModal() {
+        authModal.classList.remove("hidden");
     }
 
-    function closeModal(modal) {
-        modal.classList.add("hidden");
+    function closeModal() {
+        authModal.classList.add("hidden");
     }
 
-    // Top navbar buttons
-    if (loginBtn) loginBtn.addEventListener("click", () => openModal(loginModal));
-    if (signupBtn) signupBtn.addEventListener("click", () => openModal(signupModal));
+    // Show login form
+    if (loginBtn) loginBtn.addEventListener("click", () => {
+        loginWrapper.style.display = 'block';
+        signupWrapper.style.display = 'none';
+        openModal();
+    });
 
-    // HERO "Create an account" button
-    if (heroSignupBtn) heroSignupBtn.addEventListener("click", () => openModal(signupModal));
+    // Show signup form
+    if (signupBtn) signupBtn.addEventListener("click", () => {
+        loginWrapper.style.display = 'none';
+        signupWrapper.style.display = 'block';
+        openModal();
+    });
 
-    // Close buttons (X)
-    closeButtons.forEach((btn) => {
+    if (heroSignupBtn) heroSignupBtn.addEventListener("click", () => {
+        loginWrapper.style.display = 'none';
+        signupWrapper.style.display = 'block';
+        openModal();
+    });
+
+    // Close modal
+    closeButtons.forEach(btn => btn.addEventListener("click", closeModal));
+    document.addEventListener("keydown", e => {
+        if (e.key === "Escape") closeModal();
+    });
+
+    // Swap buttons inside modal
+    document.querySelectorAll("#swapToLogin").forEach(btn => {
         btn.addEventListener("click", () => {
-            const modal = btn.closest(".modal");
-            closeModal(modal);
+            loginWrapper.style.display = 'block';
+            signupWrapper.style.display = 'none';
         });
     });
 
-    // Escape closes any open modal
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            closeModal(loginModal);
-            closeModal(signupModal);
-        }
+    document.querySelectorAll("#swapToSignup").forEach(btn => {
+        btn.addEventListener("click", () => {
+            loginWrapper.style.display = 'none';
+            signupWrapper.style.display = 'block';
+        });
     });
-
-    // Switch from signup → login
-    const swapToLogin = document.getElementById("swapToLogin");
-    if (swapToLogin) {
-        swapToLogin.addEventListener("click", () => {
-            closeModal(signupModal);
-            openModal(loginModal);
-        });
-    }
-
-    // Switch from login → signup
-    const swapToSignup = document.getElementById("swapToSignup");
-    if (swapToSignup) {
-        swapToSignup.addEventListener("click", () => {
-            closeModal(loginModal);
-            openModal(signupModal);
-        });
-    }
-
 });
