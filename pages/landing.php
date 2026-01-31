@@ -70,14 +70,8 @@
     </div>
 
 </section>
-<section id="browse-games">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <h2 style="color:#A24465; font-size:32px;">Start Browsing</h2>
-    <a href="games" class="secondary-a">See More</a>
-  </div>
 
-  <div id="browse-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:25px; padding:0 20px;"></div>
-</section>
+<?php include __DIR__ . '/../components/browseModal.php'; ?>
 
 <?php include __DIR__ . '/../components/authModal.php'; ?>
 
