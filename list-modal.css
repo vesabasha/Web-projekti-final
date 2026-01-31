@@ -1,0 +1,216 @@
+#create-list-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    font-family: 'helvetica', sans-serif;
+}
+
+#create-list-modal .modal-content {
+    background-color: #010B14;
+    padding: 30px;
+    border-radius: 10px;
+    width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: white;
+    position: relative;
+    border: 1px solid #444;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+#create-list-modal .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: white;
+    transition: color 0.2s;
+}
+
+#create-list-modal .close:hover {
+    color: #ccc;
+}
+
+#create-list-modal h2 {
+    margin-bottom: 20px;
+    color: white;
+}
+
+#create-list-modal label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: white;
+}
+
+#create-list-modal input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #1a1f2a;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+#create-list-modal input[type="text"]:focus {
+    border-color: #44A1A0;
+    box-shadow: 0 0 5px rgba(68, 161, 160, 0.3);
+}
+
+#listGameResults {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+.game-search-result {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.game-search-result:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.game-search-result img {
+    width: 80px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.game-search-result span {
+    color: white;
+    font-size: 14px;
+}
+
+#create-list-modal button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #44A1A0;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+#create-list-modal button[type="submit"]:hover {
+    background-color: #6cbdbb;
+    transform: scale(1.02);
+}
+
+#listFeedback {
+    display: none;
+    padding: 10px 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    color: white;
+}
+
+#listFeedback.success {
+    background-color: rgba(40, 167, 69, 0.2);
+    border: 1px solid rgba(40, 167, 69, 0.5);
+}
+
+#listFeedback.error {
+    background-color: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+}
+
+#selectedGamesContainer label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: white;
+}
+
+.selected-games-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.selected-game-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+.selected-game-item img {
+    width: 60px;
+    height: 30px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.selected-game-item span {
+    flex: 1;
+    color: white;
+    font-size: 14px;
+}
+
+.selected-game-item .remove-btn {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.selected-game-item .remove-btn img {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0.8);
+}
+
+.selected-game-item .remove-btn:hover img {
+    filter: brightness(1);
+}
+
+.no-results {
+    color: #999;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.search-error {
+    color: #d9534f;
+    padding: 10px;
+    font-size: 14px;
+}
