@@ -537,7 +537,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
         <div class="no-games">No games in this list yet.</div>
     <?php else: ?>
         <?php foreach ($games as $game): ?>
-            <div class="game-card" data-game-id="<?= $game['id'] ?>">
+            <div class="game-card" data-game-id="<?= $game['id'] ?>" data-game-title="<?= htmlspecialchars($game['title']) ?>">
                 <img src="../<?= htmlspecialchars($game['main_image2_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?>" onerror="this.src='../images/games/placeholder.png';">
                 <div class="game-card-info">
                     <h3><?= htmlspecialchars($game['title']) ?></h3>
@@ -890,8 +890,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.tagName === 'BUTTON') return;
         const gameCard = e.target.closest('.game-card');
         if (gameCard) {
-            const gameId = gameCard.dataset.gameId;
-            window.location.href = `details?id=${gameId}`;
+            const gameTitle = gameCard.dataset.gameTitle;
+            window.location.href = `details?game=${encodeURIComponent(gameTitle)}`;
         }
     });
 });
