@@ -15,7 +15,7 @@ Our website has these pages:
 3. Game details page - view the games, a picture catalogue of them, a descriptions, genre etc. (details.html)
 4. Profile page - View your profile and your lists (profile.html)
 5. Lists page - similar to browse games page, but only includes the games from the users list (lists.html)
-6. Privacy Policy page - Read our privacy policy (privacy.html)
+6. Privacy Policy page - Read our privacy policy (privacy.php)
 
 Javascript has been used to render the games and games details pages from our json. It has also been used to open up the login and sign up modals.
 

@@ -1,34 +1,38 @@
+<?php
+session_start();
+require_once __DIR__ . '/../config.php';
+
+$loggedInId = $_SESSION['user_id'] ?? null;
+$username = null;
+
+// If user is logged in, get their username
+if ($loggedInId) {
+    $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
+    $stmt->execute([$loggedInId]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $username = $user['username'] ?? null;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Privacy Policy - Quest</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../responsive.css">
 </head>
 <body>
 
-    <nav>
-        <ul>
-            <li><img href="#" style="width: 50px; height: 50px; cursor: pointer;" src="images/logo.jpg" alt="Logo"></li>
-            <li><a style="font-size:30px" id="title" href="landing">QUEST</a></li>
-
-            <li style="margin-left: auto;"><a  class="navitem" href="games">Browse Games</a></li>
-            <li><a class="navitem" href="privacy">Our Policy</a></li>
-
-            <li><input type="search" placeholder=" Search..."></li>
-
-            <li><button id="loginBtn">Log in</button></li>
-            <li><button id="signupBtn" class="button-2">Sign Up</button></li>
-        </ul>
-    </nav>
+    <?php include __DIR__ . '/../components/nav.php'; ?>
 
     <main class="privacy-page">
 
         <header class="privacy-header">
             <div class="privacy-hero">
                 <div class="privacy-kh">
-                    <img src="images/privacy.png" alt="Privacy Policy illustration">
+                    <img src="../images/privacy.png" alt="Privacy Policy illustration">
                 </div>
                 <div>
                     <h1 class="privacy-title">Privacy Policy</h1>
@@ -135,7 +139,7 @@
             <h2>Policy Updates</h2>
             <p class="secondary-text">
                 We may update this Privacy Policy when needed due to new features, legal requirements, or
-                user feedback. The “Last Updated” date will always be displayed at the top of the page.
+                user feedback. The "Last Updated" date will always be displayed at the top of the page.
             </p>
         </section>
 
@@ -148,145 +152,11 @@
             </p>
         </section>
 
-        <!-- login and signup -->
-         
-         <!-- login -->
-    <div id="loginModal" class="modal hidden">
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <h2>Log in</h2>
+    </main>
 
-            <button class="google-btn">
-                <img src="images/googleicon.png" alt="Google Icon">
-                Continue with Google
-            </button>
+    <?php include __DIR__ . '/../components/authModal.php'; ?>
+    <?php include __DIR__ . '/../components/footer.php'; ?>
 
-            <p class="divider-text">or</p>
-
-            <form class="modal-form">
-                <label>
-                    Email
-                    <input type="email" placeholder="Enter your email or username">
-                </label>
-                <label>
-                    Password
-                    <input type="password" placeholder="Enter your password">
-                </label>
-
-                <div style="margin-bottom: 12px;"></div>
-
-                <button type="button" onclick="window.location.href='profile.html'">Log in</button>
-            </form>
-
-                <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
-                <button id="reset" style="
-                    background:none;
-                    border:none;
-                    color:#44A1A0;
-                    cursor:pointer;
-                    font-size:14px;
-                    text-decoration:underline;
-                ">Reset password</button>
-
-                <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
-                No account?
-                <button id="swapToSignup" style="
-                    background:none;
-                    border:none;
-                    color:#44A1A0;
-                    cursor:pointer;
-                    font-size:14px;
-                    text-decoration:underline;
-                ">Create one</button>
-            </p>
-        </div>
-    </div>
-
-    <!-- signup -->
-    <div id="signupModal" class="modal hidden">
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <h2>Sign Up</h2>
-
-            <button class="google-btn">
-                <img src="images/googleicon.png" alt="Google Icon">
-                Continue with Google
-            </button>
-
-            <p class="divider-text">or</p>
-
-            <form class="modal-form">
-                <label>
-                    Username
-                    <input type="text" placeholder="Choose a username" required>
-                </label>
-
-                <label>
-                    Email
-                    <input type="email" placeholder="Enter your email">
-                </label>
-
-                <label>
-                    Age
-                    <input type="number" min="1" placeholder="Your age">
-                </label>
-
-                <label>
-                    Phone Number
-                    <input type="tel" placeholder="+383 44 123 456">
-                </label>
-
-                <label>
-                    Password
-                    <input type="password" placeholder="Create a password">
-                </label>
-
-                <label>
-                    Confirm Password
-                    <input type="password" placeholder="Confirm your password" >
-                </label>
-
-                <div style="margin-bottom: 12px;"></div>
-
-                <button type="button" onclick="window.location.href='profile.html'"  class="button-2">Create Account</button>
-            </form>
-
-            <p style="color:white; margin-top:15px; text-align:center; font-size:14px;">
-                Already a member?
-                <button id="swapToLogin" style="
-                    background:none;
-                    border:none;
-                    color:#44A1A0;
-                    cursor:pointer;
-                    font-size:14px;
-                    text-decoration:underline;
-                ">Log in!</button>
-            </p>
-        </div>
-    </div>
-
-
-    <!--footer, e boni copy paste qeta ncdo faqe ever-->
-    <footer>
-        <div class="footer-columns">
-            <div class="col">
-            <h2>QUEST</h2>
-            </div>
-            <div class="col">
-            <a href="#">About Us</a><br>
-            <a href="#">Contact Us</a>
-            </div>
-            <div class="col">
-            <a href="#">Terms of Service</a><br>
-            <a href="privacy">Privacy Policy</a>
-            </div>
-        </div>
-        <br>
-        <div class="footer-bottom">
-            © 2025 Quest. All rights reserved. Game data and artwork belong to their respective owners.
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
 </body>
 </html>

@@ -30,7 +30,7 @@ switch ($path) {
         require 'pages/details.php';
         break;
     case 'privacy':
-        require 'pages/privacy.html';
+        require 'pages/privacy.php';
         break;
     case 'games': 
         require 'pages/games.php';
