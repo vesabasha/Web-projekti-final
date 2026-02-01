@@ -89,6 +89,8 @@ $genres = $game['genres'] ? explode(',', $game['genres']) : [];
 
 <?php include __DIR__ . '/../components/browseModal.php'; ?>
 
+<?php include __DIR__ . '/../components/addToListModal.php'; ?>
+
 <?php include __DIR__ . '/../components/footer.php'; ?>
 
 <script>
