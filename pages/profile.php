@@ -217,8 +217,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isOwnProfile) {
         const editBtn = document.getElementById('editProfileBtn');
+        const editForm = document.getElementById('editProfileForm');
         const usernameDisplay = document.getElementById('usernameDisplay');
         const cancelBtn = document.getElementById('cancelEdit');
+        const profilePicContainer = document.querySelector('.profile-pic-container');
         const profilePic = document.getElementById('profilePicPreview');
         const pfpInput = document.getElementById('pfpInput');
 
