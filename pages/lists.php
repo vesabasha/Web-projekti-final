@@ -131,7 +131,7 @@ $isOwnList = ($loggedInId && intval($loggedInId) === intval($list['user_id']));
 
 // Fetch games in this list
 $stmt = $pdo->prepare("
-    SELECT g.id, g.title, g.main_image2_url, g.description, g.release_date
+    SELECT g.id, g.title, g.main_image_url, g.description, g.release_date
     FROM games g
     INNER JOIN list_games lg ON g.id = lg.game_id
     WHERE lg.list_id = ?
@@ -140,12 +140,78 @@ $stmt->execute([$listId]);
 $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch all games for the add games modal
-$stmt = $pdo->prepare("SELECT id, title, main_image2_url FROM games ORDER BY title LIMIT 50");
+$stmt = $pdo->prepare("SELECT id, title, main_image_url FROM games ORDER BY title LIMIT 50");
 $stmt->execute();
 $allGames = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get list of game IDs already in this list
 $gameIds = array_map(fn($g) => $g['id'], $games);
+
+// Handle AJAX actions
+if (isset($_GET['action'])) {
+    header('Content-Type: application/json');
+
+    if ($_GET['action'] === 'rename_list') {
+        if (!$isOwnList) {
+            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+            exit;
+        }
+        $newName = trim($_POST['name'] ?? '');
+        if (!$newName) {
+            echo json_encode(['success' => false, 'error' => 'Name cannot be empty']);
+            exit;
+        }
+        $stmt = $pdo->prepare("UPDATE lists SET name = ? WHERE id = ?");
+        $stmt->execute([$newName, $listId]);
+        echo json_encode(['success' => true, 'name' => $newName]);
+        exit;
+    }
+
+    if ($_GET['action'] === 'remove_game') {
+        if (!$isOwnList) {
+            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+            exit;
+        }
+        $gameId = intval($_POST['game_id'] ?? 0);
+        $stmt = $pdo->prepare("DELETE FROM list_games WHERE list_id = ? AND game_id = ?");
+        $stmt->execute([$listId, $gameId]);
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
+    if ($_GET['action'] === 'add_game') {
+        if (!$isOwnList) {
+            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+            exit;
+        }
+        $gameId = intval($_POST['game_id'] ?? 0);
+        
+        // Check if game already in list
+        $stmt = $pdo->prepare("SELECT id FROM list_games WHERE list_id = ? AND game_id = ?");
+        $stmt->execute([$listId, $gameId]);
+        if ($stmt->fetch()) {
+            echo json_encode(['success' => false, 'error' => 'Game already in list']);
+            exit;
+        }
+        
+        $stmt = $pdo->prepare("INSERT INTO list_games (list_id, game_id) VALUES (?, ?)");
+        $stmt->execute([$listId, $gameId]);
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
+    if ($_GET['action'] === 'search_games') {
+        $q = trim($_GET['q'] ?? '');
+        if (!$q) { 
+            echo json_encode([]); 
+            exit; 
+        }
+        $stmt = $pdo->prepare("SELECT id, title, main_image_url FROM games WHERE title LIKE ? LIMIT 15");
+        $stmt->execute(["%$q%"]);
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+        exit;
+    }
+}
 
 // Handle form submission for list rename
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnList) {
@@ -577,8 +643,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
         <div class="no-games">No games in this list yet.</div>
     <?php else: ?>
         <?php foreach ($games as $game): ?>
-            <div class="game-card" data-game-id="<?= $game['id'] ?>">
-                <img src="../<?= htmlspecialchars($game['main_image2_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?>" onerror="this.src='../images/games/placeholder.png';">
+            <div class="game-card" data-game-id="<?= $game['id'] ?>" data-game-title="<?= htmlspecialchars($game['title']) ?>">
+                <img src="../<?= htmlspecialchars($game['main_image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?>" onerror="this.src='../images/games/placeholder.png';">
                 <div class="game-card-info">
                     <h3><?= htmlspecialchars($game['title']) ?></h3>
                     <p class="secondary-text"><?= htmlspecialchars(substr($game['description'] ?? 'No description', 0, 100)) ?></p>
@@ -787,7 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     resultsDiv.innerHTML = games.map(game => `
                         <div class="game-search-result" data-game-id="${game.id}" style="padding: 10px; background: #2a2a2a; margin-bottom: 8px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;">
                             <div style="display: flex; gap: 10px; align-items: center;">
-                                <img src="../${game.main_image2_url}" alt="${game.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 3px;">
+                                <img src="../${game.main_image_url}" alt="${game.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 3px;">
                                 <div>
                                     <p style="margin: 0; color: #FF669C; font-weight: bold;">${game.title}</p>
                                     <p style="margin: 4px 0 0 0; color: #aaa; font-size: 12px;">${currentGameIds.has(game.id) ? '✓ Already in list' : 'Click to add'}</p>
@@ -835,7 +901,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                         ${selectedGamesData.map(game => `
                             <div style="position: relative; width: 70px; height: 100px; border-radius: 4px; overflow: hidden;">
-                                <img src="../${game.main_image2_url}" alt="${game.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="../${game.main_image_url}" alt="${game.title}" style="width: 100%; height: 100%; object-fit: cover;">
                                 <button type="button" onclick="removeSelectedGame(${game.id})" style="position: absolute; top: 2px; right: 2px; background: rgba(255, 102, 156, 0.9); border: none; color: white; width: 24px; height: 24px; border-radius: 3px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">✕</button>
                             </div>
                         `).join('')}
@@ -843,18 +909,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }
-
         function renderSearchResults(games) {
             const resultsDiv = document.getElementById('gameSearchResults');
             if (document.getElementById('searchGameInput').value.trim() === '') {
                 resultsDiv.innerHTML = '';
                 return;
             }
-
             resultsDiv.innerHTML = games.map(game => `
                 <div class="game-search-result" data-game-id="${game.id}" style="padding: 10px; background: #2a2a2a; margin-bottom: 8px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; opacity: ${currentGameIds.has(game.id) ? '0.5' : '1'}; pointer-events: ${currentGameIds.has(game.id) ? 'none' : 'auto'};">
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <img src="../${game.main_image2_url}" alt="${game.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 3px;">
+                        <img src="../${game.main_image_url}" alt="${game.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 3px;">
                         <div>
                             <p style="margin: 0; color: #FF669C; font-weight: bold;">${game.title}</p>
                             <p style="margin: 4px 0 0 0; color: #aaa; font-size: 12px;">${currentGameIds.has(game.id) ? '✓ Already in list' : 'Click to add'}</p>
@@ -993,8 +1057,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.tagName === 'BUTTON') return;
         const gameCard = e.target.closest('.game-card');
         if (gameCard) {
-            const gameId = gameCard.dataset.gameId;
-            window.location.href = `details?id=${gameId}`;
+            const gameTitle = gameCard.dataset.gameTitle;
+            window.location.href = `details?game=${encodeURIComponent(gameTitle)}`;
         }
     });
 });
