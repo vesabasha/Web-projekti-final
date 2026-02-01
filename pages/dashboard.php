@@ -101,6 +101,7 @@
                         <img src="images/delete.png" alt="Delete" class="icon-btn">
                       </button>
                     </form>
+                    <button onclick="window.location.href='profile?id=<?= $user['id'] ?>'"><img src="images/view.png" alt="View" class="icon-btn"> </button>
                 </td>        
             </tr>
             <?php endforeach; ?>

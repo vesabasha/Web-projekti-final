@@ -3,14 +3,27 @@ require_once __DIR__ . '/../config.php';
 
 session_start();
 
-$userId = $_SESSION['user_id'] ?? null;
-$username = $_SESSION['username'] ?? '';
-$profilePic = $_SESSION['pfp_url'] ?? 'images/placeholder.jpg';
+$loggedInId = $_SESSION['user_id'] ?? null;
+$viewingId = isset($_GET['id']) ? intval($_GET['id']) : $loggedInId;
 
-if (!$userId) {
+if (!$viewingId) {
     header("Location: landing");
     exit();
 }
+
+$isOwnProfile = ($loggedInId && intval($loggedInId) === intval($viewingId));
+
+$stmt = $pdo->prepare("SELECT username, pfp_url FROM users WHERE id = ?");
+$stmt->execute([$viewingId]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    header("Location: landing"); 
+    exit();
+}
+
+$viewedUsername = $user['username'];
+$viewedProfilePic = $user['pfp_url'] ? '../' . $user['pfp_url'] : '../images/placeholder.jpg';
 
 if (isset($_GET['action'])) {
     header('Content-Type: application/json');
@@ -25,13 +38,8 @@ if (isset($_GET['action'])) {
     }
 
     if ($_GET['action'] === 'get_lists') {
-        if (!$userId) {
-            echo json_encode(['lists' => []]);
-            exit;
-        }
-        
         $stmt = $pdo->prepare("SELECT id, name FROM lists WHERE user_id = ? ORDER BY id DESC");
-        $stmt->execute([$userId]);
+        $stmt->execute([$viewingId]);
         $lists = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         $listsWithGames = [];
@@ -45,64 +53,31 @@ if (isset($_GET['action'])) {
             $list['games'] = $gameStmt->fetchAll(PDO::FETCH_ASSOC);
             $listsWithGames[] = $list;
         }
-        
         echo json_encode(['lists' => $listsWithGames]);
         exit;
     }
 
+    if (!$isOwnProfile) {
+        echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+        exit;
+    }
+
     if ($_GET['action'] === 'delete_list') {
-        if (!$userId) {
-            echo json_encode(['success' => false, 'error' => 'Not logged in']);
-            exit;
-        }
-
         $listId = intval($_POST['list_id'] ?? 0);
-        if (!$listId) {
-            echo json_encode(['success' => false, 'error' => 'List ID required']);
-            exit;
-        }
-
-        try {
-            // Verify ownership
-            $stmt = $pdo->prepare("SELECT user_id FROM lists WHERE id = ?");
-            $stmt->execute([$listId]);
-            $list = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (!$list || $list['user_id'] != $userId) {
-                echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-                exit;
-            }
-
-            // Delete the list (cascade will handle list_games)
-            $stmt = $pdo->prepare("DELETE FROM lists WHERE id = ?");
-            $stmt->execute([$listId]);
-
-            echo json_encode(['success' => true, 'message' => 'List deleted successfully']);
-        } catch (Exception $e) {
-            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
-        }
+        $stmt = $pdo->prepare("DELETE FROM lists WHERE id = ? AND user_id = ?");
+        $stmt->execute([$listId, $loggedInId]);
+        echo json_encode(['success' => true, 'message' => 'List deleted successfully']);
         exit;
     }
 
     if ($_GET['action'] === 'create_list') {
-        if (!$userId) {
-            echo json_encode(['success' => false, 'error' => 'Not logged in']);
-            exit;
-        }
-
         $name = trim($_POST['name'] ?? '');
-        if (!$name) {
-            echo json_encode(['success' => false, 'error' => 'List name required']);
-            exit;
-        }
-
         $games = isset($_POST['games']) && is_array($_POST['games']) ? $_POST['games'] : [];
 
         try {
             $pdo->beginTransaction();
-            
             $stmt = $pdo->prepare("INSERT INTO lists (name, user_id) VALUES (?, ?)");
-            $stmt->execute([$name, $userId]);
+            $stmt->execute([$name, $loggedInId]);
             $listId = $pdo->lastInsertId();
 
             if (!empty($games)) {
@@ -111,7 +86,6 @@ if (isset($_GET['action'])) {
                     $stmt->execute([$listId, intval($gameId)]);
                 }
             }
-
             $pdo->commit();
             echo json_encode(['success' => true, 'message' => 'List created successfully']);
         } catch (Exception $e) {
@@ -123,29 +97,29 @@ if (isset($_GET['action'])) {
 }
 
 // Handle profile update
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnProfile) {
     $newUsername = trim($_POST['username'] ?? '');
 
     if (!empty($_FILES['pfp']['name'])) {
         $ext = pathinfo($_FILES['pfp']['name'], PATHINFO_EXTENSION);
-        $newFileName = 'user_' . $userId . '.' . $ext;
+        $newFileName = 'user_' . $loggedInId . '.' . $ext;
         $uploadPath = __DIR__ . '/../images/user_profiles/' . $newFileName;
 
         if (move_uploaded_file($_FILES['pfp']['tmp_name'], $uploadPath)) {
             $pfpUrl = 'images/user_profiles/' . $newFileName;
             $stmt = $pdo->prepare("UPDATE users SET pfp_url = ? WHERE id = ?");
-            $stmt->execute([$pfpUrl, $userId]);
+            $stmt->execute([$pfpUrl, $loggedInId]);
             $_SESSION['pfp_url'] = $pfpUrl;
         }
     }
 
     if (!empty($newUsername)) {
         $stmt = $pdo->prepare("UPDATE users SET username = ? WHERE id = ?");
-        $stmt->execute([$newUsername, $userId]);
+        $stmt->execute([$newUsername, $loggedInId]);
         $_SESSION['username'] = $newUsername;
     }
 
-    header("Location: /profile");
+    header("Location: profile?id=" . $loggedInId);
     exit();
 }
 ?>
@@ -153,12 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="../list-modal.css">
-<link rel="stylesheet" href="../responsive.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($viewedUsername) ?>'s Profile</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../list-modal.css">
+    <link rel="stylesheet" href="../responsive.css">
 </head>
 <body>
 
@@ -170,22 +144,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
     <div class="profile-header">
         <div class="profile-top">
             <div class="profile-pic-container">
-                <img src="<?= $profilePic ?>" class="profile-avatar" id="profilePicPreview">
-                <div class="pfp-overlay"><p>Choose Picture</p></div>
+                <img src="<?= $viewedProfilePic ?>" class="profile-avatar" id="profilePicPreview">
+                <?php if ($isOwnProfile): ?>
+                    <div class="pfp-overlay"><p>Choose Picture</p></div>
+                <?php endif; ?>
             </div>
             <div class="profile-user-info">
-                <h2 id="usernameDisplay" style="color:#FF669C ;"><?= htmlspecialchars($username) ?></h2>
-                <button id="editProfileBtn">Edit Profile</button>
+                <h2 id="usernameDisplay" style="color:#FF669C;"><?= htmlspecialchars($viewedUsername) ?></h2>
+                <?php if ($isOwnProfile): ?>
+                    <button id="editProfileBtn">Edit Profile</button>
+                    <form method="post" enctype="multipart/form-data" id="editProfileForm" style="display:none;">
+                        <input type="text" name="username" value="<?= htmlspecialchars($viewedUsername) ?>">
+                        <input type="file" name="pfp" id="pfpInput" style="display:none;" accept="image/*">
+                        <button class="button-3" type="submit">Apply</button>
+                        <button class="button-3" type="button" id="cancelEdit">Cancel</button>
+                    </form>
+                <?php endif; ?>
             </div>
-            <form method="post" enctype="multipart/form-data" id="editProfileForm" style="display:none;">
-                <input type="text" name="username" value="<?= htmlspecialchars($username) ?>">
-                <input type="file" name="pfp" id="pfpInput" style="display:none;" accept="image/*">
-                <button class="button-3" type="submit">Apply</button>
-                <button class="button-3" type="button" id="cancelEdit">Cancel</button>
-            </form>
-            <button class="button-2" onclick="window.location.href='logout.php'">
-                <img src="images/logout.png" alt="Logout" class="icon-btn">
-            </button>
+            
+            <?php if ($isOwnProfile): ?>
+                <button class="button-2" onclick="window.location.href='../logout.php'">
+                    <img src="../images/logout.png" alt="Logout" class="icon-btn">
+                </button>
+                <button id="shareProfileBtn" data-id="<?= $viewingId ?>" class="button-3"><img src="../images/shared.png" alt="Share" class="icon-btn"></button>
+            <?php endif; ?>
         </div>
 
         <div class="profile-stats">
@@ -196,8 +178,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
     </div>
 
     <div class="lists-header">
-        <h2>My Lists</h2>
-        <button class="create-list-btn">Create a List</button>
+        <h2><?= $isOwnProfile ? "My Lists" : htmlspecialchars($viewedUsername) . "'s Lists" ?></h2>
+        <?php if ($isOwnProfile): ?>
+            <button class="create-list-btn">Create a List</button>
+        <?php endif; ?>
     </div>
 
     <div id="create-list-modal">
@@ -226,41 +210,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
 <?php include __DIR__ . '/../components/footer.php'; ?>
 
 <script>
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    const editBtn = document.getElementById('editProfileBtn');
-    const editForm = document.getElementById('editProfileForm');
-    const usernameDisplay = document.getElementById('usernameDisplay');
-    const cancelBtn = document.getElementById('cancelEdit');
-    const profilePicContainer = document.querySelector('.profile-pic-container');
-    const profilePic = document.getElementById('profilePicPreview');
-    const pfpInput = document.getElementById('pfpInput');
+    const isOwnProfile = <?= json_encode($isOwnProfile) ?>;
 
-    editBtn.onclick = () => {
-        usernameDisplay.style.display = 'none';
-        editBtn.style.display = 'none';
-        editForm.style.display = 'block';
-        profilePicContainer.classList.add('edit-mode');
-    };
+    if (isOwnProfile) {
+        const editBtn = document.getElementById('editProfileBtn');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const cancelBtn = document.getElementById('cancelEdit');
+        const profilePic = document.getElementById('profilePicPreview');
+        const pfpInput = document.getElementById('pfpInput');
 
-    cancelBtn.onclick = () => {
-        editForm.style.display = 'none';
-        usernameDisplay.style.display = 'block';
-        editBtn.style.display = 'inline-block';
-        profilePicContainer.classList.remove('edit-mode');
-    };
+        editBtn.onclick = () => {
+            usernameDisplay.style.display = 'none';
+            editBtn.style.display = 'none';
+            editForm.style.display = 'block';
+            profilePicContainer.classList.add('edit-mode');
+        };
 
-    profilePicContainer.onclick = () => {
-        if (editForm.style.display === 'block') pfpInput.click();
-    };
+        cancelBtn.onclick = () => {
+            editForm.style.display = 'none';
+            usernameDisplay.style.display = 'block';
+            editBtn.style.display = 'inline-block';
+            profilePicContainer.classList.remove('edit-mode');
+        };
 
-    pfpInput.onchange = () => {
-        const file = pfpInput.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = e => profilePic.src = e.target.result;
-            reader.readAsDataURL(file);
-        }
-    };
+        document.getElementById('shareProfileBtn').onclick = (e) => {
+    let url = window.location.href;
+    const userId = e.currentTarget.getAttribute('data-id');
+
+    if (!url.includes('id=')) {
+        url += (url.includes('?') ? '&' : '?') + 'id=' + userId;
+    }
+
+    navigator.clipboard.writeText(url);
+    
+    const toast = document.getElementById('toast-notification');
+    toast.innerText = "Link copied: " + url;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+};
+
+        profilePicContainer.onclick = () => {
+            if (editForm.style.display === 'block') pfpInput.click();
+        };
+
+        pfpInput.onchange = () => {
+            const file = pfpInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => profilePic.src = e.target.result;
+                reader.readAsDataURL(file);
+            }
+        };
+    }
 
     const listModal = document.getElementById('create-list-modal');
     const listClose = listModal.querySelector('.close');
@@ -286,7 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeListModal() {
         listModal.style.display = 'none';
-        selectedGames = [];
     }
 
     function showFeedback(message, isError = false) {
@@ -304,11 +307,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const gamesHtml = selectedGames.map(game => `
             <div class="selected-game-item">
-                <img src="${game.main_image2_url}" alt="${game.title}">
+                <img src="../${game.main_image2_url}" alt="${game.title}">
                 <span>${game.title}</span>
-                <button type="button" class="remove-btn" onclick="removeGame(${game.id})">
-                    <img src="../images/delete.png" alt="Delete">
-                </button>
+                <button type="button" class="remove-btn" onclick="removeGame(${game.id})">✕</button>
             </div>
         `).join('');
 
@@ -323,34 +324,29 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSelectedGames();
     };
 
-    document.querySelector('.create-list-btn').onclick = openListModal;
+    if (isOwnProfile) {
+        document.querySelector('.create-list-btn').onclick = openListModal;
+    }
+    
     listClose.onclick = closeListModal;
-    window.onclick = e => {
-        if (e.target === listModal) closeListModal();
-    };
+    window.onclick = e => { if (e.target === listModal) closeListModal(); };
 
     listGameSearch.oninput = () => {
         clearTimeout(searchTimeout);
         const term = listGameSearch.value.trim();
-
-        if (!term) {
-            listGameResults.innerHTML = '';
-            return;
-        }
+        if (!term) { listGameResults.innerHTML = ''; return; }
 
         searchTimeout = setTimeout(async () => {
             try {
                 const res = await fetch(`?action=search_games&q=${encodeURIComponent(term)}`);
                 const games = await res.json();
-
                 if (games.length === 0) {
                     listGameResults.innerHTML = '<p class="no-results">No games found</p>';
                     return;
                 }
-
                 listGameResults.innerHTML = games.slice(0, 5).map(game => `
                     <div class="game-search-result" data-id="${game.id}" data-title="${game.title}" data-img="${game.main_image2_url}">
-                        <img src="${game.main_image2_url}" alt="${game.title}">
+                        <img src="../${game.main_image2_url}" alt="${game.title}">
                         <span>${game.title}</span>
                     </div>
                 `).join('');
@@ -358,115 +354,80 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('.game-search-result').forEach(el => {
                     el.onclick = () => {
                         const gameId = parseInt(el.dataset.id);
-                        const gameTitle = el.dataset.title;
-                        const gameImg = el.dataset.img;
 
                         if (selectedGames.some(g => g.id === gameId)) {
                             showFeedback('Game already added!', true);
                             return;
                         }
-
-                        selectedGames.push({ id: gameId, title: gameTitle, main_image2_url: gameImg });
+                        selectedGames.push({ id: gameId, title: el.dataset.title, main_image2_url: el.dataset.img });
                         renderSelectedGames();
                         listGameSearch.value = '';
                         listGameResults.innerHTML = '';
-                        showFeedback(`Added: ${gameTitle}`);
                     };
                 });
-            } catch (error) {
-                listGameResults.innerHTML = '<p class="search-error">Error searching games</p>';
-            }
+            } catch (e) { console.error(e); }
         }, 300);
     };
 
     createListForm.onsubmit = async (e) => {
         e.preventDefault();
-
-        const listName = listNameInput.value.trim();
-        if (!listName) {
-            showFeedback('Please enter a list name', true);
-            return;
-        }
-
         const formData = new FormData();
-        formData.append('name', listName);
+        formData.append('name', listNameInput.value.trim());
         selectedGames.forEach(game => formData.append('games[]', game.id));
 
-        try {
-            const res = await fetch('?action=create_list', { method: 'POST', body: formData });
-            const data = await res.json();
-
-            if (data.success) {
-                showFeedback(data.message || 'List created successfully!');
-                setTimeout(() => {
-                    closeListModal();
-                    loadUserLists();
-                }, 1500);
-            } else {
-                showFeedback(data.error || 'Failed to create list', true);
-            }
-        } catch (error) {
-            showFeedback('Network error. Please try again.', true);
-        }
-    };
-
-    window.deleteList = async (listId) => {
-        if (!confirm('Are you sure you want to delete this list?')) {
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('list_id', listId);
-
-        try {
-            const res = await fetch('?action=delete_list', { method: 'POST', body: formData });
-            const data = await res.json();
-
-            if (data.success) {
-                showFeedback(data.message || 'List deleted successfully');
-                setTimeout(() => loadUserLists(), 1000);
-            } else {
-                showFeedback(data.error || 'Failed to delete list', true);
-            }
-        } catch (error) {
-            showFeedback('Network error. Please try again.', true);
+        const res = await fetch('?action=create_list', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
+            closeListModal();
+            loadUserLists();
+        } else {
+            showFeedback(data.error, true);
         }
     };
 
     async function loadUserLists() {
         try {
-            const res = await fetch('?action=get_lists');
+            const urlParams = new URLSearchParams(window.location.search);
+            const profileId = urlParams.get('id') || ''; 
+            const fetchUrl = `?action=get_lists${profileId ? '&id=' + profileId : ''}`;
+
+            const res = await fetch(fetchUrl);
             const data = await res.json();
             const listsContainer = document.getElementById('lists');
 
             if (data.lists.length === 0) {
-                listsContainer.innerHTML = '<p class="no-lists">You haven\'t created any lists yet.</p>';
+                listsContainer.innerHTML = `<p class="no-lists">${isOwnProfile ? "You haven't created any lists." : "This user hasn't created any lists."}</p>`;
                 return;
             }
 
-            const listsHtml = data.lists.map(list => `
-                <div class="list-card">
-                    <div class="list-card-header">
+            listsContainer.innerHTML = data.lists.map(list => `
+                <div class="list-block">
+                    <div class="list-title-row">
                         <h3>${escapeHtml(list.name)}</h3>
-                        <button class="delete-list-btn" onclick="deleteList(${list.id})">Delete</button>
+                        ${isOwnProfile ? `<button class="delete-list-btn" onclick="deleteList(${list.id})"><img src="../images/delete.png" alt="Delete" class="icon-btn"></button>` : ''}
                     </div>
                     <div class="list-games">
                         ${list.games.length === 0 ? '<p class="no-games">No games in this list</p>' : ''}
                         ${list.games.map(game => `
                             <div class="list-game-item">
-                                <img src="${game.main_image2_url}" alt="${escapeHtml(game.title)}" title="${escapeHtml(game.title)}">
+                                <img src="../${game.main_image2_url}" alt="${escapeHtml(game.title)}" title="${escapeHtml(game.title)}">
                             </div>
                         `).join('')}
                     </div>
                 </div>
             `).join('');
-
-            listsContainer.innerHTML = listsHtml;
         } catch (error) {
             console.error('Error loading lists:', error);
-            document.getElementById('lists').innerHTML = '<p class="error">Error loading lists</p>';
         }
     }
+
+    window.deleteList = async (listId) => {
+        if (!confirm('Are you sure?')) return;
+        const formData = new FormData();
+        formData.append('list_id', listId);
+        await fetch('?action=delete_list', { method: 'POST', body: formData });
+        loadUserLists();
+    };
 
     function escapeHtml(text) {
         const div = document.createElement('div');
