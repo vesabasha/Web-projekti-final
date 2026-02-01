@@ -216,7 +216,8 @@ display: flex;
 }
 .game-card img {
   height: 100%;
-  width: auto;
+  width: 140px;
+  object-fit: cover;
 }
 .game-card-info {
     margin-left: 20px;
