@@ -115,6 +115,20 @@ $queryString = http_build_query($currentParams);
     <title>Browse Games - Quest</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../responsive.css">
+    <style>
+        /* Match list page title styling: pink, bolder font for game titles */
+        .game-card-info h3 {
+            color: #FF669C;
+            font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            font-weight: 600;
+            font-size: 18px;
+            margin: 0 0 8px;
+        }
+
+        .game-card-info p.secondary-text {
+            color: #ccc;
+        }
+    </style>
 </head>
 <body>
 

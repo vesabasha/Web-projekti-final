@@ -25,7 +25,6 @@ if (!$user) {
 $viewedUsername = $user['username'];
 $viewedProfilePic = $user['pfp_url'] ? '../' . $user['pfp_url'] : '../images/placeholder.jpg';
 
-// Get stats for the profile
 $listCountStmt = $pdo->prepare("SELECT COUNT(*) as count FROM lists WHERE user_id = ?");
 $listCountStmt->execute([$viewingId]);
 $listCount = $listCountStmt->fetch(PDO::FETCH_ASSOC)['count'];
@@ -110,7 +109,6 @@ if (isset($_GET['action'])) {
     }
 }
 
-// Handle profile update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnProfile) {
     $newUsername = trim($_POST['username'] ?? '');
 

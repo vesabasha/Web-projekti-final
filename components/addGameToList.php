@@ -4,7 +4,6 @@ require_once __DIR__ . '/../config.php';
 
 header('Content-Type: application/json');
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Not logged in']);
@@ -20,7 +19,6 @@ if (!$listId || !$gameName) {
     exit;
 }
 
-// Verify the list belongs to the user
 $stmt = $pdo->prepare("SELECT id FROM lists WHERE id = ? AND user_id = ?");
 $stmt->execute([$listId, $userId]);
 if (!$stmt->fetch()) {
@@ -29,7 +27,6 @@ if (!$stmt->fetch()) {
     exit;
 }
 
-// Get game ID by name
 $stmt = $pdo->prepare("SELECT id FROM games WHERE title = ?");
 $stmt->execute([$gameName]);
 $game = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -41,7 +38,6 @@ if (!$game) {
 
 $gameId = $game['id'];
 
-// Check if game is already in the list
 $stmt = $pdo->prepare("SELECT 1 FROM list_games WHERE list_id = ? AND game_id = ?");
 $stmt->execute([$listId, $gameId]);
 if ($stmt->fetch()) {
@@ -49,7 +45,6 @@ if ($stmt->fetch()) {
     exit;
 }
 
-// Add game to list
 try {
     $stmt = $pdo->prepare("INSERT INTO list_games (list_id, game_id) VALUES (?, ?)");
     $stmt->execute([$listId, $gameId]);
