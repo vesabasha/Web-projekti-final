@@ -25,6 +25,20 @@ if (!$user) {
 $viewedUsername = $user['username'];
 $viewedProfilePic = $user['pfp_url'] ? '../' . $user['pfp_url'] : '../images/placeholder.jpg';
 
+// Get stats for the profile
+$listCountStmt = $pdo->prepare("SELECT COUNT(*) as count FROM lists WHERE user_id = ?");
+$listCountStmt->execute([$viewingId]);
+$listCount = $listCountStmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+$gamesSavedStmt = $pdo->prepare("
+    SELECT COUNT(DISTINCT lg.game_id) as count 
+    FROM list_games lg
+    INNER JOIN lists l ON lg.list_id = l.id
+    WHERE l.user_id = ?
+");
+$gamesSavedStmt->execute([$viewingId]);
+$gamesSaved = $gamesSavedStmt->fetch(PDO::FETCH_ASSOC)['count'];
+
 if (isset($_GET['action'])) {
     header('Content-Type: application/json');
 
@@ -171,9 +185,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnPr
         </div>
 
         <div class="profile-stats">
-            <p><span>103</span>Liked Games</p>
-            <p><span>5</span>Lists</p>
-            <p><span>63</span>Games Saved</p>
+            <p><span><?= $listCount ?></span>Lists</p>
+            <p><span><?= $gamesSaved ?></span>Games Saved</p>
         </div>
     </div>
 
