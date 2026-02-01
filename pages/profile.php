@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
     if ($_GET['action'] === 'search_games') {
         $q = trim($_GET['q'] ?? '');
         if (!$q) { echo json_encode([]); exit; }
-        $stmt = $pdo->prepare("SELECT id, title, main_image2_url, main_image_url FROM games WHERE title LIKE ? LIMIT 10");
+        $stmt = $pdo->prepare("SELECT id, title, main_image_url, main_image_url FROM games WHERE title LIKE ? LIMIT 10");
         $stmt->execute(["%$q%"]);
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
         exit;
@@ -59,7 +59,7 @@ if (isset($_GET['action'])) {
         $listsWithGames = [];
         foreach ($lists as $list) {
             $gameStmt = $pdo->prepare("
-                SELECT g.id, g.title, g.main_image2_url FROM games g
+                SELECT g.id, g.title, g.main_image_url FROM games g
                 INNER JOIN list_games lg ON g.id = lg.game_id
                 WHERE lg.list_id = ?
             ");
@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const gamesHtml = selectedGames.map(game => `
             <div class="selected-game-item">
-                <img src="../${game.main_image2_url}" alt="${game.title}">
+                <img src="../${game.main_image_url}" alt="${game.title}">
                 <span>${game.title}</span>
                 <button type="button" class="remove-btn" onclick="removeGame(${game.id})">✕</button>
             </div>
@@ -360,8 +360,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 listGameResults.innerHTML = games.slice(0, 5).map(game => `
-                    <div class="game-search-result" data-id="${game.id}" data-title="${game.title}" data-img="${game.main_image2_url}">
-                        <img src="../${game.main_image2_url}" alt="${game.title}">
+                    <div class="game-search-result" data-id="${game.id}" data-title="${game.title}" data-img="${game.main_image_url}">
+                        <img src="../${game.main_image_url}" alt="${game.title}">
                         <span>${game.title}</span>
                     </div>
                 `).join('');
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             showFeedback('Game already added!', true);
                             return;
                         }
-                        selectedGames.push({ id: gameId, title: el.dataset.title, main_image2_url: el.dataset.img });
+                        selectedGames.push({ id: gameId, title: el.dataset.title, main_image_url: el.dataset.img });
                         renderSelectedGames();
                         listGameSearch.value = '';
                         listGameResults.innerHTML = '';
@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${list.games.length === 0 ? '<p class="no-games">No games in this list</p>' : ''}
                         ${list.games.map(game => `
                             <div class="list-game-item">
-                                <img src="../${game.main_image2_url}" alt="${escapeHtml(game.title)}" title="${escapeHtml(game.title)}">
+                                <img src="../${game.main_image_url}" alt="${escapeHtml(game.title)}" title="${escapeHtml(game.title)}">
                             </div>
                         `).join('')}
                     </div>
