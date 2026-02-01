@@ -116,7 +116,6 @@ $queryString = http_build_query($currentParams);
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../responsive.css">
     <style>
-        /* Match list page title styling: pink, bolder font for game titles */
         .game-card-info h3 {
             color: #FF669C;
             font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
@@ -185,9 +184,9 @@ $queryString = http_build_query($currentParams);
         <label class="secondary-text">Release year</label>
 
         <div class="year-range">
-            <input type="number" name="year_from" placeholder="From" min="1980" max="2030">
+            <input type="number" name="year_from" placeholder="From" min="1980" max="2030" value="<?= htmlspecialchars($yearFrom ?? '') ?>">
             <span class="year-separator">–</span>
-            <input type="number" name="year_to" placeholder="To" min="1980" max="2030">
+            <input type="number" name="year_to" placeholder="To" min="1980" max="2030" value="<?= htmlspecialchars($yearTo ?? '') ?>">
         </div>
     </div>
 
@@ -205,10 +204,8 @@ $queryString = http_build_query($currentParams);
     <?php foreach ($games as $game): ?>
         <div class="game-card" onclick="window.location.href='/details?game=<?php echo urlencode($game['name']); ?>';" style="cursor: pointer;">
             <?php
-            // Try to use main_image_url from database, otherwise construct from game name
             $imagePath = $game['main_image_url'];
             if (empty($imagePath) || $imagePath === null) {
-                // Construct path from game name
                 $imagePath = '../images/games/' . urlencode($game['name']) . '.png';
             }
             ?>
@@ -251,7 +248,6 @@ $queryString = http_build_query($currentParams);
 </body>
 
     <script>
-/* Advanced Search toggle */
 const btn = document.getElementById('advancedBtn');
 const box = document.getElementById('advancedBox');
 
@@ -268,7 +264,6 @@ btn.addEventListener('click', () => {
     localStorage.setItem('advancedBoxOpen', box.style.display);
 });
 
-/* Genre multi-select logic */
 const dropdown = document.getElementById('genreDropdown');
 const selectedContainer = document.getElementById('selectedGenres');
 
