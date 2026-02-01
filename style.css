@@ -432,6 +432,10 @@ display: flex;
     justify-content: center;
 }
 
+.hero-buttons.logged-in {
+    justify-content: center;
+}
+
 /* info section */
 .info-section {
     padding: 80px 80px;

@@ -8,7 +8,13 @@
 </head>
 <body>
 
-<?php include __DIR__ . '/../components/nav.php'; ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$userId = $_SESSION['user_id'] ?? null;
+include __DIR__ . '/../components/nav.php';
+?>
 
 
 <section class="hero">
@@ -16,9 +22,11 @@
         <h1>Find the Next World<br>Worth Entering.</h1>
         <p>Log your gaming journey and find new games perfect for you.</p>
 
-        <div class="hero-buttons">
+        <div class="hero-buttons <?php if ($userId) echo 'logged-in'; ?>">
             <a href="games"><button>Start Browsing</button></a>
-            <button id="heroSignupBtn" class="button-2">Create an account</button>
+            <?php if (!$userId): ?>
+                <button id="heroSignupBtn" class="button-2">Create an account</button>
+            <?php endif; ?>
         </div>
     </div>
 </section>
