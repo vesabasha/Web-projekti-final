@@ -103,6 +103,7 @@ $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : 
 <!--testing per commit, erind balaj-->
     <!--navigation bar, e boni copy paste qeta ncdo faqe ever -->
     <?php include __DIR__ . '/../components/nav.php'; ?>
+    <?php include __DIR__ . '/../components/sidebar.php'; ?>
 
     <?php include __DIR__ . '/../components/authModal.php'; ?>
 

@@ -41,6 +41,7 @@ $genres = $game['genres'] ? explode(',', $game['genres']) : [];
 <body>
 
 <?php include __DIR__ . '/../components/nav.php'; ?>
+<?php include __DIR__ . '/../components/sidebar.php'; ?>
 <?php include __DIR__ . '/../components/authModal.php'; ?>
 
 <button onclick="history.back()" style="margin-left:9%;padding:0 20px;font-size:16px;cursor:pointer;">

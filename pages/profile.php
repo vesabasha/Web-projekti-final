@@ -163,6 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
 <body>
 
 <?php include __DIR__ . '/../components/nav.php'; ?>
+<?php include __DIR__ . '/../components/sidebar.php'; ?>
 <?php include __DIR__ . '/../components/authModal.php'; ?>
 
 <section class="profile-container">
