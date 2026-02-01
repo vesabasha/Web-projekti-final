@@ -1,10 +1,116 @@
 <?php
+ob_start();
 require_once __DIR__ . '/../config.php';
 
 session_start();
 
 $loggedInId = $_SESSION['user_id'] ?? null;
 $listId = isset($_GET['id']) ? intval($_GET['id']) : null;
+
+// Handle AJAX actions first (before any HTML output)
+if (isset($_GET['action'])) {
+    ob_end_clean();
+    header('Content-Type: application/json');
+
+    if (!$listId) {
+        echo json_encode(['success' => false, 'error' => 'Invalid list ID']);
+        exit;
+    }
+
+    // Fetch list to check ownership
+    $stmt = $pdo->prepare("SELECT user_id FROM lists WHERE id = ?");
+    $stmt->execute([$listId]);
+    $list = $stmt->fetch(PDO::FETCH_ASSOC);
+    $isOwnList = ($loggedInId && intval($loggedInId) === intval($list['user_id'] ?? 0));
+
+    if ($_GET['action'] === 'rename_list') {
+        if (!$isOwnList) {
+            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+            exit;
+        }
+        $newName = trim($_POST['name'] ?? '');
+        if (!$newName) {
+            echo json_encode(['success' => false, 'error' => 'Name cannot be empty']);
+            exit;
+        }
+        
+        try {
+            $stmt = $pdo->prepare("UPDATE lists SET name = ? WHERE id = ?");
+            $stmt->execute([$newName, $listId]);
+            echo json_encode(['success' => true, 'name' => $newName]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+            exit;
+        }
+    }
+
+    if ($_GET['action'] === 'remove_game') {
+        if (!$isOwnList) {
+            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+            exit;
+        }
+        $gameId = intval($_POST['game_id'] ?? 0);
+        if (!$gameId) {
+            echo json_encode(['success' => false, 'error' => 'Invalid game ID']);
+            exit;
+        }
+        try {
+            $stmt = $pdo->prepare("DELETE FROM list_games WHERE list_id = ? AND game_id = ?");
+            $stmt->execute([$listId, $gameId]);
+            echo json_encode(['success' => true]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+            exit;
+        }
+    }
+
+    if ($_GET['action'] === 'add_game') {
+        if (!$isOwnList) {
+            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+            exit;
+        }
+        $gameId = intval($_POST['game_id'] ?? 0);
+        if (!$gameId) {
+            echo json_encode(['success' => false, 'error' => 'Invalid game ID']);
+            exit;
+        }
+        
+        // Check if game already in list
+        $stmt = $pdo->prepare("SELECT 1 FROM list_games WHERE list_id = ? AND game_id = ?");
+        $stmt->execute([$listId, $gameId]);
+        if ($stmt->fetch()) {
+            echo json_encode(['success' => false, 'error' => 'Game already in list']);
+            exit;
+        }
+        
+        try {
+            $stmt = $pdo->prepare("INSERT INTO list_games (list_id, game_id) VALUES (?, ?)");
+            $stmt->execute([$listId, $gameId]);
+            echo json_encode(['success' => true]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+            exit;
+        }
+    }
+
+    if ($_GET['action'] === 'search_games') {
+        $q = trim($_GET['q'] ?? '');
+        if (!$q) { 
+            echo json_encode([]); 
+            exit; 
+        }
+        $stmt = $pdo->prepare("SELECT id, title, main_image2_url FROM games WHERE title LIKE ? LIMIT 15");
+        $stmt->execute(["%$q%"]);
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+        exit;
+    }
+}
+
+// Now load page data (only if not an AJAX request)
+ob_end_clean();
 
 if (!$listId) {
     header("Location: landing");
@@ -40,72 +146,6 @@ $allGames = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get list of game IDs already in this list
 $gameIds = array_map(fn($g) => $g['id'], $games);
-
-// Handle AJAX actions
-if (isset($_GET['action'])) {
-    header('Content-Type: application/json');
-
-    if ($_GET['action'] === 'rename_list') {
-        if (!$isOwnList) {
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-            exit;
-        }
-        $newName = trim($_POST['name'] ?? '');
-        if (!$newName) {
-            echo json_encode(['success' => false, 'error' => 'Name cannot be empty']);
-            exit;
-        }
-        $stmt = $pdo->prepare("UPDATE lists SET name = ? WHERE id = ?");
-        $stmt->execute([$newName, $listId]);
-        echo json_encode(['success' => true, 'name' => $newName]);
-        exit;
-    }
-
-    if ($_GET['action'] === 'remove_game') {
-        if (!$isOwnList) {
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-            exit;
-        }
-        $gameId = intval($_POST['game_id'] ?? 0);
-        $stmt = $pdo->prepare("DELETE FROM list_games WHERE list_id = ? AND game_id = ?");
-        $stmt->execute([$listId, $gameId]);
-        echo json_encode(['success' => true]);
-        exit;
-    }
-
-    if ($_GET['action'] === 'add_game') {
-        if (!$isOwnList) {
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-            exit;
-        }
-        $gameId = intval($_POST['game_id'] ?? 0);
-        
-        // Check if game already in list
-        $stmt = $pdo->prepare("SELECT id FROM list_games WHERE list_id = ? AND game_id = ?");
-        $stmt->execute([$listId, $gameId]);
-        if ($stmt->fetch()) {
-            echo json_encode(['success' => false, 'error' => 'Game already in list']);
-            exit;
-        }
-        
-        $stmt = $pdo->prepare("INSERT INTO list_games (list_id, game_id) VALUES (?, ?)");
-        $stmt->execute([$listId, $gameId]);
-        echo json_encode(['success' => true]);
-        exit;
-    }
-
-    if ($_GET['action'] === 'search_games') {
-        $q = trim($_GET['q'] ?? '');
-        if (!$q) { 
-            echo json_encode([]); 
-            exit; 
-        }
-        $stmt = $pdo->prepare("SELECT id, title, main_image2_url FROM games WHERE title LIKE ? LIMIT 15");
-        $stmt->execute(["%$q%"]);
-        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-        exit;
-    }
-}
 
 // Handle form submission for list rename
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnList) {
@@ -670,22 +710,39 @@ document.addEventListener('DOMContentLoaded', () => {
         editListForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newName = document.getElementById('listNameInput').value.trim();
-            if (!newName) return;
+            if (!newName) {
+                toastNotification.textContent = 'List name cannot be empty!';
+                toastNotification.style.display = 'block';
+                toastNotification.style.background = '#FF6B6B';
+                setTimeout(() => { toastNotification.style.display = 'none'; }, 2000);
+                return;
+            }
 
             try {
                 const formData = new FormData();
                 formData.append('name', newName);
-                const res = await fetch('?action=rename_list', { method: 'POST', body: formData });
+                const res = await fetch(`?id=${listId}&action=rename_list`, { method: 'POST', body: formData });
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('list-title').textContent = newName;
                     editListModal.classList.remove('show');
                     toastNotification.textContent = "List renamed successfully!";
                     toastNotification.style.display = 'block';
+                    toastNotification.style.background = '#44A1A0';
                     setTimeout(() => { toastNotification.style.display = 'none'; }, 2000);
+                } else {
+                    console.error('Rename error:', data);
+                    toastNotification.textContent = 'Error: ' + (data.error || 'Failed to rename list');
+                    toastNotification.style.display = 'block';
+                    toastNotification.style.background = '#FF6B6B';
+                    setTimeout(() => { toastNotification.style.display = 'none'; }, 3000);
                 }
             } catch (e) {
-                console.error(e);
+                console.error('Error renaming list:', e);
+                toastNotification.textContent = 'Error renaming list!';
+                toastNotification.style.display = 'block';
+                toastNotification.style.background = '#FF6B6B';
+                setTimeout(() => { toastNotification.style.display = 'none'; }, 3000);
             }
         });
 
@@ -718,7 +775,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             searchTimeout = setTimeout(async () => {
                 try {
-                    const res = await fetch(`?action=search_games&q=${encodeURIComponent(query)}`);
+                    const res = await fetch(`?id=${listId}&action=search_games&q=${encodeURIComponent(query)}`);
                     const games = await res.json();
                     const resultsDiv = document.getElementById('gameSearchResults');
                     
@@ -833,19 +890,44 @@ document.addEventListener('DOMContentLoaded', () => {
             if (selectedGamesToAdd.size === 0) {
                 toastNotification.textContent = 'No games selected!';
                 toastNotification.style.display = 'block';
+                toastNotification.style.background = '#FF6B6B';
                 setTimeout(() => { toastNotification.style.display = 'none'; }, 2000);
                 return;
             }
 
             try {
+                let allSuccess = true;
                 for (const gameId of selectedGamesToAdd) {
                     const formData = new FormData();
                     formData.append('game_id', gameId);
-                    await fetch('?action=add_game', { method: 'POST', body: formData });
+                    const res = await fetch(`?id=${listId}&action=add_game`, { method: 'POST', body: formData });
+                    const data = await res.json();
+                    if (!data.success) {
+                        console.error(`Failed to add game ${gameId}:`, data.error);
+                        allSuccess = false;
+                    }
                 }
-                location.reload();
+                
+                if (allSuccess) {
+                    toastNotification.textContent = 'Games added successfully!';
+                    toastNotification.style.display = 'block';
+                    toastNotification.style.background = '#44A1A0';
+                    setTimeout(() => { 
+                        toastNotification.style.display = 'none';
+                        location.reload();
+                    }, 1500);
+                } else {
+                    toastNotification.textContent = 'Some games failed to add. Check console.';
+                    toastNotification.style.display = 'block';
+                    toastNotification.style.background = '#FF6B6B';
+                    setTimeout(() => { toastNotification.style.display = 'none'; }, 3000);
+                }
             } catch (e) {
-                console.error(e);
+                console.error('Error adding games:', e);
+                toastNotification.textContent = 'Error adding games!';
+                toastNotification.style.display = 'block';
+                toastNotification.style.background = '#FF6B6B';
+                setTimeout(() => { toastNotification.style.display = 'none'; }, 3000);
             }
         });
     }
@@ -853,27 +935,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove game from list
     window.removeGame = async (gameId) => {
         if (!confirm('Remove this game from the list?')) return;
-        
+
         try {
             const formData = new FormData();
             formData.append('game_id', gameId);
-            const res = await fetch('?action=remove_game', { method: 'POST', body: formData });
+
+            const res = await fetch(`?id=${listId}&action=remove_game`, {
+                method: 'POST',
+                body: formData
+            });
+
             const data = await res.json();
+
             if (data.success) {
                 const gameCard = document.querySelector(`.game-card[data-game-id="${gameId}"]`);
-                gameCard.style.transition = 'opacity 0.3s ease';
-                gameCard.style.opacity = '0';
-                setTimeout(() => {
-                    gameCard.remove();
-                    currentGameIds.delete(gameId);
-                    const remaining = document.querySelectorAll('.game-card');
-                    if (remaining.length === 0) {
-                        gameContainer.innerHTML = '<div class="no-games">No games in this list yet.</div>';
-                    }
-                }, 300);
+                if (gameCard) {
+                    gameCard.style.animation = 'fadeOut 0.3s ease-out';
+                    setTimeout(() => {
+                        gameCard.remove();
+                        // Check if list is now empty
+                        const remainingCards = document.querySelectorAll('.game-card').length;
+                        if (remainingCards === 0) {
+                            gameContainer.innerHTML = '<div class="no-games">No games in this list yet.</div>';
+                        }
+                    }, 300);
+                    toastNotification.textContent = 'Game removed successfully!';
+                    toastNotification.style.display = 'block';
+                    toastNotification.style.background = '#44A1A0';
+                    setTimeout(() => { toastNotification.style.display = 'none'; }, 2000);
+                }
+            } else {
+                console.error('Remove game error:', data);
+                toastNotification.textContent = 'Error: ' + (data.error || 'Failed to remove game');
+                toastNotification.style.display = 'block';
+                toastNotification.style.background = '#FF6B6B';
+                setTimeout(() => { toastNotification.style.display = 'none'; }, 3000);
             }
         } catch (e) {
-            console.error(e);
+            console.error('Error removing game:', e);
+            toastNotification.textContent = 'Error removing game!';
+            toastNotification.style.display = 'block';
+            toastNotification.style.background = '#FF6B6B';
+            setTimeout(() => { toastNotification.style.display = 'none'; }, 3000);
         }
     };
 
