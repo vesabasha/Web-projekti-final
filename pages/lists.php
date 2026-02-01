@@ -7,7 +7,6 @@ session_start();
 $loggedInId = $_SESSION['user_id'] ?? null;
 $listId = isset($_GET['id']) ? intval($_GET['id']) : null;
 
-// Handle AJAX actions first (before any HTML output)
 if (isset($_GET['action'])) {
     ob_end_clean();
     header('Content-Type: application/json');
@@ -17,7 +16,6 @@ if (isset($_GET['action'])) {
         exit;
     }
 
-    // Fetch list to check ownership
     $stmt = $pdo->prepare("SELECT user_id FROM lists WHERE id = ?");
     $stmt->execute([$listId]);
     $list = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -109,7 +107,6 @@ if (isset($_GET['action'])) {
     }
 }
 
-// Now load page data (only if not an AJAX request)
 ob_end_clean();
 
 if (!$listId) {
@@ -117,7 +114,6 @@ if (!$listId) {
     exit();
 }
 
-// Fetch the list details
 $stmt = $pdo->prepare("SELECT id, name, user_id FROM lists WHERE id = ?");
 $stmt->execute([$listId]);
 $list = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -129,25 +125,24 @@ if (!$list) {
 
 $isOwnList = ($loggedInId && intval($loggedInId) === intval($list['user_id']));
 
-// Fetch games in this list
 $stmt = $pdo->prepare("
     SELECT g.id, g.title, g.main_image_url, g.description, g.release_date
     FROM games g
     INNER JOIN list_games lg ON g.id = lg.game_id
+    LEFT JOIN game_genres gg ON g.id = gg.game_id
+    LEFT JOIN genres ge ON gg.genre_id = ge.id
     WHERE lg.list_id = ?
+    GROUP BY g.id
 ");
 $stmt->execute([$listId]);
 $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch all games for the add games modal
 $stmt = $pdo->prepare("SELECT id, title, main_image_url FROM games ORDER BY title LIMIT 50");
 $stmt->execute();
 $allGames = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Get list of game IDs already in this list
 $gameIds = array_map(fn($g) => $g['id'], $games);
 
-// Handle AJAX actions
 if (isset($_GET['action'])) {
     header('Content-Type: application/json');
 
@@ -213,7 +208,6 @@ if (isset($_GET['action'])) {
     }
 }
 
-// Handle form submission for list rename
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnList) {
     $newName = trim($_POST['list_name'] ?? '');
     if (!empty($newName)) {
@@ -345,7 +339,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
-        /* Detailed View - Text Only */
         .detailed-view .game-card {
             padding: 15px;
             background: #2a2a2a;
@@ -392,8 +385,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
             border-radius: 3px;
             font-size: 11px;
         }
-
-        /* Lists View - Image + Text */
         .lists-view .game-card {
             display: flex;
             gap: 15px;
@@ -431,7 +422,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
             overflow: hidden;
         }
 
-        /* Grid View - Images */
         .grid-view .game-card img {
             width: 100%;
             height: 240px;
@@ -644,23 +634,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
     <?php else: ?>
         <?php foreach ($games as $game): ?>
             <div class="game-card" data-game-id="<?= $game['id'] ?>" data-game-title="<?= htmlspecialchars($game['title']) ?>">
-                <img src="../<?= htmlspecialchars($game['main_image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?>" onerror="this.src='../images/games/placeholder.png';">
-                <div class="game-card-info">
-                    <h3><?= htmlspecialchars($game['title']) ?></h3>
-                    <p class="secondary-text"><?= htmlspecialchars(substr($game['description'] ?? 'No description', 0, 100)) ?></p>
-                    <?php if ($game['release_date']): ?>
-                        <p class="release-date"><?= htmlspecialchars($game['release_date']) ?></p>
-                    <?php endif; ?>
-                </div>
+                <a class="card-link" href="/details?game=<?= urlencode($game['title']) ?>" style="display:flex; gap:12px; color:inherit; text-decoration:none; width:100%;">
+                    <img src="../<?= htmlspecialchars($game['main_image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?>" onerror="this.src='../images/games/placeholder.png';">
+                    <div class="game-card-info">
+                        <h3><?= htmlspecialchars($game['title']) ?></h3>
+                        <p class="secondary-text"><?= htmlspecialchars(substr($game['description'] ?? 'No description', 0, 100)) ?></p>
+                        <?php if ($game['release_date']): ?>
+                            <p class="release-date"><?= htmlspecialchars($game['release_date']) ?></p>
+                        <?php endif; ?>
+                    </div>
+                </a>
                 <?php if ($isOwnList): ?>
-                    <button class="remove-game-btn" title="Remove from list" onclick="removeGame(<?= $game['id'] ?>)">✕</button>
-                <?php endif; ?>
+                        <button class="remove-game-btn" title="Remove from list" onclick="removeGame(<?= $game['id'] ?>)">✕</button>
+                    <?php endif; ?>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
 </div>
-
-<!-- Edit List Modal -->
+    
 <?php if ($isOwnList): ?>
 <div id="editListModal" class="edit-list-modal">
     <div class="modal-content">
@@ -675,7 +666,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
     </div>
 </div>
 
-<!-- Add Games Modal -->
 <div id="addGamesModal" class="edit-list-modal">
     <div class="modal-content">
         <button class="close" id="closeAddGamesModal">&times;</button>
@@ -689,6 +679,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
 </div>
 <?php endif; ?>
 
+<!-- Table view for Lists (matches admin manage_games style) -->
+<div id="lists-table-container" style="width:75%; margin: 20px auto; display: none;">
+    <div style="background:#1a1a1a; padding:12px; border-radius:8px;">
+        <h2 style="color:#FF669C; margin:0 0 12px 0;">List contents (table view)</h2>
+        <table style="width:100%; border-collapse:collapse;">
+            <thead>
+                <tr style="text-align:left; border-bottom:1px solid #222; color:#aaa;">
+                    <th style="padding:8px">Title</th>
+                    <th style="padding:8px">Genres</th>
+                    <th style="padding:8px">Description</th>
+                    <th style="padding:8px">Year</th>
+                    <th style="padding:8px">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($games as $g): ?>
+                    <tr style="border-bottom:1px solid #222;">
+                        <td style="padding:10px; vertical-align:top; color:#FF669C; font-weight:600;"><a href="details?game=<?= urlencode($g['title']) ?>" style="color:inherit; text-decoration:none;"><?= htmlspecialchars($g['title']) ?></a></td>
+                        <td style="padding:10px; vertical-align:top; color:#ccc;">
+                            <?= htmlspecialchars($g['genres'] ?? '') ?>
+                        </td>
+                        <td style="padding:10px; vertical-align:top; color:#ccc; max-width:400px;">
+                            <?= htmlspecialchars(substr($g['description'] ?? 'No description', 0, 140)) ?>
+                        </td>
+                        <td style="padding:10px; vertical-align:top; color:#ccc;">
+                            <?= $g['release_date'] ? date('Y', strtotime($g['release_date'])) : '' ?>
+                        </td>
+                        <td style="padding:10px; vertical-align:top;">
+                            <button onclick="window.location.href='details?game=<?= urlencode($g['title']) ?>'" style="margin-right:8px;">View</button>
+                            <?php if ($isOwnList): ?>
+                                <button onclick="removeGame(<?= $g['id'] ?>)">Remove</button>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <?php include __DIR__ . '/../components/footer.php'; ?>
 
 <div class="toast-notification" id="toast-notification"></div>
@@ -698,6 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isOwnList = <?= json_encode($isOwnList) ?>;
     const listId = <?= json_encode($listId) ?>;
     const gameContainer = document.getElementById('game-container');
+    const listsTable = document.getElementById('lists-table-container');
     const viewToggleBtns = document.querySelectorAll('.view-btn');
     const shareListBtn = document.getElementById('shareListBtn');
     const editListBtn = document.getElementById('editListBtn');
@@ -713,35 +744,38 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentView = 'grid-view';
     let selectedGamesToAdd = new Set();
 
-    // Get current list of game IDs
     const currentGameIds = new Set(Array.from(document.querySelectorAll('.game-card')).map(card => parseInt(card.dataset.gameId)));
 
-    // View toggle
+    function updateViewVisibility() {
+        if (currentView === 'lists-view') {
+            gameContainer.style.display = 'none';
+            listsTable.style.display = 'block';
+        } else {
+            gameContainer.style.display = '';
+            listsTable.style.display = 'none';
+            gameContainer.className = `game-container ${currentView}`;
+        }
+    }
+
     viewToggleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             viewToggleBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentView = btn.dataset.view;
-            gameContainer.className = `game-container ${currentView}`;
             localStorage.setItem('listViewMode', currentView);
+            updateViewVisibility();
             renderGames();
         });
     });
 
-    // Load saved view preference
     const savedView = localStorage.getItem('listViewMode');
-    if (savedView && savedView !== 'grid-view') {
-        gameContainer.className = `game-container ${savedView}`;
-        viewToggleBtns.forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.dataset.view === savedView) {
-                btn.classList.add('active');
-            }
-        });
+    if (savedView) {
+        viewToggleBtns.forEach(btn => btn.classList.remove('active'));
+        viewToggleBtns.forEach(btn => { if (btn.dataset.view === savedView) btn.classList.add('active'); });
         currentView = savedView;
+        updateViewVisibility();
     }
 
-    // Share list
     shareListBtn.addEventListener('click', () => {
         const url = window.location.href;
         navigator.clipboard.writeText(url);
@@ -750,7 +784,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { toastNotification.style.display = 'none'; }, 2000);
     });
 
-    // Edit list
     if (isOwnList) {
         editListBtn.addEventListener('click', () => {
             editListModal.classList.add('show');
@@ -812,7 +845,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Add Games Modal
+
         addGamesBtn.addEventListener('click', () => {
             selectedGamesToAdd.clear();
             document.getElementById('gameSearchResults').innerHTML = '';
@@ -829,7 +862,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addGamesModal.classList.remove('show');
         });
 
-        // Search games
+
         let searchTimeout;
         document.getElementById('searchGameInput').addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
@@ -996,7 +1029,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Remove game from list
     window.removeGame = async (gameId) => {
         if (!confirm('Remove this game from the list?')) return;
 
@@ -1017,7 +1049,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gameCard.style.animation = 'fadeOut 0.3s ease-out';
                     setTimeout(() => {
                         gameCard.remove();
-                        // Check if list is now empty
+                    
                         const remainingCards = document.querySelectorAll('.game-card').length;
                         if (remainingCards === 0) {
                             gameContainer.innerHTML = '<div class="no-games">No games in this list yet.</div>';
@@ -1044,21 +1076,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Render games with genre info
     function renderGames() {
         if (currentView === 'compact-view') {
-            // For compact view, we need to fetch genre info
-            // For now, we'll keep the basic rendering
         }
     }
-
-    // Click on game card to go to details page
+    
     gameContainer.addEventListener('click', (e) => {
         if (e.target.tagName === 'BUTTON') return;
-        const gameCard = e.target.closest('.game-card');
+            const gameCard = e.target.closest('.game-card');
         if (gameCard) {
             const gameTitle = gameCard.dataset.gameTitle;
-            window.location.href = `details?game=${encodeURIComponent(gameTitle)}`;
+            window.location.href = '/details?game=' + encodeURIComponent(gameTitle);
         }
     });
 });

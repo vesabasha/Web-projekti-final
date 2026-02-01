@@ -335,10 +335,10 @@ const editModal = document.getElementById('edit-game-modal');
 const editClose = editModal.querySelector('.close');
 
 document.querySelectorAll('.view-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const title = encodeURIComponent(btn.dataset.title);
-        window.location.href = `/details?game=${title}`;
-    });
+  btn.addEventListener('click', () => {
+    const title = encodeURIComponent(btn.dataset.title);
+    window.location.href = `/details?game=${title}`;
+  });
 });
 
 document.querySelectorAll('.edit-btn').forEach(btn => {
