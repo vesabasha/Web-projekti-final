@@ -96,7 +96,7 @@ $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Games - Quest</title>
     <link rel="stylesheet" href="../style.css">
-
+    <link rel="stylesheet" href="../responsive.css">
 </head>
 <body>
 

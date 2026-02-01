@@ -51,6 +51,8 @@ const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
 const loginError = document.getElementById('loginError');
 const signupError = document.getElementById('signupError');
+const loginBtn = document.getElementById('loginBtn');
+const signupBtn = document.getElementById('signupBtn');
 
 document.querySelectorAll('#swapToSignup').forEach(btn => btn.onclick = () => {
     loginWrapper.style.display = 'none';
@@ -62,6 +64,19 @@ document.querySelectorAll('#swapToLogin').forEach(btn => btn.onclick = () => {
     signupWrapper.style.display = 'none';
     loginWrapper.style.display = 'block';
     signupError.style.display = 'none';
+});
+loginBtn?.addEventListener("click", () => {
+    authModal.classList.remove("hidden");
+    loginWrapper.style.display = "block";
+    signupWrapper.style.display = "none";
+    loginError.style.display = "none";
+});
+
+signupBtn?.addEventListener("click", () => {
+    authModal.classList.remove("hidden");
+    loginWrapper.style.display = "none";
+    signupWrapper.style.display = "block";
+    signupError.style.display = "none";
 });
 
 document.querySelector('.modal-close').onclick = () => authModal.classList.add('hidden');
