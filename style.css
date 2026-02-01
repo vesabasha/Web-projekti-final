@@ -647,6 +647,74 @@ body {
     transform: scale(1.05);
 }
 
+#lists {
+    margin-top: 30px;
+}
+
+.list-card {
+    margin-bottom: 30px;
+    background-color: #010B14;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.list-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.list-card h3 {
+    color: #FF669C;
+    margin: 0;
+}
+
+.delete-list-btn {
+    background-color: #A24465;
+    padding: 6px 14px;
+    font-size: 13px;
+    height: auto;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.delete-list-btn:hover {
+    background-color: #b76c82;
+}
+
+.list-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.list-game-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    height: 160px;
+}
+
+.list-game-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.list-game-item img:hover {
+    transform: scale(1.05);
+}
+
+.no-lists, .no-games, .error {
+    color: #8db8ff;
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+}
+
 /*game details page*/
 .game-detail-image{
     cursor: pointer;

@@ -24,6 +24,66 @@ if (isset($_GET['action'])) {
         exit;
     }
 
+    if ($_GET['action'] === 'get_lists') {
+        if (!$userId) {
+            echo json_encode(['lists' => []]);
+            exit;
+        }
+        
+        $stmt = $pdo->prepare("SELECT id, name FROM lists WHERE user_id = ? ORDER BY id DESC");
+        $stmt->execute([$userId]);
+        $lists = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $listsWithGames = [];
+        foreach ($lists as $list) {
+            $gameStmt = $pdo->prepare("
+                SELECT g.id, g.title, g.main_image2_url FROM games g
+                INNER JOIN list_games lg ON g.id = lg.game_id
+                WHERE lg.list_id = ?
+            ");
+            $gameStmt->execute([$list['id']]);
+            $list['games'] = $gameStmt->fetchAll(PDO::FETCH_ASSOC);
+            $listsWithGames[] = $list;
+        }
+        
+        echo json_encode(['lists' => $listsWithGames]);
+        exit;
+    }
+
+    if ($_GET['action'] === 'delete_list') {
+        if (!$userId) {
+            echo json_encode(['success' => false, 'error' => 'Not logged in']);
+            exit;
+        }
+
+        $listId = intval($_POST['list_id'] ?? 0);
+        if (!$listId) {
+            echo json_encode(['success' => false, 'error' => 'List ID required']);
+            exit;
+        }
+
+        try {
+            // Verify ownership
+            $stmt = $pdo->prepare("SELECT user_id FROM lists WHERE id = ?");
+            $stmt->execute([$listId]);
+            $list = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$list || $list['user_id'] != $userId) {
+                echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+                exit;
+            }
+
+            // Delete the list (cascade will handle list_games)
+            $stmt = $pdo->prepare("DELETE FROM lists WHERE id = ?");
+            $stmt->execute([$listId]);
+
+            echo json_encode(['success' => true, 'message' => 'List deleted successfully']);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+        }
+        exit;
+    }
+
     if ($_GET['action'] === 'create_list') {
         if (!$userId) {
             echo json_encode(['success' => false, 'error' => 'Not logged in']);
@@ -337,7 +397,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.success) {
                 showFeedback(data.message || 'List created successfully!');
-                setTimeout(() => closeListModal(), 1500);
+                setTimeout(() => {
+                    closeListModal();
+                    loadUserLists();
+                }, 1500);
             } else {
                 showFeedback(data.error || 'Failed to create list', true);
             }
@@ -345,6 +408,72 @@ document.addEventListener('DOMContentLoaded', () => {
             showFeedback('Network error. Please try again.', true);
         }
     };
+
+    window.deleteList = async (listId) => {
+        if (!confirm('Are you sure you want to delete this list?')) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('list_id', listId);
+
+        try {
+            const res = await fetch('?action=delete_list', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            if (data.success) {
+                showFeedback(data.message || 'List deleted successfully');
+                setTimeout(() => loadUserLists(), 1000);
+            } else {
+                showFeedback(data.error || 'Failed to delete list', true);
+            }
+        } catch (error) {
+            showFeedback('Network error. Please try again.', true);
+        }
+    };
+
+    async function loadUserLists() {
+        try {
+            const res = await fetch('?action=get_lists');
+            const data = await res.json();
+            const listsContainer = document.getElementById('lists');
+
+            if (data.lists.length === 0) {
+                listsContainer.innerHTML = '<p class="no-lists">You haven\'t created any lists yet.</p>';
+                return;
+            }
+
+            const listsHtml = data.lists.map(list => `
+                <div class="list-card">
+                    <div class="list-card-header">
+                        <h3>${escapeHtml(list.name)}</h3>
+                        <button class="delete-list-btn" onclick="deleteList(${list.id})">Delete</button>
+                    </div>
+                    <div class="list-games">
+                        ${list.games.length === 0 ? '<p class="no-games">No games in this list</p>' : ''}
+                        ${list.games.map(game => `
+                            <div class="list-game-item">
+                                <img src="${game.main_image2_url}" alt="${escapeHtml(game.title)}" title="${escapeHtml(game.title)}">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            listsContainer.innerHTML = listsHtml;
+        } catch (error) {
+            console.error('Error loading lists:', error);
+            document.getElementById('lists').innerHTML = '<p class="error">Error loading lists</p>';
+        }
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    loadUserLists();
 });
 </script>
 
