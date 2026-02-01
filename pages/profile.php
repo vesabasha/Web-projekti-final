@@ -406,7 +406,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="list-block">
                     <div class="list-title-row">
                         <h3>${escapeHtml(list.name)}</h3>
-                        ${isOwnProfile ? `<button class="delete-list-btn" onclick="deleteList(${list.id})"><img src="../images/delete.png" alt="Delete" class="icon-btn"></button>` : ''}
+                        <div class="list-actions">
+                            <a href="lists?id=${list.id}" class="see-more-btn">See More</a>
+                            ${isOwnProfile ? `<button class="delete-list-btn" onclick="deleteList(${list.id})"><img src="../images/delete.png" alt="Delete" class="icon-btn"></button>` : ''}
+                        </div>
                     </div>
                     <div class="list-games">
                         ${list.games.length === 0 ? '<p class="no-games">No games in this list</p>' : ''}

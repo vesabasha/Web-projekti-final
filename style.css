@@ -621,6 +621,27 @@ body {
     color: #A24465;
 }
 
+.list-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.see-more-btn {
+    background: #44A1A0;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.see-more-btn:hover {
+    background: #368c8b;
+}
+
 .see-full {
     color: #8db8ff;
     font-size: 14px;
