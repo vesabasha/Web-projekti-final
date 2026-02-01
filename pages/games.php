@@ -2,6 +2,10 @@
 session_start();
 require_once __DIR__ . '/../config.php';
 
+$limit = 10; 
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
 $genreStmt = $pdo->query("SELECT name FROM genres ORDER BY name");
 $allGenres = $genreStmt->fetchAll(PDO::FETCH_COLUMN);
 
@@ -53,7 +57,6 @@ if (!empty($_GET['genres']) && is_array($_GET['genres'])) {
 
 if (!empty($selectedGenres)) {
     $placeholders = [];
-    $params = $params ?? [];
     foreach ($selectedGenres as $i => $g) {
         $placeholders[] = ":genre$i";
         $params[":genre$i"] = $g;
@@ -69,10 +72,22 @@ if (!empty($selectedGenres)) {
         HAVING COUNT(DISTINCT ge2.name) = " . count($selectedGenres) . "
     )";
 }
-$sql .= " GROUP BY g.id ORDER BY g.release_date DESC";
+$countSql = "SELECT COUNT(*) FROM ( " . $sql . " GROUP BY g.id ) as total_count";
+$countStmt = $pdo->prepare($countSql);
+$countStmt->execute($params);
+$totalRows = $countStmt->fetchColumn();
+$totalPages = ceil($totalRows / $limit);
+
+$sql .= " GROUP BY g.id ORDER BY g.release_date DESC LIMIT :limit OFFSET :offset";
 
 $stmt = $pdo->prepare($sql);
-$stmt->execute($params);
+foreach ($params as $key => $val) {
+    $stmt->bindValue($key, $val);
+}
+$stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+$stmt->execute();
 $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($games as &$game) {
@@ -86,6 +101,9 @@ unset($game);
 
 $is_logged_in = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : '';
+$currentParams = $_GET;
+unset($currentParams['page']);
+$queryString = http_build_query($currentParams);
 ?>
 
 
@@ -195,6 +213,22 @@ $username = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : 
             </div>
         </div>
     <?php endforeach; ?>
+</div>
+<div class="pagination" style="display: flex; justify-content: center; gap: 15px; margin: 40px 0;">
+    <?php if ($page > 1): ?>
+        <a href="?<?= $queryString ?>&page=<?= $page - 1 ?>" style="color: #fff; text-decoration: none;">« Prev</a>
+    <?php endif; ?>
+
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="?<?= $queryString ?>&page=<?= $i ?>" 
+           style="color: <?= ($i == $page) ? '#00fbff' : '#fff' ?>; font-weight: <?= ($i == $page) ? 'bold' : 'normal' ?>; text-decoration: none;">
+           <?= $i ?>
+        </a>
+    <?php endfor; ?>
+
+    <?php if ($page < $totalPages): ?>
+        <a href="?<?= $queryString ?>&page=<?= $page + 1 ?>" style="color: #fff; text-decoration: none;">Next »</a>
+    <?php endif; ?>
 </div>
 
 

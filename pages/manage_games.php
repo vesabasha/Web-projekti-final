@@ -9,6 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_game_id'])) {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['name'])) {
+  $genreName = htmlspecialchars($_POST['name']);
+
+  $stmt = $pdo->prepare("INSERT INTO genres (name) VALUES (?)");
+  if ($stmt->execute([$genreName])) {
+      echo "Genre added successfully!";
+  } else {
+      echo "Failed to add genre.";
+  }
+  header("Location: manage_games");
+  exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_game_id'])) {
     $gameId = $_POST['edit_game_id'];
     $title = $_POST['title'];
@@ -138,8 +151,22 @@ $genres = $pdo->query("SELECT * FROM genres")->fetchAll();
       <button style="margin-left:auto;" class="button-3" onclick="window.location.href='landing'">Back to Quest</button>
 
       <button  id="openModalBtn">Add Game</button>
+      <button  id="openGenreModalBtn">Add Genre</button>
 
     </div>
+
+<div id="add-genre-modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Add New Genre</h2>
+    <form method="POST">
+      <label>Genre Name:</label>
+      <input type="text" name="name" placeholder="Enter genre name" required>
+      
+      <button type="submit">Add Genre</button>
+    </form>
+  </div>
+</div>
 
 <div id="add-game-modal">
   <div class="modal-content">
@@ -273,6 +300,32 @@ $genres = $pdo->query("SELECT * FROM genres")->fetchAll();
   const modal = document.getElementById('add-game-modal');
 const btn = document.getElementById('openModalBtn');
 const close = modal.querySelector('.close');
+
+const genreModal = document.getElementById('add-genre-modal'); // NEW
+const genreBtn = document.getElementById('openGenreModalBtn'); // NEW
+const genreClose = genreModal.querySelector('.close');         // NEW
+const genreForm = document.getElementById('genreForm');        // NEW
+
+if (genreBtn) {
+    genreBtn.onclick = () => genreModal.style.display = 'block';
+}
+if (genreClose) {
+    genreClose.onclick = () => genreModal.style.display = 'none';
+}
+
+if (genreForm) {
+    genreForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(genreForm);
+        try {
+            const response = await fetch('add_genre.php', { method: 'POST', body: formData });
+            const result = await response.text();
+            alert(result);
+            genreModal.style.display = 'none';
+            genreForm.reset();
+        } catch (error) { console.error("Error:", error); }
+    };
+}
 
 btn.onclick = () => modal.style.display = 'block';
 close.onclick = () => modal.style.display = 'none';

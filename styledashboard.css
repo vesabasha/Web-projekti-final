@@ -180,8 +180,7 @@ a:hover{
     margin-bottom: 20px;
 }
 
-
-#add-game-modal, #edit-game-modal {
+#add-game-modal, #edit-game-modal, #add-genre-modal {
     display: none;
     position: fixed;
     z-index: 1000;
@@ -194,20 +193,22 @@ a:hover{
     font-family: 'helvetica', sans-serif;
 }
 
-#add-game-modal .modal-content, #edit-game-modal .modal-content {
+#add-game-modal .modal-content, 
+#edit-game-modal .modal-content,
+#add-genre-modal .modal-content {
     background-color: #010B14;
-    margin: 2% auto;
+    margin: 5% auto; 
     padding: 20px;
     border-radius: 10px;
-    width: 50%;
+    width: 40%;
     color: white;
     position: relative;
-    border-color:#444;
-    border-style: solid;
-    border-width: 1px;
+    border: 1px solid #444;
 }
 
-#add-game-modal .close, #edit-game-modal .close {
+#add-game-modal .close, 
+#edit-game-modal .close,
+#add-genre-modal .close {
     position: absolute;
     top: 10px;
     right: 20px;
@@ -215,12 +216,10 @@ a:hover{
     cursor: pointer;
     color: white;
 }
-#add-game-modal input,
-#add-game-modal textarea,
-#add-game-modal select,
-#edit-game-modal input,
-#edit-game-modal textarea,
-#edit-game-modal select {
+
+#add-game-modal input, #add-game-modal textarea, #add-game-modal select,
+#edit-game-modal input, #edit-game-modal textarea, #edit-game-modal select,
+#add-genre-modal input {
     width: 100%;
     padding: 10px 12px;
     margin: 5px 0 15px 0;
@@ -231,7 +230,6 @@ a:hover{
     font-size: 16px;
     outline: none;
     transition: border 0.2s, box-shadow 0.2s;
-
     box-sizing: border-box;
 }
 
@@ -255,4 +253,22 @@ a:hover{
 }
 button img.icon-btn {
     filter: brightness(0) invert(1);
+}
+
+#add-genre-modal input:focus {
+    border-color: #666;
+}
+
+.modal-submit-btn {
+    background-color: #2a3245;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal-submit-btn:hover {
+    background-color: #3a445c;
 }
