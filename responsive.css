@@ -776,4 +776,29 @@ body {
         padding-left: 12px;
         padding-right: 12px;
     }
+
+
+    .list-controls {
+        align-items: center;
+        justify-content: center;
+    }
+    .list-controls > :first-child {
+        order: 2;
+        flex-basis: 100%;
+        text-align: center;
+    }
+    .view-toggle {
+        text-align: center;
+        justify-content: center;
+    }
+    .game-card-info .secondary-text,
+    .game-container .game-card-info .secondary-text {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-height: 4.5em !important;
+        line-height: 1.5em !important;
+    }
 }
