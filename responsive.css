@@ -256,6 +256,17 @@ body {
     /*browse games*/
 
     @media (max-width: 768px) {
+    .h1-title {
+        font-size: 22px !important;
+        line-height: 1.2;
+    }
+}
+#game-container {
+    margin-top: 40px;
+}
+
+    @media (max-width: 768px) {
+        
         #browse-games {
             width: 80% !important;
         }
@@ -272,7 +283,7 @@ body {
         #browse-games a.secondary-a {
             font-size: 14px !important;
         }
-    
+        
         .game-card img {
             max-width: 140px;
             height: auto;
@@ -291,6 +302,110 @@ body {
             font-size: 11px;
             padding: 2px 4px;
         }
+
+        /* Game container responsive */
+        .game-container {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+            width: 90% !important;
+            margin: 0 auto !important;
+        }
+
+        .game-card {
+            width: 100% !important;
+        }
+
+        /* Advanced search filters responsive */
+        .advanced-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 20px !important;
+            padding: 20px !important;
+        }
+
+        .genre-filter,
+        .year-filter,
+        .apply-filter {
+            width: 100% !important;
+        }
+
+        .year-range {
+            display: flex !important;
+            gap: 4px !important;
+            align-items: center !important;
+            width: 100% !important;
+        }
+
+        .year-range input {
+            flex: 1 !important;
+            min-width: 0 !important;
+            padding: 8px 10px !important;
+            font-size: 14px !important;
+            box-sizing: border-box !important;
+        }
+
+        .year-separator {
+            flex-shrink: 0 !important;
+            padding: 0 1px !important;
+            font-size: 14px !important;
+        }
+
+        .apply-filter button {
+            width: 100% !important;
+            margin-top: 0 !important;
+        }
+
+        /* Profile page responsive */
+        .profile-header {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .profile-top {
+            order: 1 !important;
+        }
+
+        .profile-stats {
+            order: 2 !important;
+            margin-top: 20px !important;
+        }
+
+        #editProfileBtn {
+            padding: 10px 20px !important;
+            font-size: 14px !important;
+            width: auto !important;
+            white-space: nowrap !important;
+        }
+
+        .username-box {
+    position: relative;
+    display: inline-block;
+}
+
+.username-box h2,
+.username-box input {
+    padding-right: 110px; /* space for the button */
+}
+
+.edit-inside {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #FF669C;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 6px;
+}
+
+.edit-inside:hover {
+    text-decoration: underline;
+}
+
+
     }
     
 }
