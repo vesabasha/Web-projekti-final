@@ -1,24 +1,56 @@
+<h1> Quest </h1>
+
 Github: https://github.com/vesabasha/Web-projekti-final.git
+<br>
 Figma: https://www.figma.com/design/rQlsEK9svKIczOG0Ud7siD/Untitled?node-id=0-1&t=f4BnldojixI7d2Gh-1
 
-Quest is a website that aims to make it easier for students or other adults who are busy to spend less time trying to pick the games they want to play and more actually playing. 
+<h3>About the Project</h3>
 
-In the future, we will aim to accomplish this by letting users create lists of games they want to play, are playing etc. by categorising them however they want into lists, making it effortless to organize their backlog and jump straight into what they feel like playing next.
+Quest is a web platform designed to help students and busy adults spend less time deciding what to play and more time actually playing.
 
-We also plan to implement a smart search feature with AI using openai api or a similar api, whereas for the catalogue of games itself we plan to use steamAPI
+Instead of getting overwhelmed by endless choices, users can easily organize their game backlog by creating custom lists such as Want to Play, Currently Playing, or any category they prefer. Quest makes managing and jumping into games simple, fast, and enjoyable.
 
-The UI part of our website is done and it is completed with mock data for games, lists and the user.
+<h3>Tech Stack</h3>
+Frontend: HTML, CSS, JavaScript
+Backend: PHP
+Database: MySQL
+Design: Figma
 
-Our website has these pages:
-1. Landing page - learn about the website (landing.html)
-2. Browse games page - browse different games with short descriptions, genre badges and the games cover picture (games.php)
-3. Game details page - view the games, a picture catalogue of them, a descriptions, genre etc. (details.html)
-4. Profile page - View your profile and your lists (profile.html)
-5. Lists page - similar to browse games page, but only includes the games from the users list (lists.html)
-6. Privacy Policy page - Read our privacy policy (privacy.php)
+<h3>Pages: </h3>
 
-Javascript has been used to render the games and games details pages from our json. It has also been used to open up the login and sign up modals.
+Landing Page (landing.php)
+Learn what Quest is all about and what it offers.
 
-The developers: Vesa Basha, Bled Mehmeti, Erind Balaj
+Browse Games (games.php)
+Explore games with short descriptions, genre badges, and cover images.
+Includes search and filters by genre and release date.
+
+Game Details (details.php)
+View detailed information about a game, including image galleries, descriptions, and genres.
+Add games directly to your lists.
+
+Profile Page (profile.php)
+View your profile and game lists, and share them with friends.
+
+Lists Page (lists.php)
+Manage your lists in grid, detailed, or list view.
+Edit and share lists easily.
+
+Privacy Policy (privacy.php)
+Read about how user data is handled.
+
+Admin Dashboard (dashboard.php)
+Manage users, change roles, or remove accounts.
+
+Game Management (Admin) (manage_games.php)
+Add, edit, or delete games and genres
+
+### Project Status
+This project was developed as a university web project and may be expanded with additional features in the future :)
+
+<h3>The developers:</h3> 
+Vesa Basha
+Bled Mehmeti
+Erind Balaj
 
 Keep Gaming 
