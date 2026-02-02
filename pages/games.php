@@ -140,12 +140,12 @@ $queryString = http_build_query($currentParams);
 
 <!--header -->
 
-<div style="margin: 40px auto; width: 75%; display: flex; align-items: center;">
-    <h1 class="h1-title" style="flex-grow: 0.5; margin: 0;">
+<div style="margin: 40px auto; width: 75%; display: flex; flex-direction: column;">
+    <h1 class="h1-title" style="margin: 0 0 20px 0;">
         Find the perfect game for you
     </h1>
 
-    <form method="GET" style="width:42%; margin-left: 5%;">
+    <form method="GET" style="width:100%;">
         <input
             style="height:45px; width:100%;"
             type="search"
