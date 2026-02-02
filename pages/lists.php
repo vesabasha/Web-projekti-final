@@ -268,6 +268,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
                         <?php if ($game['release_date']): ?>
                             <p class="release-date"><?= htmlspecialchars($game['release_date']) ?></p>
                         <?php endif; ?>
+                        <div class="genres-container">
+                            <?php foreach (explode(',', $game['genres'] ?? '') as $genre): ?>
+                                <span class="genre-badge"><?= htmlspecialchars($genre) ?></span>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </a>
                 <?php if ($isOwnList): ?>
