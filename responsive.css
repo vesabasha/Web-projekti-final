@@ -802,3 +802,107 @@ body {
         line-height: 1.5em !important;
     }
 }
+
+/* Lists page grid view mobile responsiveness */
+@media (max-width: 1024px) {
+    .list-header {
+        padding: 15px !important;
+        margin-left: 0 !important;
+    }
+
+    .list-controls {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    .view-toggle {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    /* Grid view adjustments for lists page */
+    .game-container.grid-view {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+        gap: 15px !important;
+        padding: 15px !important;
+        margin-left: 0 !important;
+    }
+
+    .game-container.grid-view .game-card {
+        display: contents !important;
+    }
+
+    .game-container.grid-view .card-link {
+        display: block !important;
+        color: inherit !important;
+        text-decoration: none !important;
+        width: 100% !important;
+        height: 100% !important;
+        position: relative !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+    }
+
+    .game-container.grid-view .game-card img {
+        width: 100% !important;
+        height: 200px !important;
+        object-fit: cover !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .game-container.grid-view .game-card-info {
+        display: none !important;
+    }
+
+    .game-container.grid-view .remove-game-btn {
+        position: absolute !important;
+        top: 8px !important;
+        right: 8px !important;
+        background: rgba(255, 102, 156, 0.9) !important;
+        border: none !important;
+        color: white !important;
+        width: 28px !important;
+        height: 28px !important;
+        border-radius: 50% !important;
+        cursor: pointer !important;
+        font-size: 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 10 !important;
+    }
+
+    #lists-table-container {
+        margin-left: 0 !important;
+        padding: 15px !important;
+    }
+
+    .table-container {
+        min-width: auto !important;
+        overflow-x: auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container.grid-view {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .game-container.grid-view .game-card img {
+        height: 185px !important;
+    }
+
+    .game-container.grid-view .game-card-info {
+        padding: 8px !important;
+    }
+
+    .game-container.grid-view .game-card-info h3 {
+        font-size: 13px !important;
+    }
+}
