@@ -295,3 +295,152 @@ body {
     
 }
 
+/*privacy page responsiveness*/
+
+@media (max-width: 1024px) {
+    .privacy-title p {
+        margin-left: 100px !important;
+        margin-right: 100px !important;
+        font-size: 16px;
+    }
+
+    .privacy-header {
+        padding: 20px;
+    }
+
+    .privacy-hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .privacy-title h2 {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    .privacy-title {
+        text-align: center;
+    }
+
+    .privacy-title p {
+        margin-left: 30px !important;
+        margin-right: 30px !important;
+        margin-bottom: 30px;
+        font-size: 15px;
+        line-height: 1.6;
+        text-align: center;
+    }
+
+    .privacy-title h2 {
+        font-size: 20px;
+        margin-left: 30px;
+        margin-right: 30px;
+        text-align: center;
+    }
+
+    .privacy-kh {
+        max-width: calc(100% - 40px) !important;
+        margin: 0 20px !important;
+        width: calc(100% - 40px);
+    }
+
+    .privacy-header {
+        padding: 15px 0;
+    }
+
+    main.privacy-page {
+        padding: 0;
+        margin: 20px 0;
+    }
+}
+
+@media (max-width: 599px) {
+    body {
+        padding-top: 50px !important;
+    }
+
+    .privacy-title {
+        text-align: center;
+    }
+
+    .privacy-title p {
+        margin-left: 20px !important;
+        margin-right: 20px !important;
+        margin-bottom: 25px;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    .privacy-title h2 {
+        font-size: 18px;
+        margin-left: 20px;
+        margin-right: 20px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .privacy-kh {
+        max-width: calc(100% - 30px) !important;
+        margin: 0 15px !important;
+        width: calc(100% - 30px);
+        border-radius: 8px;
+    }
+
+    .privacy-kh img {
+        border-radius: 8px;
+    }
+
+    .privacy-header {
+        padding: 10px 0;
+        margin-bottom: 30px;
+    }
+
+    main.privacy-page {
+        padding: 0;
+        margin: 15px 0;
+    }
+}
+
+@media (max-width: 375px) {
+    .privacy-title p {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+        margin-bottom: 20px;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    .privacy-title h2 {
+        font-size: 16px;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .privacy-kh {
+        margin: 0 10px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .privacy-title p {
+        margin-left: 250px !important;
+        margin-right: 250px !important;
+        font-size: 16px;
+        line-height: 1.8;
+    }
+
+    .privacy-title h2 {
+        font-size: 28px;
+    }
+
+    main.privacy-page {
+        max-width: 1400px;
+        margin: 40px auto;
+    }
+}
+
