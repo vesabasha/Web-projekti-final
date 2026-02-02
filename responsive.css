@@ -834,7 +834,6 @@ body {
     .edit-list-modal, .mobile-nav, .mobile-overlay {
         z-index: 10001 !important;
     }
-}
 
     .list-controls {
         align-items: center;
@@ -849,7 +848,8 @@ body {
         text-align: center;
         justify-content: center;
     }
-    .game-container.grid-view .game-card-info .secondary-text {
+    .game-card-info .secondary-text,
+    .game-container .game-card-info .secondary-text {
         display: -webkit-box !important;
         -webkit-line-clamp: 3 !important;
         -webkit-box-orient: vertical !important;
