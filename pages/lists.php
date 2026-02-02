@@ -260,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
     <?php else: ?>
         <?php foreach ($games as $game): ?>
             <div class="game-card" data-game-id="<?= $game['id'] ?>" data-game-title="<?= htmlspecialchars($game['title']) ?>">
-                <a class="card-link" href="/details?game=<?= urlencode($game['title']) ?>">
+                <a class="card-link" href="/details?game=<?= urlencode($game['title']) ?>" style="display:flex;">
                     <img src="../<?= htmlspecialchars($game['main_image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?>" onerror="this.src='../images/games/placeholder.png';">
                     <div class="game-card-info">
                         <h3><?= htmlspecialchars($game['title']) ?></h3>

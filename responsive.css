@@ -810,8 +810,7 @@ body {
         text-align: center;
         justify-content: center;
     }
-    .game-card-info .secondary-text,
-    .game-container .game-card-info .secondary-text {
+    .game-container.grid-view .game-card-info .secondary-text {
         display: -webkit-box !important;
         -webkit-line-clamp: 3 !important;
         -webkit-box-orient: vertical !important;
