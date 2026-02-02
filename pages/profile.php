@@ -175,11 +175,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnPr
             </div>
             
             <?php if ($isOwnProfile): ?>
+                <div class="profile-buttons">
                 <button class="button-2" onclick="window.location.href='../logout.php'">
                     <img src="../images/logout.png" alt="Logout" class="icon-btn">
                 </button>
                 <button id="shareProfileBtn" data-id="<?= $viewingId ?>" class="button-3"><img src="../images/shared.png" alt="Share" class="icon-btn"></button>
-            <?php endif; ?>
+                </div>
+                <?php endif; ?>
         </div>
 
         <div class="profile-stats">
