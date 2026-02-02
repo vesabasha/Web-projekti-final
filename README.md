@@ -12,45 +12,50 @@ Instead of getting overwhelmed by endless choices, users can easily organize the
 
 <h3>Tech Stack</h3>
 Frontend: HTML, CSS, JavaScript
+<br>
 Backend: PHP
+<br>
 Database: MySQL
+<br>
 Design: Figma
 
 <h3>Pages: </h3>
 
 Landing Page (landing.php)
+<br>
 Learn what Quest is all about and what it offers.
 
 Browse Games (games.php)
-Explore games with short descriptions, genre badges, and cover images.
-Includes search and filters by genre and release date.
+<br>
+Explore games with short descriptions, genre badges, and cover images.<br>
+Includes search and filters by genre and release date.<br>
 
-Game Details (details.php)
-View detailed information about a game, including image galleries, descriptions, and genres.
-Add games directly to your lists.
+Game Details (details.php)<br>
+View detailed information about a game, including image galleries, descriptions, and genres.<br>
+Add games directly to your lists.<br>
 
-Profile Page (profile.php)
-View your profile and game lists, and share them with friends.
+Profile Page (profile.php)<br>
+View your profile and game lists, and share them with friends.<br>
 
-Lists Page (lists.php)
-Manage your lists in grid, detailed, or list view.
-Edit and share lists easily.
+Lists Page (lists.php)<br>
+Manage your lists in grid, detailed, or list view.<br>
+Edit and share lists easily.<br>
 
-Privacy Policy (privacy.php)
-Read about how user data is handled.
+Privacy Policy (privacy.php)<br>
+Read about how user data is handled.<br>
 
-Admin Dashboard (dashboard.php)
-Manage users, change roles, or remove accounts.
+Admin Dashboard (dashboard.php)<br>
+Manage users, change roles, or remove accounts.<br>
 
-Game Management (Admin) (manage_games.php)
-Add, edit, or delete games and genres
+Game Management (Admin) (manage_games.php)<br>
+Add, edit, or delete games and genres<br>
 
-### Project Status
-This project was developed as a university web project and may be expanded with additional features in the future :)
+### Project Status<br>
+This project was developed as a university web project and may be expanded with additional features in the future :)<br>
 
 <h3>The developers:</h3> 
-Vesa Basha
-Bled Mehmeti
-Erind Balaj
-
-Keep Gaming 
+Vesa Basha<br>
+Bled Mehmeti<br>
+Erind Balaj<br>
+<br>
+<h3>Keep Gaming 👾</h3>
