@@ -12,7 +12,7 @@ CREATE TABLE games(
     title VARCHAR(100) NOT NULL,
     description TEXT,
     main_image_url VARCHAR(255),
-    main_image_url VARCHAR(255),
+    main_image2_url VARCHAR(255),
     image1 VARCHAR(255),
     image2 VARCHAR(255),
     image3 VARCHAR(255),
