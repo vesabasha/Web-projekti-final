@@ -831,7 +831,16 @@ body {
         pointer-events: auto !important;
     }
     /* Ensure modals and mobile nav overlays are above lists table */
-    .edit-list-modal, .mobile-nav, .mobile-overlay {
+    .mobile-header {
+        z-index: 10002 !important;
+    }
+    .mobile-overlay {
+        z-index: 9999 !important;
+    }
+    .mobile-nav {
+        z-index: 10003 !important;
+    }
+    .edit-list-modal {
         z-index: 10001 !important;
     }
 
