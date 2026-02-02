@@ -401,9 +401,6 @@ display: flex;
     margin: 10px 0;
 }
 
-/* landing */
-
-/* main section */
 .hero {
     position: relative;
     min-height: 110vh;
@@ -439,7 +436,6 @@ display: flex;
     justify-content: center;
 }
 
-/* info section */
 .info-section {
     padding: 80px 80px;
     background-color: #011628;
@@ -498,7 +494,6 @@ body {
     height: auto !important;
     margin-top: 60px !important;
 }
-/*per profile page*/
 .profile-container {
     width: 90%;
     max-width:1000px;
@@ -739,7 +734,6 @@ body {
     font-style: italic;
 }
 
-/*game details page*/
 .game-detail-image{
     cursor: pointer;
     opacity: 0.5;
