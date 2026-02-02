@@ -374,15 +374,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentGameIds = new Set(Array.from(document.querySelectorAll('.game-card')).map(card => parseInt(card.dataset.gameId)));
 
     function updateViewVisibility() {
+        const isMobile = window.matchMedia('(max-width: 1024px)').matches;
         if (currentView === 'lists-view') {
-            gameContainer.style.display = 'none';
-            listsTable.style.display = 'block';
+            if (isMobile) {
+                document.body.classList.add('lists-view-mobile');
+                listsTable.classList.add('active');
+                // Ensure nav and overlays are visible and pointer events work
+                if (document.querySelector('.mobile-header')) {
+                    document.querySelector('.mobile-header').style.display = 'flex';
+                }
+            } else {
+                gameContainer.style.display = 'none';
+                listsTable.style.display = 'block';
+            }
         } else {
+            if (isMobile) {
+                document.body.classList.remove('lists-view-mobile');
+                listsTable.classList.remove('active');
+                if (document.querySelector('.mobile-header')) {
+                    document.querySelector('.mobile-header').style.display = '';
+                }
+            }
             gameContainer.style.display = '';
             listsTable.style.display = 'none';
             gameContainer.className = `game-container ${currentView}`;
         }
     }
+
+    // Re-apply view logic on resize (for mobile/desktop switch)
+    window.addEventListener('resize', () => {
+        updateViewVisibility();
+    });
 
     viewToggleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
