@@ -433,6 +433,11 @@ body {
         .apply-filter {
             width: 100% !important;
         }
+        
+        .genre-filter p,
+        .year-filter label {
+            order: -1 !important;
+        }
 
         #advancedBox,
         #advancedBtn {
@@ -977,5 +982,11 @@ body {
         gap: 15px !important;
         padding: 15px !important;
         margin-left: 0 !important;
+    }
+    button{
+        padding: 3px 15px !important;
+    }
+    .button-2{
+        padding: 3px 15px !important;
     }
 }

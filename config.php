@@ -1,6 +1,5 @@
 <?php
 // basically the communication line to the database
-//e bona gen most of it eshte boilerplate code
 $host = 'localhost';
 $dbname = 'quest_db';
 $username = 'root';

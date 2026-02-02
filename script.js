@@ -17,14 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
         authModal.classList.add("hidden");
     }
 
-    // Show login form
+   
     if (loginBtn) loginBtn.addEventListener("click", () => {
         loginWrapper.style.display = 'block';
         signupWrapper.style.display = 'none';
         openModal();
     });
 
-    // Show signup form
+    
     if (signupBtn) signupBtn.addEventListener("click", () => {
         loginWrapper.style.display = 'none';
         signupWrapper.style.display = 'block';
@@ -36,14 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
         signupWrapper.style.display = 'block';
         openModal();
     });
-
-    // Close modal
     closeButtons.forEach(btn => btn.addEventListener("click", closeModal));
     document.addEventListener("keydown", e => {
         if (e.key === "Escape") closeModal();
     });
-
-    // Swap buttons inside modal
     document.querySelectorAll("#swapToLogin").forEach(btn => {
         btn.addEventListener("click", () => {
             loginWrapper.style.display = 'block';
