@@ -75,7 +75,7 @@ $genres = $game['genres'] ? explode(',', $game['genres']) : [];
     </div>
 </div>
 
-<button class="button-2 mobile-only" style="width:100%; margin: 16px 0;">
+<button class="button-2 add-button mobile-only" style="width:100%; margin: 16px 0;">
     Add to List
 </button>
 
