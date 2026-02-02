@@ -241,16 +241,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
     <div class="list-controls">
         <div class="view-toggle">
             <button class="view-btn active" data-view="grid-view">Grid</button>
-            <button class="view-btn" data-view="detailed-view">Detailed</button>
-            <?php if ($isOwnList): ?>
+                <button class="view-btn" data-view="detailed-view">Detailed</button>
                 <button class="view-btn" data-view="lists-view">Lists</button>
+            </div>
+
+            <button class="button-3" id="shareListBtn"><img class="icon-btn" src="../images/shared.png" alt="Share"></button>
+            <?php if ($isOwnList): ?>
+                <button class="list-action-btn" id="addGamesBtn">+ Add Games</button>
+                <button class="list-action-btn" id="editListBtn">Edit</button>
             <?php endif; ?>
         </div>
-        <button class="button-3" id="shareListBtn"><img class="icon-btn" src="../images/shared.png" alt="Share"></button>
-        <?php if ($isOwnList): ?>
-            <button class="list-action-btn" id="addGamesBtn">+ Add Games</button>
-            <button class="list-action-btn" id="editListBtn">Edit</button>
-        <?php endif; ?>
     </div>
 </div>
 
