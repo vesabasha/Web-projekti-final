@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../config.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -6,6 +7,16 @@ $userId = $_SESSION['user_id'] ?? null;
 $username = $_SESSION['username'] ?? '';
 $profilePic = $_SESSION['pfp_url'] ?? 'images/placeholder.jpg';
 $is_admin = $_SESSION['is_admin'] ?? false;
+
+if ($userId) {
+    $stmt = $pdo->prepare("SELECT pfp_url FROM users WHERE id = ?");
+    $stmt->execute([$userId]);
+    $dbPfp = $stmt->fetchColumn();
+    if (!empty($dbPfp)) {
+        $profilePic = $dbPfp;
+    }
+}
+
 ?>
 <nav>
 
