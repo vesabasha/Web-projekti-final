@@ -303,7 +303,6 @@ body {
             padding: 2px 4px;
         }
 
-        /* Game container responsive */
         .game-container {
             display: grid !important;
             grid-template-columns: 1fr !important;
@@ -316,7 +315,6 @@ body {
             width: 100% !important;
         }
 
-        /* Advanced search filters responsive */
         .advanced-grid {
             display: flex !important;
             flex-direction: column !important;
@@ -328,6 +326,58 @@ body {
         .year-filter,
         .apply-filter {
             width: 100% !important;
+        }
+
+        #advancedBox,
+        #advancedBtn {
+            position: relative !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            width: calc(100vw - 30px) !important;
+            max-width: calc(100vw - 30px) !important;
+            margin: 0 !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+            box-sizing: border-box !important;
+            overflow-x: hidden !important;
+        }
+
+        /* make grid children stretch to full available width */
+        .advanced-grid {
+            align-items: stretch !important;
+        }
+
+        .genre-filter select {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .genre-filter select,
+        .year-filter input {
+            display: block !important;
+            margin: 0 !important;
+        }
+
+        .selected-genres {
+            justify-content: flex-start !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Make the games list use full width with side padding to avoid horizontal scroll */
+        .game-container {
+            margin-top: 18px !important;
+            width: 100% !important;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Ensure nothing inside advanced box causes horizontal overflow */
+        #advancedBox * {
+            max-width: 100% !important;
+            box-sizing: border-box !important;
         }
 
         .year-range {
@@ -357,10 +407,6 @@ body {
         }
 
         /* Profile page responsive */
-        .profile-container {
-            margin-left: 24px !important;
-        }
-
         .profile-header {
             display: flex !important;
             flex-direction: column !important;
@@ -412,7 +458,7 @@ body {
 
 .username-box h2,
 .username-box input {
-    padding-right: 110px; /* space for the button */
+    padding-right: 110px;
 }
 
 .edit-inside {
@@ -437,7 +483,6 @@ body {
     
 }
 
-/*privacy page responsiveness*/
 
 @media (max-width: 1024px) {
     .privacy-title p {
@@ -583,6 +628,29 @@ body {
     main.privacy-page {
         max-width: 1400px;
         margin: 40px auto;
+    }
+}
+
+/* games page responsiveness*/
+@media (max-width: 767px) {
+    #advancedBox {
+        margin-bottom: 18px;
+        box-sizing: border-box;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .game-container {
+        margin-top: 18px !important;
+        width: 94% !important;
+        margin-left: 3% !important;
+        margin-right: 3% !important;
+        box-sizing: border-box;
+    }
+
+    #advancedBtn {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 }
 
