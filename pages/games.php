@@ -192,6 +192,7 @@ $queryString = http_build_query($currentParams);
 
     <div class="apply-filter">
         <button type="submit" style="margin-top:33px;">Apply filters</button>
+        <button type="button" class="button-2" style="margin-left: 10px; margin-top:33px;" onclick="window.location.href='games'">Clear filters</button>
     </div>
 
 </div>

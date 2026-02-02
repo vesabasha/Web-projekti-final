@@ -3,12 +3,9 @@
     <div class="footer-columns">
         <div class="col"><h2>QUEST</h2></div>
         <div class="col">
-            <a href="#">About Us</a>
-            <a href="#">Contact Us</a>
-        </div>
-        <div class="col">
-            <a href="#">Terms of Service</a>
-            <a href="privacy.html">Privacy Policy</a>
+            <a href="games">Browse Games</a>
+            <a href="privacy">Privacy Policy</a>
+
         </div>
     </div>
 
