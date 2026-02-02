@@ -311,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
 <?php endif; ?>
 
 <div id="lists-table-container" style="margin-left: 230px; ">
-    <div class="table-container" style="min-width: 1400px;">
+    <div class="table-container">
         <div class="table-header">
             <h2><?= htmlspecialchars($list['name']) ?></h2>
             <span class="badge" id="gameCount"><?= count($games) ?> games</span>

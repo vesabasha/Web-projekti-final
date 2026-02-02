@@ -800,58 +800,28 @@ body {
 @media (max-width: 1024px) {
     #lists-table-container {
         width: 100vw !important;
-        min-width: unset !important;
         margin: 0 !important;
-        padding: 0 0 20px 0 !important;
+        padding: 0 !important;
         left: 0 !important;
         position: relative !important;
         background: #010B14 !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         z-index: 10;
         display: none;
         pointer-events: auto !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
     #lists-table-container.active {
         display: block !important;
     }
     #lists-table-container .table-container {
-        min-width: unset !important;
-        width: 100vw !important;
-        overflow-x: auto !important;
-        padding: 0 0 20px 0 !important;
-        box-sizing: border-box !important;
+        overflow-x: visible !important;
         pointer-events: auto !important;
-    }
-    #lists-table-container table {
-        width: 100% !important;
-        font-size: 13px !important;
-        background: #0a1622 !important;
-        border-radius: 0 !important;
-        margin: 0 !important;
-    }
-    #lists-table-container th, #lists-table-container td {
-        padding: 8px 4px !important;
-        word-break: break-word !important;
-    }
-    #lists-table-container .table-header {
-        padding: 12px 10px 0 10px !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 6px !important;
-    }
-    #lists-table-container h2 {
-        font-size: 20px !important;
-        margin: 0 0 4px 0 !important;
-    }
-    #lists-table-container .badge {
-        font-size: 13px !important;
-        margin-left: 0 !important;
     }
     /* Hide sidebar/nav on lists view for mobile */
     body.lists-view-mobile .sidebar {
         display: none !important;
     }
-    /* Only hide nav if it overlays content, otherwise keep it accessible */
     /* Hide grid/detailed view when lists is active */
     body.lists-view-mobile #game-container {
         display: none !important;

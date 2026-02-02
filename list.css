@@ -223,6 +223,7 @@
     color: white;
     font-family: 'helvetica', sans-serif;
     width: 150vh;
+    min-width: 1400px;
 }
 
 .table-header {
@@ -318,4 +319,11 @@ tr:hover {
 
 button img.icon-btn {
     filter: brightness(0) invert(1);
+}
+
+@media (max-width: 1024px) {
+    #lists-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
