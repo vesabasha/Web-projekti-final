@@ -100,7 +100,7 @@ if (isset($_GET['action'])) {
             echo json_encode([]); 
             exit; 
         }
-        $stmt = $pdo->prepare("SELECT id, title, main_image2_url FROM games WHERE title LIKE ? LIMIT 15");
+        $stmt = $pdo->prepare("SELECT id, title, main_image_url, main_image2_url FROM games WHERE title LIKE ? LIMIT 15");
         $stmt->execute(["%$q%"]);
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
         exit;
@@ -578,7 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsDiv.innerHTML = games.map(game => `
                 <div class="game-search-result" data-game-id="${game.id}" style="padding: 10px; background: #2a2a2a; margin-bottom: 8px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; opacity: ${currentGameIds.has(game.id) ? '0.5' : '1'}; pointer-events: ${currentGameIds.has(game.id) ? 'none' : 'auto'};">
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <img src="../${game.main_image_url}" alt="${game.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 3px;">
+                        <img src="../${game.main_image2_url}" alt="${game.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 3px;">
                         <div>
                             <p style="margin: 0; color: #FF669C; font-weight: bold;">${game.title}</p>
                             <p style="margin: 4px 0 0 0; color: #aaa; font-size: 12px;">${currentGameIds.has(game.id) ? '✓ Already in list' : 'Click to add'}</p>
