@@ -666,6 +666,25 @@ body {
         padding: 0;
         margin: 20px 0;
     }
+    .profile-top {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+    }
+    .profile-buttons {
+        display: flex;
+        gap: 10px; 
+        justify-content: center; 
+        align-items: center;     
+    }
+    .profile-buttons .button-2 {
+        margin-top: 0px;
+    }
 }
 
 @media (max-width: 599px) {
@@ -860,8 +879,7 @@ body {
         text-align: center;
         justify-content: center;
     }
-    .game-card-info .secondary-text,
-    .game-container .game-card-info .secondary-text {
+    .game-container.grid-view .game-card-info .secondary-text {
         display: -webkit-box !important;
         -webkit-line-clamp: 3 !important;
         -webkit-box-orient: vertical !important;
