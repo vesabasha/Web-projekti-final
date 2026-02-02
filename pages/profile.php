@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnPr
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($viewedUsername) ?>'s Profile</title>
     <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../list-modal.css">
+    <link rel="stylesheet" href="../list.css">
     <link rel="stylesheet" href="../responsive.css">
 </head>
 <body>

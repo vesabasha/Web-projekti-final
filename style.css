@@ -714,7 +714,6 @@ body {
 
 .list-game-item {
     position: relative;
-    overflow: hidden;
     border-radius: 4px;
     height: 160px;
 }
@@ -1093,7 +1092,6 @@ button img.icon-btn {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             border-radius: 8px;
-            overflow: hidden;
         }
 
         .game-card:hover {
@@ -1103,7 +1101,7 @@ button img.icon-btn {
 
         .detailed-view .game-card {
             padding: 15px;
-            background: #2a2a2a;
+            background: #2a2a2a95;
             border-left: 4px solid #44A1A0;
             cursor: pointer;
         }
@@ -1127,10 +1125,12 @@ button img.icon-btn {
             color: #aaa;
             font-size: 13px;
             margin: 6px 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            display: block !important;
+            -webkit-line-clamp: unset !important;
+            -webkit-box-orient: unset !important;
+            overflow: visible !important;
+            white-space: normal !important;
+
         }
 
         .detailed-view .genres-container {
@@ -1181,12 +1181,14 @@ button img.icon-btn {
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
-            overflow: hidden;
+        }
+
+        .grid-view .game-card{
+            height:270px;
         }
 
         .grid-view .game-card img {
             width: 100%;
-            height: 240px;
             object-fit: cover;
         }
 

@@ -126,7 +126,7 @@ if (!$list) {
 $isOwnList = ($loggedInId && intval($loggedInId) === intval($list['user_id']));
 
 $stmt = $pdo->prepare("
-    SELECT g.id, g.title, g.main_image_url, g.description, g.release_date
+    SELECT g.id, g.title, g.main_image_url, g.description, g.release_date, GROUP_CONCAT(ge.name SEPARATOR ', ') as genres
     FROM games g
     INNER JOIN list_games lg ON g.id = lg.game_id
     LEFT JOIN game_genres gg ON g.id = gg.game_id
@@ -228,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
     <title><?= htmlspecialchars($list['name']) ?> - Quest</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../responsive.css">
+    <link rel="stylesheet" href="../list.css">
 </head>
 <body>
 
@@ -245,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
                 <button class="view-btn" data-view="lists-view">Lists</button>
             <?php endif; ?>
         </div>
-        <button class="list-action-btn" id="shareListBtn">Share</button>
+        <button class="button-3" id="shareListBtn"><img class="icon-btn" src="../images/shared.png" alt="Share"></button>
         <?php if ($isOwnList): ?>
             <button class="list-action-btn" id="addGamesBtn">+ Add Games</button>
             <button class="list-action-btn" id="editListBtn">Edit</button>
@@ -263,7 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
                     <img src="../<?= htmlspecialchars($game['main_image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?>" onerror="this.src='../images/games/placeholder.png';">
                     <div class="game-card-info">
                         <h3><?= htmlspecialchars($game['title']) ?></h3>
-                        <p class="secondary-text"><?= htmlspecialchars(substr($game['description'] ?? 'No description', 0, 100)) ?></p>
+                        <p class="secondary-text"><?= htmlspecialchars(substr($game['description'] ?? 'No description', 0, 1000)) ?></p>
                         <?php if ($game['release_date']): ?>
                             <p class="release-date"><?= htmlspecialchars($game['release_date']) ?></p>
                         <?php endif; ?>
@@ -304,37 +305,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
 </div>
 <?php endif; ?>
 
-<!-- Table view for Lists (matches admin manage_games style) -->
-<div id="lists-table-container" style="width:75%; margin: 20px auto; display: none;">
-    <div style="background:#1a1a1a; padding:12px; border-radius:8px;">
-        <h2 style="color:#FF669C; margin:0 0 12px 0;">List contents (table view)</h2>
-        <table style="width:100%; border-collapse:collapse;">
+<div id="lists-table-container" style="margin-left: 230px; ">
+    <div class="table-container" style="min-width: 1400px;">
+        <div class="table-header">
+            <h2><?= htmlspecialchars($list['name']) ?></h2>
+            <span class="badge" id="gameCount"><?= count($games) ?> games</span>
+        </div>
+        <table>
             <thead>
-                <tr style="text-align:left; border-bottom:1px solid #222; color:#aaa;">
-                    <th style="padding:8px">Title</th>
-                    <th style="padding:8px">Genres</th>
-                    <th style="padding:8px">Description</th>
-                    <th style="padding:8px">Year</th>
-                    <th style="padding:8px">Actions</th>
+                <tr>
+                    <th>Title</th>
+                    <th>Genres</th>
+                    <th>Description</th>
+                    <th>Year</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($games as $g): ?>
-                    <tr style="border-bottom:1px solid #222;">
-                        <td style="padding:10px; vertical-align:top; color:#FF669C; font-weight:600;"><a href="details?game=<?= urlencode($g['title']) ?>" style="color:inherit; text-decoration:none;"><?= htmlspecialchars($g['title']) ?></a></td>
-                        <td style="padding:10px; vertical-align:top; color:#ccc;">
-                            <?= htmlspecialchars($g['genres'] ?? '') ?>
-                        </td>
-                        <td style="padding:10px; vertical-align:top; color:#ccc; max-width:400px;">
-                            <?= htmlspecialchars(substr($g['description'] ?? 'No description', 0, 140)) ?>
-                        </td>
-                        <td style="padding:10px; vertical-align:top; color:#ccc;">
-                            <?= $g['release_date'] ? date('Y', strtotime($g['release_date'])) : '' ?>
-                        </td>
-                        <td style="padding:10px; vertical-align:top;">
-                            <button onclick="window.location.href='details?game=<?= urlencode($g['title']) ?>'" style="margin-right:8px;">View</button>
+                    <tr data-game-id="<?= $g['id'] ?>">
+                        <td><?= htmlspecialchars($g['title']) ?></td>
+                        <td><?= htmlspecialchars($g['genres'] ?? '') ?></td>
+                        <td><?= htmlspecialchars(substr($g['description'] ?? 'No description', 0, 500)) ?></td>
+                        <td><?= $g['release_date'] ? date('Y', strtotime($g['release_date'])) : '' ?></td>
+                        <td>
+                            <button class="button-3" onclick="window.location.href='details?game=<?= urlencode($g['title']) ?>'"><img class="icon-btn" src="../images/view.png" alt="View"></button>
                             <?php if ($isOwnList): ?>
-                                <button onclick="removeGame(<?= $g['id'] ?>)">Remove</button>
+                                <button class="button-2" onclick="removeGame(<?= $g['id'] ?>)"><img class="icon-btn" src="../images/delete.png" alt="Remove"></button>
                             <?php endif; ?>
                         </td>
                     </tr>

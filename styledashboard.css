@@ -19,27 +19,6 @@ button{
 button:hover{
     background-color: #6cbdbb;
 }
-.button-2{
-    background-color: #A24465;
-}
-.button-2:hover{
-    background-color: #b76c82;
-}
-.button-3 {
-    background-color: #2c3e50;
-    color: #ffffff;
-    padding: 5px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    height: 35px;
-    transition: background-color 0.2s, border-color 0.2s;
-}
-
-.button-3:hover {
-    background-color: #3a556d; 
-    border-color: #5a718f;
-}
 
 /*textet fonti edhe ngjyra*/
 h1{
@@ -118,61 +97,6 @@ a:hover{
     padding: 5vh;
 }
 
-    .table-container {
-      background-color: #111111;
-      border-radius: 12px;
-      border: 1px solid #1a1a1a;
-      overflow: hidden;
-      color: white;
-      font-family : 'helvetica', sans-serif;
-      width: 150vh;
-    }
-
-    .table-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid #1a1a1a;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .table-header h2 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th {
-      text-align: left;
-      padding: 12px 20px;
-      font-size: 12px;
-      font-weight: 500;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 1px solid #1a1a1a;
-    }
-
-    td {
-      padding: 16px 20px;
-      font-size: 14px;
-      max-width: 68vh ;
-      border-bottom: 1px solid #1a1a1a;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tr:hover {
-      background-color: #1a1a1a;
-    }
-
 .header{
     display: flex; 
     justify-content: space-between; 
@@ -244,15 +168,6 @@ a:hover{
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.2s;
-}
-
-.icon-btn {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-}
-button img.icon-btn {
-    filter: brightness(0) invert(1);
 }
 
 #add-genre-modal input:focus {
