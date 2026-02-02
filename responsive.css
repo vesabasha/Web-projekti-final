@@ -357,6 +357,10 @@ body {
         }
 
         /* Profile page responsive */
+        .profile-container {
+            margin-left: 24px !important;
+        }
+
         .profile-header {
             display: flex !important;
             flex-direction: column !important;
@@ -376,6 +380,29 @@ body {
             font-size: 14px !important;
             width: auto !important;
             white-space: nowrap !important;
+        }
+
+        .list-games .list-game-item:nth-child(n+4) {
+            display: none !important;
+        }
+
+        .list-games {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            gap: 16px !important;
+            overflow-x: auto !important;
+        }
+
+        .list-game-item {
+            flex-shrink: 0 !important;
+            width: 100px !important;
+            height: 130px !important;
+        }
+
+        .list-game-item img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
         }
 
         .username-box {
