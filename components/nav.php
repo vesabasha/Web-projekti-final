@@ -8,6 +8,7 @@ $profilePic = $_SESSION['pfp_url'] ?? 'images/placeholder.jpg';
 $is_admin = $_SESSION['is_admin'] ?? false;
 ?>
 <nav>
+
     <ul>
         <li><img style="width:50px;height:50px;cursor:pointer;" src="images/logo.jpg" alt="Logo"></li>
         <li><a style="font-size:30px" id="title" href="landing">QUEST</a></li>

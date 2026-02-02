@@ -49,11 +49,11 @@ $genres = $game['genres'] ? explode(',', $game['genres']) : [];
     &lt; Back to Games
 </button>
 
-<h1 style="margin-left:10%;font-size:42px;">
+<h1 class="desktop-only" style="margin-left:10%;font-size:42px;">
     <?= htmlspecialchars($game['title']) ?>
 </h1>
 
-<div style="width:75%;margin:auto;display:flex;gap:20px;">
+<div id="main-content" style="width:75%;margin:auto;display:flex;gap:20px;">
     <div style="flex:3; position:relative;">
 
         <div style="position: relative; width:94%; height:440px; margin-bottom:10px;">
@@ -75,15 +75,22 @@ $genres = $game['genres'] ? explode(',', $game['genres']) : [];
     </div>
 </div>
 
+<button class="button-2 mobile-only" style="width:100%; margin: 16px 0;">
+    Add to List
+</button>
+
     <div style="flex:2;">
         <img src="<?= $game['main_image2_url'] ?>" style="width:100%;margin-bottom:5%;">
+        <h1 class="mobile-only">
+            <?= htmlspecialchars($game['title']) ?>
+        </h1>
         <p class="secondary-text"><?= htmlspecialchars($game['description']) ?></p>
         <div class="genre-container" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:3%;">
             <?php foreach ($genres as $g): ?>
                 <p class="genre-badge"><?= htmlspecialchars($g) ?></p>
             <?php endforeach; ?>
         </div>
-        <button style="width:100%;" class="button-2">Add to List</button>
+        <button style="width:100%;" class="button-2 desktop-only">Add to List</button>
     </div>
 </div>
 
