@@ -345,7 +345,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action']) && $isOwnLi
         </table>
     </div>
 </div>
-
+<p style="height:150px"></p> 
 <?php include __DIR__ . '/../components/footer.php'; ?>
 
 <div class="toast-notification" id="toast-notification"></div>

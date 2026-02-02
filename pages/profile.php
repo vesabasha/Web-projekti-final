@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const listsContainer = document.getElementById('lists');
 
             if (data.lists.length === 0) {
-                listsContainer.innerHTML = `<p class="no-lists">${isOwnProfile ? "You haven't created any lists." : "This user hasn't created any lists."}</p>`;
+                listsContainer.innerHTML = `<p style="height:150px"     class="no-lists">${isOwnProfile ? "You haven't created any lists." : "This user hasn't created any lists."}</p>`;
                 return;
             }
 
