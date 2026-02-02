@@ -24,7 +24,8 @@ if ($loggedInId) {
     <link rel="stylesheet" href="../responsive.css">
 </head>
 <body>
-
+    
+    <?php include __DIR__ . '/../components/sidebar.php'; ?>
     <?php include __DIR__ . '/../components/nav.php'; ?>
 
     <main class="privacy-page">
