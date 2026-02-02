@@ -361,7 +361,7 @@ body {
 
     /*browse games*/
 
-    @media (max-width: 768px) {
+    @media (max-width: 800px) {
     .h1-title {
         font-size: 22px !important;
         line-height: 1.2;
@@ -371,7 +371,7 @@ body {
     margin-top: 40px;
 }
 
-    @media (max-width: 768px) {
+    @media (max-width: 800px) {
         
         #browse-games {
             width: 80% !important;
@@ -586,7 +586,7 @@ body {
 
 
     }
-    @media (max-width: 768px) {
+    @media (max-width: 800px) {
     .desktop-only {
         display: none;
     }
@@ -596,7 +596,7 @@ body {
     }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 800px) {
     .desktop-only {
         display: block;
     }
@@ -631,7 +631,7 @@ body {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 800px) {
     .privacy-title {
         text-align: center;
     }
@@ -775,7 +775,7 @@ body {
 }
 
 /* games page responsiveness*/
-@media (max-width: 767px) {
+@media (max-width: 800px) {
     #advancedBox {
         margin-bottom: 18px;
         box-sizing: border-box;
@@ -889,7 +889,7 @@ body {
     /* Grid view adjustments for lists page */
     .game-container.grid-view {
         display: grid !important;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+        grid-template-columns: repeat(5, 1fr) !important;
         gap: 15px !important;
         padding: 15px !important;
         margin-left: 0 !important;
@@ -955,7 +955,7 @@ body {
 
 @media (max-width: 480px) {
     .game-container.grid-view {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+        grid-template-columns: repeat(5, 1fr) !important;
         gap: 10px !important;
         padding: 10px !important;
     }
@@ -970,5 +970,12 @@ body {
 
     .game-container.grid-view .game-card-info h3 {
         font-size: 13px !important;
+    }
+    .game-container.grid-view {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+        padding: 15px !important;
+        margin-left: 0 !important;
     }
 }
